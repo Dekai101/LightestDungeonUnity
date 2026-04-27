@@ -1,5 +1,6 @@
 package com.example.demo.api.model.messages.in.select_room;
 
+import com.example.demo.api.model.Room;
 import com.example.demo.api.model.messages.MessageBody;
 
 public class SelectRoomMessage_IN extends MessageBody{
@@ -11,6 +12,6 @@ public class SelectRoomMessage_IN extends MessageBody{
         return TYPE;
     }
 
-    public int room_type;
+    public Room room;
     
 }

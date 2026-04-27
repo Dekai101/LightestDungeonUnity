@@ -2,8 +2,10 @@ package com.example.demo.components;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -18,6 +20,10 @@ import com.example.demo.api.model.Room;
 import com.example.demo.api.model.messages.JSONMessage;
 import com.example.demo.api.model.states.State;
 import com.example.demo.api.model.states.StatePickCharacter;
+import com.example.demo.api.model.bd.Character;
+import com.example.demo.api.model.bd.CharacterService;
+import com.example.demo.api.model.bd.Item;
+import com.example.demo.api.model.bd.LootService;
 
 import tools.jackson.databind.ObjectMapper;
 
@@ -44,7 +50,11 @@ public class GameInstance {
     /** Les habitacions que hi ha disponibles en el mapa creat */
     private final List<Room> nextRooms;
 
-    private final Room actualRoom;
+    private Room actualRoom;
+
+    //Services
+    private final LootService lootService;
+    private final CharacterService characterService;
 
     /** Llista de missatges per gestionaro (INBOX) */
     private final BlockingQueue<GameMessage> queue = new LinkedBlockingQueue<>();
@@ -79,6 +89,26 @@ public class GameInstance {
         return this.actualRoom;
     }
 
+    public void setActualRoom(Room room){
+        actualRoom = room;
+    }
+
+    public List<Item> getChestLoot(){
+        if(actualRoom.getType().equals("CHEST_ROOM")) {
+            return lootService.generateChestLoot(actualRoom.getLevel());
+        }
+
+        return new ArrayList<>();
+    }
+
+    public List<com.example.demo.api.model.bd.Character> getCharacters(){
+        return characterService.getAllCharacters();
+    }
+
+    public Optional<Character> getCharacterById(int id){
+        return characterService.getCharacterById(id);
+    }
+
     /**
      * Permet canviar l'estat actual de la partida
      * @param newState el nou estat
@@ -93,14 +123,16 @@ public class GameInstance {
      * @param players
      * @param executor
      */
-    public GameInstance(List<Player> players, ExecutorService executor) {
+    public GameInstance(List<Player> players, ExecutorService executor, LootService lootService, CharacterService characterService) {
         this.id = UUID.randomUUID().toString();
-        this.actualRoom = new Room(0, "Starting Room", "START_ROOM", 0);
-        this.nextRooms = new ArrayList<Room>(); 
+        this.actualRoom = new Room(0, "START_ROOM", 0);
+        this.nextRooms = new ArrayList<>();
         this.players = players;
         this.executor = executor;
+        this.lootService = lootService;
+        this.characterService = characterService;
+
         System.out.println("Starting the game instance.");
-        // Assignem l'estat actual
         currentState = new StatePickCharacter(this);
     }
 
@@ -205,7 +237,7 @@ public class GameInstance {
 
         // Si estem al nivell 4, la següent i única room és el BOSS
         if (actualRoom.getLevel() == 4) {
-            nextRooms.add(new Room(1, "Boss Room", "BOSS_ROOM", actualRoom.getLevel()+1));
+            nextRooms.add(new Room(1, "BOSS_ROOM", actualRoom.getLevel()+1));
             return;
         }
         
@@ -241,7 +273,7 @@ public class GameInstance {
             }
 
             int roomId = nextRooms.size() + 1;
-            nextRooms.add(new Room(roomId, chosenType, chosenType, actualRoom.getLevel()+1));
+            nextRooms.add(new Room(roomId, chosenType, actualRoom.getLevel()+1));
         }
     }
 }
