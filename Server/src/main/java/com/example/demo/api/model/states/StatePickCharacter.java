@@ -27,31 +27,23 @@ public class StatePickCharacter extends State
         super(game);
         mapper = new ObjectMapper();
         
+        List<PlayerInfo> players = new ArrayList<>();
+        for (Player p:game.getPlayers()) {
+            PlayerInfo p1 = new PlayerInfo(p.getId(),"Player "+p.getId());
+            players.add(p1);
+        } 
 
-       List<PlayerInfo> players = new ArrayList<>();
-       for (Player p:game.getPlayers()) {
-        PlayerInfo p1 = new PlayerInfo(p.getId(),"Player "+p.getId());
-        players.add(p1);
-       }
-       
-    
-        //Aquí  inventem les dades...però haurien de sortir de game, que al seu temps les hauria de llegir de la 
-        // base de dades i/o d'objectes en memòria.
-       CharacterInfo c1 = new CharacterInfo(1, "Ork", "http://", -1, false);
-       CharacterInfo c2 = new CharacterInfo(2, "Elf", "http://", -1, false);
-       CharacterInfo c3 = new CharacterInfo(3, "Wizard", "http://", -1, false);
-       
-       List<CharacterInfo> characters = new ArrayList<>();
-       characters.add(c1);
-       characters.add(c2);
-       characters.add(c3);  
+        List<CharacterInfo> characterInfos = new ArrayList<>();
+        for (com.example.demo.api.model.bd.Character character : game.getCharacters()) {
+            characterInfos.add(new CharacterInfo(character, -1, false));
+        }
 
-       m = new Players2SelectMessage_OUT();
-       m.characters = characters;
-       m.players = players;
+        m = new Players2SelectMessage_OUT();
+        m.characters = characterInfos;
+        m.players = players;
 
-       JSONMessage gm = new JSONMessage(game.getId(), m);
-       game.broadcast(gm);
+        JSONMessage gm = new JSONMessage(game.getId(), m);
+        game.broadcast(gm);
     }
 
     @Override
@@ -90,7 +82,7 @@ public class StatePickCharacter extends State
         }
         
         // Busquem personatge amb l'ID que volem ocupar 
-        Optional<CharacterInfo> oc = m.characters.stream().filter(x -> x.characterId == message.characterId).findFirst();
+        Optional<CharacterInfo> oc = m.characters.stream().filter(x -> x.getCharacter().getId() == message.characterId).findFirst();
         if(!oc.isPresent())
         {
             System.out.println("Missatge erroni, el personatge amb id :"+message.characterId+" no existeix.");
@@ -119,7 +111,7 @@ public class StatePickCharacter extends State
                 game.broadcast(ogm);
 
                 // Si tots els jugadors estan assignats, passem a l'estat següent !
-                if(m.characters.stream().filter(x -> !x.isSelected).count()==0){                    
+                if(m.characters.stream().filter(x -> x.isSelected).count()==game.getPlayers().size()){                    
                     game.setState(new StateMap(game));
                 }
             }

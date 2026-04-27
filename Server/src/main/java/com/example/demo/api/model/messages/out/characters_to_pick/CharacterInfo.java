@@ -1,7 +1,9 @@
 package com.example.demo.api.model.messages.out.characters_to_pick;
 
+import com.example.demo.api.model.bd.Character;
+
 public class CharacterInfo {
-    public int characterId;
+    public com.example.demo.api.model.bd.Character character;
     public String name;
     public String imageURL;
     public int selectedPlayerId;
@@ -9,12 +11,13 @@ public class CharacterInfo {
 
     public CharacterInfo(){}
 
-    public CharacterInfo(int id, String name, String imageURL, int selectedPlayerId, boolean isSelected) {
-        this.characterId = id;
-        this.name = name;
-        this.imageURL = imageURL;
+    public CharacterInfo(Character character, int selectedPlayerId, boolean isSelected) {
+        this.character = character;
         this.selectedPlayerId = selectedPlayerId;
         this.isSelected = isSelected;
     }
     
+    public Character getCharacter(){
+        return this.character;
+    }
 }
