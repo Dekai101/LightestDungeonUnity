@@ -51,7 +51,7 @@ CREATE TABLE `Player` (
 
 CREATE TABLE `Enemy` (
   `entity_id` int PRIMARY KEY,
-  `passiveId` int NOT NULL
+  `passive_id` int NOT NULL
 );
 
 CREATE TABLE `Skill` (

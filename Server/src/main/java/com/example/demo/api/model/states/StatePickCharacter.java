@@ -6,12 +6,14 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import com.example.demo.api.model.Player;
+import com.example.demo.api.model.bd.BdPlayer;
 import com.example.demo.api.model.messages.JSONMessage;
 import com.example.demo.api.model.messages.in.pick_characters.PickCharacterMessage_IN;
 import com.example.demo.api.model.messages.out.characters_to_pick.CharacterInfo;
 import com.example.demo.api.model.messages.out.characters_to_pick.PlayerInfo;
 import com.example.demo.api.model.messages.out.characters_to_pick.Players2SelectMessage_OUT;
 import com.example.demo.api.model.messages.out.generic.ActionResult_OUT;
+import com.example.demo.api.model.messages.out.identify_player.PlayerIdentifier_OUT;
 import com.example.demo.components.GameInstance;
 import com.example.demo.components.GameMessage;
 
@@ -31,11 +33,17 @@ public class StatePickCharacter extends State
         for (Player p:game.getPlayers()) {
             PlayerInfo p1 = new PlayerInfo(p.getId(),"Player "+p.getId());
             players.add(p1);
-        } 
+
+            //Fer el missatge per a que cada jugador sapigui qui es
+            PlayerIdentifier_OUT playerinfo = new PlayerIdentifier_OUT();
+            playerinfo.playerId = p.getId();
+            playerinfo.playerNumber = p.getId()+1;
+            game.send(p.getSession(), new JSONMessage(game.getId(), playerinfo));
+        }
 
         List<CharacterInfo> characterInfos = new ArrayList<>();
-        for (com.example.demo.api.model.bd.Character character : game.getCharacters()) {
-            characterInfos.add(new CharacterInfo(character, -1, false));
+        for (BdPlayer bdPlayer : game.getBdPlayers()) {
+            characterInfos.add(new CharacterInfo(bdPlayer, -1, false));
         }
 
         m = new Players2SelectMessage_OUT();
@@ -79,42 +87,47 @@ public class StatePickCharacter extends State
             ActionResult_OUT result = new ActionResult_OUT(false, 1);
             game.send(p.getSession(), new JSONMessage(game.getId(), result) );
             return;
-        }
-        
-        // Busquem personatge amb l'ID que volem ocupar 
-        Optional<CharacterInfo> oc = m.characters.stream().filter(x -> x.getCharacter().getId() == message.characterId).findFirst();
-        if(!oc.isPresent())
-        {
-            System.out.println("Missatge erroni, el personatge amb id :"+message.characterId+" no existeix.");
-            // Missatge individual
-            ActionResult_OUT result = new ActionResult_OUT(false, 2);
-            game.send(p.getSession(), new JSONMessage(game.getId(), result) );
-            return;
-
-        } else {
-
-            // Si el trobem, mirem si ja està seleccionat.
-            CharacterInfo ci = oc.get();
-
-            if(!ci.isSelected){
-
-                // si no està seleccionat, assignem l'id del jugador al personatge 
-                ci.selectedPlayerId = message.playerId;
-                ci.isSelected = true;
-
+        }else {
+            // Busquem personatge amb l'ID que volem ocupar 
+            Optional<CharacterInfo> oc = m.characters.stream().filter(x -> x.getCharacter().getId() == message.characterId).findFirst();
+            if(!oc.isPresent())
+            {
+                System.out.println("Missatge erroni, el personatge amb id :"+message.characterId+" no existeix.");
                 // Missatge individual
-                ActionResult_OUT result = new ActionResult_OUT(true, 0);
+                ActionResult_OUT result = new ActionResult_OUT(false, 1);
                 game.send(p.getSession(), new JSONMessage(game.getId(), result) );
+                return;
 
-                // Missatge a tothom amb l'actualització de les assignacions.
-                JSONMessage ogm = new JSONMessage(game.getId(),m);
-                game.broadcast(ogm);
+            } else {
 
-                // Si tots els jugadors estan assignats, passem a l'estat següent !
-                if(m.characters.stream().filter(x -> x.isSelected).count()==game.getPlayers().size()){                    
-                    game.setState(new StateMap(game));
+                // Si el trobem, mirem si ja està seleccionat.
+                CharacterInfo ci = oc.get();
+
+                if(!ci.isSelected){
+
+                    // si no està seleccionat, assignem l'id del jugador al personatge 
+                    ci.selectedPlayerId = message.playerId;
+                    ci.isSelected = true;
+                    game.getPlayers().get(message.playerId).setBdPlayer(ci.character, 0, 0);
+
+                    // Missatge individual
+                    ActionResult_OUT result = new ActionResult_OUT(true, 0);
+                    game.send(p.getSession(), new JSONMessage(game.getId(), result) );
+
+                    // Missatge a tothom amb l'actualització de les assignacions.
+                    JSONMessage ogm = new JSONMessage(game.getId(),m);
+                    game.broadcast(ogm);
+
+                    // Si tots els jugadors estan assignats, passem a l'estat següent !
+                    if(m.characters.stream().filter(x -> x.isSelected).count()==game.getPlayers().size()){                    
+                        game.setState(new StateMap(game));
+                    }
+                } else {
+                    System.out.println("Character ja seleccionat");
+                    ActionResult_OUT result = new ActionResult_OUT(false, 1);
+                    game.send(p.getSession(), new JSONMessage(game.getId(), result) );
                 }
-            }
-        }     
+            }     
+        }
     }
 }

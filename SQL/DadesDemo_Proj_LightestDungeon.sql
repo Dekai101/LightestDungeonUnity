@@ -33,10 +33,10 @@ INSERT INTO Statistic (name) VALUES
 -- 2️⃣ STATUS
 -- =====================================================
 INSERT INTO Status (name, max_level, description, scaling_formula) VALUES
-('Bleeding', 3, 'Loses HP each turn', 'HP * 0.05 * level'),
-('Poisoned', 3, 'Loses HP each turn - Apilable debuff', 'HP * 0.04 * level'),
-('Strengthened', 3, 'Increases target attack - Temporary buff', 'Attack * 0.15 * level'),
-('Stunned', 2, 'Chance of losing your turn - Control debuff', '0.40 + (0.20 * level)');
+('Bleeding',     3, 'Loses HP each turn',                          'HP * 0.05 * level'),
+('Poisoned',     3, 'Loses HP each turn - Apilable debuff',        'HP * 0.04 * level'),
+('Strengthened', 3, 'Increases target attack - Temporary buff',    'Attack * 0.15 * level'),
+('Stunned',      2, 'Chance of losing your turn - Control debuff', '0.40 + (0.20 * level)');
 
 -- =====================================================
 -- 3️⃣ SKILLS
@@ -44,22 +44,22 @@ INSERT INTO Status (name, max_level, description, scaling_formula) VALUES
 INSERT INTO Skill
 (name, description, energy_cost, accuracy, hits, target_type, is_aoe, is_passive, image_thumb)
 VALUES
-('Aquatic Blessing', 'Restores HP and Energy to an ally',               40, 0.90, 1, 'ALLY',  false, false, '/img/aquatic.png'),
-('Iron Body',        'It increases the user defense',                   30, 1.00, 1, 'SELF',  false, false, '/img/iron.png'),
-('Blood Rain',       'Area attack with potential bleeding',             70, 0.95, 1, 'ENEMY', true,  false, '/img/blood.png'),
-('Shadow Strike',    'Fast strike that ignores part of the defense.',      25, 0.95, 1, 'ENEMY', false, false, '/img/shadow_strike.png'),
-('Meteor Crash',     'Massive impact that damages all enemies.',           80, 0.85, 1, 'ENEMY', true,  false, '/img/meteor.png'),
-('Poison Dart',      'Shot that applies Poisoned to the target.',          20, 0.90, 1, 'ENEMY', false, false, '/img/poison_dart.png'),
-('Twin Slash',       'Two consecutive fast strikes on the same target.',   35, 0.90, 2, 'ENEMY', false, false, '/img/twin_slash.png'),
-('Soul Drain',       'Absorbs enemy HP and heals self for 50%.',          50, 0.85, 1, 'ENEMY', false, false, '/img/soul_drain.png'),
-('Battle Cry',       'Applies Strengthened to all allies.',               45, 1.00, 1, 'ALLY',  true,  false, '/img/battle_cry.png'),
-('Healing Wave',     'Moderately heals all allies.',                      60, 1.00, 1, 'ALLY',  true,  false, '/img/healing_wave.png'),
-('Barrier Shield',   'Applies a defense shield to the target ally.',      40, 1.00, 1, 'ALLY',  false, false, '/img/barrier.png'),
-('Revive',           'Revives a fallen ally with 30% HP.',               90, 1.00, 1, 'ALLY',  false, false, '/img/revive.png'),
-('Stun Smash',       'Strong hit with a chance to stun.',                 45, 0.88, 1, 'ENEMY', false, false, '/img/stun_smash.png'),
-('Frost Nova',       'Ice burst that stuns all enemies.',                 75, 0.80, 1, 'ENEMY', true,  false, '/img/frost_nova.png'),
-('Evasion Mastery',  'Increases the base accuracy of the user.',         0, 1.00, 0, 'SELF',  false, true,  '/img/evasion.png'),
-('Berserker Rage',   'When HP drops below 30%, automatically increases attack.', 0, 1.00, 0, 'SELF', false, true, '/img/berserk.png');
+('Aquatic Blessing', 'Restores HP and Energy to an ally',                              40, 0.90, 1, 'ALLY',  false, false, '/img/aquatic.png'),
+('Iron Body',        'It increases the user defense',                                  30, 1.00, 1, 'SELF',  false, false, '/img/iron.png'),
+('Blood Rain',       'Area attack with potential bleeding',                             70, 0.95, 1, 'ENEMY', true,  false, '/img/blood.png'),
+('Shadow Strike',    'Fast strike that ignores part of the defense.',                  25, 0.95, 1, 'ENEMY', false, false, '/img/shadow_strike.png'),
+('Meteor Crash',     'Massive impact that damages all enemies.',                        80, 0.85, 1, 'ENEMY', true,  false, '/img/meteor.png'),
+('Poison Dart',      'Shot that applies Poisoned to the target.',                      20, 0.90, 1, 'ENEMY', false, false, '/img/poison_dart.png'),
+('Twin Slash',       'Two consecutive fast strikes on the same target.',               35, 0.90, 2, 'ENEMY', false, false, '/img/twin_slash.png'),
+('Soul Drain',       'Absorbs enemy HP and heals self for 50%.',                       50, 0.85, 1, 'ENEMY', false, false, '/img/soul_drain.png'),
+('Battle Cry',       'Applies Strengthened to all allies.',                            45, 1.00, 1, 'ALLY',  true,  false, '/img/battle_cry.png'),
+('Healing Wave',     'Moderately heals all allies.',                                   60, 1.00, 1, 'ALLY',  true,  false, '/img/healing_wave.png'),
+('Barrier Shield',   'Applies a defense shield to the target ally.',                   40, 1.00, 1, 'ALLY',  false, false, '/img/barrier.png'),
+('Revive',           'Revives a fallen ally with 30% HP.',                             90, 1.00, 1, 'ALLY',  false, false, '/img/revive.png'),
+('Stun Smash',       'Strong hit with a chance to stun.',                              45, 0.88, 1, 'ENEMY', false, false, '/img/stun_smash.png'),
+('Frost Nova',       'Ice burst that stuns all enemies.',                              75, 0.80, 1, 'ENEMY', true,  false, '/img/frost_nova.png'),
+('Evasion Mastery',  'Increases the base accuracy of the user.',                       0,  1.00, 0, 'SELF',  false, true,  '/img/evasion.png'),
+('Berserker Rage',   'When HP drops below 30%, automatically increases attack.',       0,  1.00, 0, 'SELF',  false, true,  '/img/berserk.png');
 
 -- =====================================================
 -- 4️⃣ EFECTOS
@@ -72,11 +72,11 @@ SET @Defense  = (SELECT id FROM Statistic WHERE name = 'defense');
 SET @Attack   = (SELECT id FROM Statistic WHERE name = 'attack');
 SET @Speed    = (SELECT id FROM Statistic WHERE name = 'speed');
 
--- Capturar IDs de estados
-SET @Sangrado    = (SELECT id FROM Status WHERE name = 'Sangrado');
-SET @Envenenado  = (SELECT id FROM Status WHERE name = 'Envenenado');
-SET @Fortalecido = (SELECT id FROM Status WHERE name = 'Fortalecido');
-SET @Aturdido    = (SELECT id FROM Status WHERE name = 'Aturdido');
+-- Capturar IDs de estados (nombres en inglés, igual que el INSERT de Status)
+SET @Bleeding     = (SELECT id FROM Status WHERE name = 'Bleeding');
+SET @Poisoned     = (SELECT id FROM Status WHERE name = 'Poisoned');
+SET @Strengthened = (SELECT id FROM Status WHERE name = 'Strengthened');
+SET @Stunned      = (SELECT id FROM Status WHERE name = 'Stunned');
 
 -- Aquatic Blessing: curación porcentual de HP
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
@@ -90,41 +90,41 @@ VALUES (@Energy, 1.10, NULL, NULL, NULL, NULL, 1.0, 1);
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@Defense, 1.20, NULL, NULL, NULL, NULL, 1.0, 3);
 
--- Blood Rain: DAÑO FIJO — ataque en área (base moderada, escalará con ataque + nivel)
+-- Blood Rain: DAÑO FIJO
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@Attack, NULL, NULL, 18, 24, NULL, 1.0, 0);
 
--- Blood Rain: aplica Sangrado lv1 (sin poder base, escala vía scaling_formula del Status)
+-- Blood Rain: aplica Bleeding lv1
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Sangrado, NULL, NULL, 1, 0.15, 3);
+VALUES (NULL, NULL, @Bleeding, NULL, NULL, 1, 0.15, 3);
 
--- Shadow Strike: DAÑO FIJO + multiplicador leve (golpe físico ágil)
+-- Shadow Strike: DAÑO FIJO + multiplicador leve
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@Attack, 1.15, NULL, 10, 14, NULL, 1.00, 0);
 
--- Meteor Crash: DAÑO FIJO alto — impacto masivo AOE (sin multiplicador, el poder base es lo relevante)
+-- Meteor Crash: DAÑO FIJO alto AOE
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@Attack, NULL, NULL, 22, 30, NULL, 1.00, 0);
 
--- Poison Dart: sin daño propio (todo el daño viene del estado Envenenado)
+-- Poison Dart: aplica Poisoned lv1
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Envenenado, NULL, NULL, 1, 1.00, 4);
+VALUES (NULL, NULL, @Poisoned, NULL, NULL, 1, 1.00, 4);
 
--- Twin Slash: DAÑO FIJO por hit — dos golpes rápidos, base baja individual
+-- Twin Slash: DAÑO FIJO por hit
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@Attack, NULL, NULL, 8, 11, NULL, 1.00, 0);
 
--- Soul Drain: DAÑO FIJO — absorción oscura
+-- Soul Drain: DAÑO FIJO
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@Attack, NULL, NULL, 14, 19, NULL, 1.00, 0);
 
--- Soul Drain: curación porcentual del HP (la lógica de "50% del daño hecho" va en código)
+-- Soul Drain: curación porcentual del HP
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@HP, 1.50, NULL, NULL, NULL, NULL, 1.00, 1);
 
--- Battle Cry: aplica estado Fortalecido, sin poder base numérico
+-- Battle Cry: aplica Strengthened lv2
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Fortalecido, NULL, NULL, 2, 1.00, 3);
+VALUES (NULL, NULL, @Strengthened, NULL, NULL, 2, 1.00, 3);
 
 -- Healing Wave: curación porcentual AOE
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
@@ -134,25 +134,25 @@ VALUES (@HP, 1.25, NULL, NULL, NULL, NULL, 1.00, 1);
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@Defense, 1.30, NULL, NULL, NULL, NULL, 1.00, 2);
 
--- Revive: restaura HP porcentual al revivir
+-- Revive: restaura HP porcentual
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@HP, 1.30, NULL, NULL, NULL, NULL, 1.00, 1);
 
--- Stun Smash: DAÑO FIJO — golpe contundente pesado
+-- Stun Smash: DAÑO FIJO
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@Attack, NULL, NULL, 16, 22, NULL, 1.00, 0);
 
--- Stun Smash: aplica Aturdido lv1 (sin poder base)
+-- Stun Smash: aplica Stunned lv1
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Aturdido, NULL, NULL, 1, 0.30, 1);
+VALUES (NULL, NULL, @Stunned, NULL, NULL, 1, 0.30, 1);
 
--- Frost Nova: DAÑO FIJO menor — la skill prioriza el control sobre el daño
+-- Frost Nova: DAÑO FIJO menor AOE
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@Attack, NULL, NULL, 10, 14, NULL, 1.00, 0);
 
--- Frost Nova: aplica Aturdido lv1 50%
+-- Frost Nova: aplica Stunned lv1 50%
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Aturdido, NULL, NULL, 1, 0.50, 1);
+VALUES (NULL, NULL, @Stunned, NULL, NULL, 1, 0.50, 1);
 
 -- Evasion Mastery (pasiva): buff porcentual de velocidad
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
@@ -163,7 +163,7 @@ INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_fla
 VALUES (@Attack, 1.40, NULL, NULL, NULL, NULL, 1.00, 0);
 
 -- -------------------------------------------------------
--- EFECTOS DE ITEMS — HEAD (todos porcentuales, flat = NULL)
+-- EFECTOS DE ITEMS — HEAD
 -- -------------------------------------------------------
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
 (@Defense, 1.10, NULL, NULL, NULL, 1, 1.0, 0),   -- Iron Helm         +10% def
@@ -180,7 +180,7 @@ UPDATE Effect SET stat_id = @Speed, stat_multiplier = 1.20
 WHERE id = LAST_INSERT_ID();
 
 -- -------------------------------------------------------
--- EFECTOS DE ITEMS — CHEST (todos porcentuales, flat = NULL)
+-- EFECTOS DE ITEMS — CHEST
 -- -------------------------------------------------------
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
 (@Defense, 1.15, NULL, NULL, NULL, 1, 1.0, 0),   -- Iron Chestplate   +15% def
@@ -193,7 +193,7 @@ INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_fla
 (@Energy,  1.25, NULL, NULL, NULL, 1, 1.0, 0);   -- Vampiric Coat     +25% energy
 
 -- -------------------------------------------------------
--- EFECTOS DE ITEMS — LOWER (todos porcentuales, flat = NULL)
+-- EFECTOS DE ITEMS — LOWER
 -- -------------------------------------------------------
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
 (@Defense, 1.08, NULL, NULL, NULL, 1, 1.0, 0),   -- Iron Greaves      +8%  def
@@ -207,48 +207,46 @@ INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_fla
 
 -- -------------------------------------------------------
 -- EFECTOS DE ITEMS — WEAPONS
--- Armas ligeras/rápidas → DAÑO FIJO (flat, sin multiplicador)
--- Armas pesadas/mágicas → PORCENTUAL (multiplicador, sin flat)
 -- -------------------------------------------------------
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
-(@Attack, NULL, NULL,  6,    9,    1, 1.0, 0),   -- Short Sword          FIJO  base baja
-(@Attack, NULL, NULL, 10,   14,    1, 1.0, 0),   -- Longsword            FIJO  estándar
-(@Attack, NULL, NULL,  7,   10,    1, 1.0, 0),   -- Shadow Dagger        FIJO  ágil/rápida
-(@Attack, 1.18, NULL, NULL, NULL,  1, 1.0, 0),   -- Poison Blade         PORC  (valor en veneno)
-(@Attack, NULL, NULL, 16,   22,    1, 1.0, 0),   -- War Hammer           FIJO  pesado
-(@Energy, 1.35, NULL, NULL, NULL,  1, 1.0, 0),   -- Arcane Staff         PORC  amplifica energía
-(@HP,     1.10, NULL, NULL, NULL,  1, 1.0, 0),   -- Holy Wand            PORC  potencia curaciones
-(@Attack, NULL, NULL,  9,   13,    1, 1.0, 0),   -- Longbow              FIJO  preciso
-(@Attack, NULL, NULL, 12,   17,    1, 1.0, 0),   -- Crossbow             FIJO  potente
-(@Attack, 1.30, NULL, NULL, NULL,  1, 1.0, 0),   -- Blood Scythe         PORC  épica, escala con atk
-(@Attack, NULL, NULL, 20,   28,    1, 1.0, 0),   -- Stone Fist Gauntlet  FIJO  aplastante
-(@Attack, NULL, NULL,  7,   10,    1, 1.0, 0);   -- Twin Blades          FIJO  por hit (igual que dagger)
+(@Attack, NULL, NULL,  6,    9,    1, 1.0, 0),   -- Short Sword
+(@Attack, NULL, NULL, 10,   14,    1, 1.0, 0),   -- Longsword
+(@Attack, NULL, NULL,  7,   10,    1, 1.0, 0),   -- Shadow Dagger
+(@Attack, 1.18, NULL, NULL, NULL,  1, 1.0, 0),   -- Poison Blade
+(@Attack, NULL, NULL, 16,   22,    1, 1.0, 0),   -- War Hammer
+(@Energy, 1.35, NULL, NULL, NULL,  1, 1.0, 0),   -- Arcane Staff
+(@HP,     1.10, NULL, NULL, NULL,  1, 1.0, 0),   -- Holy Wand
+(@Attack, NULL, NULL,  9,   13,    1, 1.0, 0),   -- Longbow
+(@Attack, NULL, NULL, 12,   17,    1, 1.0, 0),   -- Crossbow
+(@Attack, 1.30, NULL, NULL, NULL,  1, 1.0, 0),   -- Blood Scythe
+(@Attack, NULL, NULL, 20,   28,    1, 1.0, 0),   -- Stone Fist Gauntlet
+(@Attack, NULL, NULL,  7,   10,    1, 1.0, 0);   -- Twin Blades
 
--- Poison Blade: veneno on-hit 25% (el daño del veneno escala vía Status.scaling_formula)
+-- Poison Blade: Poisoned on-hit 25%
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Envenenado, NULL, NULL, 1, 0.25, 3);
+VALUES (NULL, NULL, @Poisoned, NULL, NULL, 1, 0.25, 3);
 
--- Blood Scythe: sangrado on-hit 20%
+-- Blood Scythe: Bleeding on-hit 20%
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Sangrado, NULL, NULL, 1, 0.20, 3);
+VALUES (NULL, NULL, @Bleeding, NULL, NULL, 1, 0.20, 3);
 
 -- -------------------------------------------------------
--- EFECTOS DE ITEMS — NON-CONSUMABLES (porcentuales o estados, flat = NULL)
+-- EFECTOS DE ITEMS — NON-CONSUMABLES
 -- -------------------------------------------------------
 
--- Vampire Ring: Sangrado lv2 on-hit 30%
+-- Vampire Ring: Bleeding lv2 on-hit 30%
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Sangrado, NULL, NULL, 2, 0.30, 3);
+VALUES (NULL, NULL, @Bleeding, NULL, NULL, 2, 0.30, 3);
 
--- Poison Amulet: Envenenado lv2 on-hit 30%
+-- Poison Amulet: Poisoned lv2 on-hit 30%
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Envenenado, NULL, NULL, 2, 0.30, 4);
+VALUES (NULL, NULL, @Poisoned, NULL, NULL, 2, 0.30, 4);
 
--- Battle Banner: Fortalecido lv1 a aliados 2 turnos
+-- Battle Banner: Strengthened lv1 a aliados 2 turnos
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Fortalecido, NULL, NULL, 1, 1.00, 2);
+VALUES (NULL, NULL, @Strengthened, NULL, NULL, 1, 1.00, 2);
 
--- Lucky Charm, Stone Totem, Speed Anklet, Accuracy Lens, Crit Gem: porcentuales
+-- Lucky Charm, Stone Totem, Speed Anklet, Accuracy Lens, Crit Gem
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
 (@Speed,   1.15, NULL, NULL, NULL, 1, 1.0, 0),   -- Lucky Charm   +15% spd
 (@Defense, 1.20, NULL, NULL, NULL, 1, 1.0, 0),   -- Stone Totem   +20% def
@@ -258,17 +256,16 @@ INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_fla
 
 -- -------------------------------------------------------
 -- EFECTOS DE ITEMS — CONSUMABLES
--- Porcentuales salvo indicación (los consumibles curan/buff basados en el stat máximo)
 -- -------------------------------------------------------
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
-(@HP,     1.30, NULL,         NULL, NULL, 1, 1.0,  1),  -- Health Potion      +30% HP max
-(@Energy, 1.30, NULL,         NULL, NULL, 1, 1.0,  1),  -- Energy Elixir      +30% Energy max
-(NULL,    NULL, @Envenenado,  NULL, NULL, 0, 1.0,  0),  -- Antidote           cleanse veneno
-(NULL,    NULL, @Fortalecido, NULL, NULL, 1, 1.0,  3),  -- Rage Brew          Fortalecido lv1
-(NULL,    NULL, @Aturdido,    NULL, NULL, 1, 0.80, 1),  -- Smoke Bomb         Aturdido 80% AOE
-(@HP,     1.60, NULL,         NULL, NULL, 1, 1.0,  1),  -- Greater Health Pot +60% HP max
-(@Speed,  1.30, NULL,         NULL, NULL, 1, 1.0,  3),  -- Elixir of Speed    +30% spd temporal
-(@HP,     1.50, NULL,         NULL, NULL, 1, 1.0,  1);  -- Phoenix Feather    +50% HP al revivir
+(@HP,     1.30, NULL,          NULL, NULL, 1, 1.0,  1),  -- Health Potion      +30% HP max
+(@Energy, 1.30, NULL,          NULL, NULL, 1, 1.0,  1),  -- Energy Elixir      +30% Energy max
+(NULL,    NULL, @Poisoned,     NULL, NULL, 0, 1.0,  0),  -- Antidote           cleanse veneno
+(NULL,    NULL, @Strengthened, NULL, NULL, 1, 1.0,  3),  -- Rage Brew          Strengthened lv1
+(NULL,    NULL, @Stunned,      NULL, NULL, 1, 0.80, 1),  -- Smoke Bomb         Stunned 80% AOE
+(@HP,     1.60, NULL,          NULL, NULL, 1, 1.0,  1),  -- Greater Health Pot +60% HP max
+(@Speed,  1.30, NULL,          NULL, NULL, 1, 1.0,  3),  -- Elixir of Speed    +30% spd temporal
+(@HP,     1.50, NULL,          NULL, NULL, 1, 1.0,  1);  -- Phoenix Feather    +50% HP al revivir
 
 -- =====================================================
 -- 5️⃣ LINK SKILL ↔ EFFECT
@@ -298,10 +295,10 @@ SELECT s.id, e.id FROM Skill s JOIN Effect e
   ON e.stat_id = @Attack AND e.stat_multiplier IS NULL AND e.min_flat_power = 18 AND e.duration_turns = 0
 WHERE s.name = 'Blood Rain';
 
--- Blood Rain Sangrado
+-- Blood Rain Bleeding
 INSERT INTO SkillEffect (skill_id, effect_id)
 SELECT s.id, e.id FROM Skill s JOIN Effect e
-  ON e.status_id = @Sangrado AND e.probability = 0.15
+  ON e.status_id = @Bleeding AND e.probability = 0.15
 WHERE s.name = 'Blood Rain';
 
 -- Shadow Strike (fijo + multiplicador: min=10)
@@ -319,7 +316,7 @@ WHERE s.name = 'Meteor Crash';
 -- Poison Dart
 INSERT INTO SkillEffect (skill_id, effect_id)
 SELECT s.id, e.id FROM Skill s JOIN Effect e
-  ON e.status_id = @Envenenado AND e.probability = 1.00 AND e.duration_turns = 4
+  ON e.status_id = @Poisoned AND e.probability = 1.00 AND e.duration_turns = 4
 WHERE s.name = 'Poison Dart';
 
 -- Twin Slash (fijo por hit: min=8)
@@ -343,7 +340,7 @@ WHERE s.name = 'Soul Drain';
 -- Battle Cry
 INSERT INTO SkillEffect (skill_id, effect_id)
 SELECT s.id, e.id FROM Skill s JOIN Effect e
-  ON e.status_id = @Fortalecido AND e.effect_level = 2 AND e.duration_turns = 3
+  ON e.status_id = @Strengthened AND e.effect_level = 2 AND e.duration_turns = 3
 WHERE s.name = 'Battle Cry';
 
 -- Healing Wave
@@ -370,10 +367,10 @@ SELECT s.id, e.id FROM Skill s JOIN Effect e
   ON e.stat_id = @Attack AND e.stat_multiplier IS NULL AND e.min_flat_power = 16 AND e.duration_turns = 0
 WHERE s.name = 'Stun Smash';
 
--- Stun Smash aturdido
+-- Stun Smash Stunned
 INSERT INTO SkillEffect (skill_id, effect_id)
 SELECT s.id, e.id FROM Skill s JOIN Effect e
-  ON e.status_id = @Aturdido AND e.probability = 0.30
+  ON e.status_id = @Stunned AND e.probability = 0.30
 WHERE s.name = 'Stun Smash';
 
 -- Frost Nova daño (fijo: min=10)
@@ -382,10 +379,10 @@ SELECT s.id, e.id FROM Skill s JOIN Effect e
   ON e.stat_id = @Attack AND e.stat_multiplier IS NULL AND e.min_flat_power = 10 AND e.duration_turns = 0
 WHERE s.name = 'Frost Nova';
 
--- Frost Nova aturdido
+-- Frost Nova Stunned
 INSERT INTO SkillEffect (skill_id, effect_id)
 SELECT s.id, e.id FROM Skill s JOIN Effect e
-  ON e.status_id = @Aturdido AND e.probability = 0.50
+  ON e.status_id = @Stunned AND e.probability = 0.50
 WHERE s.name = 'Frost Nova';
 
 -- Evasion Mastery
@@ -408,10 +405,10 @@ INSERT INTO Entity
  crit_chance, crit_damage, accuracy_multiplier,
  image_thumb, image_full, description)
 VALUES
-('Hero Knight',     1, 90, 90, 100, 100, 25, 40, 20, 0.05, 1.5, 1.0, '/img/hero_t.png',   '/img/hero_f.png',   'Sturdy knight.'),
-('Ocean Priestess', 1, 70, 50, 100, 100, 20, 25, 35, 0.05, 1.5, 1.0, '/img/priest_t.png', '/img/priest_f.png', 'Support priestess.'),
-('Arcane Mage',     1, 40, 40, 100, 100, 40, 20, 30, 0.05, 1.5, 1.0, '/img/mage_t.png',   '/img/mage_f.png',   'Versatile mage.'),
-('Forest Ranger',   1, 60, 60, 100, 100, 35, 20, 40, 0.05, 1.5, 1.0, '/img/ranger_t.png', '/img/ranger_f.png', 'Forest dweller.');
+('Hero Knight',     1, 90,  90,  100, 100, 25, 40, 20, 0.05, 1.5, 1.0, 'https://i.pinimg.com/564x/a0/f7/ee/a0f7ee0df7562a5ddb46193c9726f5d7.jpg',   'https://i.pinimg.com/564x/a0/f7/ee/a0f7ee0df7562a5ddb46193c9726f5d7.jpg',   'Sturdy knight.'),
+('Ocean Priestess', 1, 70,  70,  100, 100, 20, 25, 35, 0.05, 1.5, 1.0, 'https://www.shutterstock.com/image-vector/pixel-art-female-water-mage-260nw-2690764367.jpg', 'https://www.shutterstock.com/image-vector/pixel-art-female-water-mage-260nw-2690764367.jpg', 'Support priestess.'),
+('Arcane Mage',     1, 40,  40,  100, 100, 40, 20, 30, 0.05, 1.5, 1.0, 'https://www.shutterstock.com/image-vector/pixel-art-royal-battlemage-casting-260nw-2704667127.jpg', 'https://www.shutterstock.com/image-vector/pixel-art-royal-battlemage-casting-260nw-2704667127.jpg',   'Versatile mage.'),
+('Forest Ranger',   1, 60,  60,  100, 100, 35, 20, 40, 0.05, 1.5, 1.0, 'https://www.shutterstock.com/image-vector/pixel-art-forest-ranger-sentinel-260nw-2704248221.jpg', 'https://www.shutterstock.com/image-vector/pixel-art-forest-ranger-sentinel-260nw-2704248221.jpg', 'Forest dweller.');
 
 INSERT INTO Player (entity_id, xp_points, skill_points)
 SELECT id, 0, 3 FROM Entity
@@ -425,13 +422,13 @@ INSERT INTO Entity
  crit_chance, crit_damage, accuracy_multiplier,
  image_thumb, image_full, description)
 VALUES
-('Goblin Berserker', 2, 40, 40, 100, 100, 35,  15, 25, 0.05, 1.5, 1.0, '/img/goblin_t.png',   '/img/goblin_f.png',   'Strong but fragile.'),
-('Stone Golem',      3, 100, 100,  100,  100, 15, 30,  15, 0.05, 1.5, 1.0, '/img/golem_t.png',    '/img/golem_f.png',    'Walking Fortress, almost no offensive capabilities.'),
-('Vampire Lord',     5, 70, 70, 100, 100, 35, 25, 25, 0.05, 1.5, 1.0, '/img/vampire_t.png',  '/img/vampire_f.png',  'Expert in blood manipulation, draining his opponents blood heals him.'),
-('Dark Assassin',    4, 50, 50, 100, 100, 40,  15, 40, 0.15, 1.7, 1.0, '/img/assassin_t.png', '/img/assassin_f.png', 'Speedy sneaky assasin ');
+('Goblin Berserker', 2,  40,  40,  100, 100, 35, 15, 25, 0.05, 1.5, 1.0, '/img/goblin_t.png',   '/img/goblin_f.png',   'Strong but fragile.'),
+('Stone Golem',      3, 100, 100,  100, 100, 15, 30, 15, 0.05, 1.5, 1.0, '/img/golem_t.png',    '/img/golem_f.png',    'Walking Fortress, almost no offensive capabilities.'),
+('Vampire Lord',     5,  70,  70,  100, 100, 35, 25, 25, 0.05, 1.5, 1.0, '/img/vampire_t.png',  '/img/vampire_f.png',  'Expert in blood manipulation, draining his opponents blood heals him.'),
+('Dark Assassin',    4,  50,  50,  100, 100, 40, 15, 40, 0.15, 1.7, 1.0, '/img/assassin_t.png', '/img/assassin_f.png', 'Speedy sneaky assassin.');
 
 -- (El trigger trg_enemy_create_loot_table crea la LootTable automáticamente)
-INSERT INTO Enemy (entity_id, passiveId)
+INSERT INTO Enemy (entity_id, passive_id)
 SELECT id, 0 FROM Entity
 WHERE name IN ('Goblin Berserker', 'Stone Golem', 'Vampire Lord', 'Dark Assassin');
 
