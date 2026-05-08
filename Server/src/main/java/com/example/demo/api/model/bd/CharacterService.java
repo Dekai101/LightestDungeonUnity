@@ -12,11 +12,40 @@ public class CharacterService {
     @Autowired
     private CharacterRepository characterRepository;
 
+    @Autowired
+    private BdPlayerRepository bdPlayerRepository;
+
+    @Autowired
+    private EnemyRepository enemyRepository;
+
+    // ---- CHARACTER (Entity) ----
     public List<Character> getAllCharacters() {
-        return (List<Character>) characterRepository.findAll();
+        return characterRepository.findAll();
     }
 
     public Optional<Character> getCharacterById(Integer id) {
         return characterRepository.findById(id);
+    }
+
+    // ---- PLAYERS ----
+    public List<BdPlayer> getAllPlayers() {
+        return bdPlayerRepository.findAll();
+    }
+
+    public Optional<BdPlayer> getPlayerById(Integer id) {
+        return bdPlayerRepository.findById(id);
+    }
+
+    // ---- ENEMIES ----
+    public List<Enemy> getAllEnemies() {
+        return (List<Enemy>) enemyRepository.findAll();
+    }
+
+    public Optional<Enemy> getEnemyById(Integer id) {
+        return enemyRepository.findById(id);
+    }
+
+    public List<Enemy> getEnemiesByLevel(Integer level) {
+        return enemyRepository.findByLevel(level);
     }
 }

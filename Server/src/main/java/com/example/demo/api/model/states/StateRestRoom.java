@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 import com.example.demo.api.model.Player;
 import com.example.demo.api.model.messages.JSONMessage;
 import com.example.demo.api.model.messages.in.room_cleared.RoomCleared_IN;
-import com.example.demo.api.model.messages.out.chest_loot.ShowChestLoot_OUT;
 import com.example.demo.api.model.messages.out.generic.ActionResult_OUT;
 import com.example.demo.api.model.messages.out.rest.Rest_OUT;
 import com.example.demo.components.GameInstance;

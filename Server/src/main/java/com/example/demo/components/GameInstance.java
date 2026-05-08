@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -20,8 +21,10 @@ import com.example.demo.api.model.Room;
 import com.example.demo.api.model.messages.JSONMessage;
 import com.example.demo.api.model.states.State;
 import com.example.demo.api.model.states.StatePickCharacter;
+import com.example.demo.api.model.bd.BdPlayer;
 import com.example.demo.api.model.bd.Character;
 import com.example.demo.api.model.bd.CharacterService;
+import com.example.demo.api.model.bd.Enemy;
 import com.example.demo.api.model.bd.Item;
 import com.example.demo.api.model.bd.LootService;
 
@@ -31,7 +34,6 @@ import org.springframework.web.socket.TextMessage;
 
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.UUID;
@@ -109,6 +111,28 @@ public class GameInstance {
         return characterService.getCharacterById(id);
     }
 
+    public List<BdPlayer> getBdPlayers(){
+        return characterService.getAllPlayers();
+    }
+
+    public List<Enemy> getEnemies(){
+        return characterService.getAllEnemies();
+    }
+
+    public List<Enemy> getEnemiesByLevel(){
+        return characterService.getEnemiesByLevel(actualRoom.getLevel()+1);
+    }
+
+    private Map<Player, BdPlayer> playerCharacters = new HashMap<>();
+
+    public Map<Player, BdPlayer> getPlayerCharacters() {
+        return playerCharacters;
+    }
+
+    public void setPlayerCharacter(Player player, BdPlayer character) {
+        playerCharacters.put(player, character);
+    }
+    
     /**
      * Permet canviar l'estat actual de la partida
      * @param newState el nou estat

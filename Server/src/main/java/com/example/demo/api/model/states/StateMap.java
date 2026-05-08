@@ -1,20 +1,15 @@
 package com.example.demo.api.model.states;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import org.springframework.beans.factory.parsing.NullSourceExtractor;
 
 import com.example.demo.api.model.Player;
 import com.example.demo.api.model.Room;
 import com.example.demo.api.model.messages.JSONMessage;
-import com.example.demo.api.model.messages.in.pick_characters.PickCharacterMessage_IN;
 import com.example.demo.api.model.messages.in.select_room.SelectRoomMessage_IN;
 import com.example.demo.api.model.messages.out.generic.ActionResult_OUT;
 import com.example.demo.api.model.messages.out.show_map.ShowMapMessage_OUT;
 import com.example.demo.components.GameInstance;
 import com.example.demo.components.GameMessage;
-import com.example.demo.api.model.bd.Item;
 
 import tools.jackson.databind.ObjectMapper;
 
@@ -100,8 +95,7 @@ public class StateMap extends State
                     break;
 
                 case "ENEMY_ROOM":
-                    game.setState(new StateMap(game));
-                    System.out.println("Enemy room selected: TO DO");
+                    game.setState(new StateEnemyRoom(game));
                     break;
 
                 case "REST_ROOM":

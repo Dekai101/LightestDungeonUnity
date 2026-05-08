@@ -1,9 +1,15 @@
 package com.example.demo.api.model.bd;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Entity")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Character {
 
     @Id
@@ -55,6 +61,15 @@ public class Character {
     @Column(length = 500)
     private String description;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "EntitySkill",
+        joinColumns = @JoinColumn(name = "entity_id"),
+        inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    @JsonIgnore
+    private List<Skill> skills = new ArrayList<>();
+
     public Character() {}
 
     public Integer getId() { return id; }
@@ -73,4 +88,7 @@ public class Character {
     public String getImageThumb() { return imageThumb; }
     public String getImageFull() { return imageFull; }
     public String getDescription() { return description; }
+    public List<Skill> getSkills() { return skills; }
+    public void setHp(Integer hp) { this.hp = hp; }
+    public void setEnergy(Integer energy) { this.energy = energy; }
 }
