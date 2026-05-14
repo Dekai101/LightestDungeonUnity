@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -27,6 +26,8 @@ import com.example.demo.api.model.bd.CharacterService;
 import com.example.demo.api.model.bd.Enemy;
 import com.example.demo.api.model.bd.Item;
 import com.example.demo.api.model.bd.LootService;
+import com.example.demo.api.model.bd.Skill;
+import com.example.demo.api.model.bd.SkillService;
 
 import tools.jackson.databind.ObjectMapper;
 
@@ -57,6 +58,7 @@ public class GameInstance {
     //Services
     private final LootService lootService;
     private final CharacterService characterService;
+    private final SkillService skillService;
 
     /** Llista de missatges per gestionaro (INBOX) */
     private final BlockingQueue<GameMessage> queue = new LinkedBlockingQueue<>();
@@ -77,7 +79,6 @@ public class GameInstance {
      * Estat del joc
      */
     private State currentState;
-
 
     public List<Player> getPlayers(){
         return this.players;
@@ -107,20 +108,41 @@ public class GameInstance {
         return characterService.getAllCharacters();
     }
 
-    public Optional<Character> getCharacterById(int id){
-        return characterService.getCharacterById(id);
+    public List<com.example.demo.api.model.bd.Character> getCharactersWithSkills(){
+        return characterService.getAllCharactersWithSkills();
+    }
+
+    public Character getCharacterById(int id){
+        return characterService.getCharacterById(id).get();
     }
 
     public List<BdPlayer> getBdPlayers(){
         return characterService.getAllPlayers();
     }
 
+    public BdPlayer getBdPlayerById(int id){
+        return characterService.getPlayerById(id).get();
+    }
+
     public List<Enemy> getEnemies(){
         return characterService.getAllEnemies();
     }
 
-    public List<Enemy> getEnemiesByLevel(){
-        return characterService.getEnemiesByLevel(actualRoom.getLevel()+1);
+    public List<Enemy> getEnemiesByLevel() {
+        Random rand = new Random();
+
+        List<Enemy> allEnemies = characterService.getEnemiesByLevel(actualRoom.getLevel() + 1);
+        List<Enemy> enemiesChoosed = new ArrayList<>();
+
+        int combatIdStart = (int)players.get(players.size() - 1).getId() + 1;
+
+        for (int i = 0; i < 3; i++) {
+            Enemy enemy = new Enemy(allEnemies.get(rand.nextInt(allEnemies.size())));
+            enemy.setCombatId(combatIdStart + i);
+            enemiesChoosed.add(enemy);
+        }
+
+        return enemiesChoosed;
     }
 
     private Map<Player, BdPlayer> playerCharacters = new HashMap<>();
@@ -129,8 +151,32 @@ public class GameInstance {
         return playerCharacters;
     }
 
+    public List<Skill> getAllSkills(){
+        return skillService.getAllSkills();
+    }
+
+    public List<Skill> getPassiveSkills(){
+        return skillService.getPassiveSkills();
+    }
+
+    public List<Skill> getActiveSkills(){
+        return skillService.getActiveSkills();
+    }
+
+    public Skill getSkillById(int id){
+        return skillService.getSkillById(id).get();
+    }
+
+    public Skill getSkillByIdWithEffects(int id){
+        return skillService.getSkillByIdWithEffects(id).get();
+    }
+
     public void setPlayerCharacter(Player player, BdPlayer character) {
         playerCharacters.put(player, character);
+    }
+
+    public Item getItemById(int id){
+        return lootService.getItemById(id).get();
     }
     
     /**
@@ -147,7 +193,8 @@ public class GameInstance {
      * @param players
      * @param executor
      */
-    public GameInstance(List<Player> players, ExecutorService executor, LootService lootService, CharacterService characterService) {
+    public GameInstance(List<Player> players, ExecutorService executor, LootService lootService, 
+        CharacterService characterService, SkillService skillService) {
         this.id = UUID.randomUUID().toString();
         this.actualRoom = new Room(0, "START_ROOM", 0);
         this.nextRooms = new ArrayList<>();
@@ -155,6 +202,7 @@ public class GameInstance {
         this.executor = executor;
         this.lootService = lootService;
         this.characterService = characterService;
+        this.skillService = skillService;
 
         System.out.println("Starting the game instance.");
         currentState = new StatePickCharacter(this);

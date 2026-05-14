@@ -1,5 +1,10 @@
 package com.example.demo.api.model.bd;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -34,6 +39,15 @@ public class Item {
     @Column(name = "image_thumb", nullable = false, length = 500)
     private String imageThumb;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "ItemEffect",
+        joinColumns = @JoinColumn(name = "item_id"),
+        inverseJoinColumns = @JoinColumn(name = "effect_id")
+    )
+    @JsonIgnore
+    private List<Effect> effects = new ArrayList<>();
+
     public Item() {}
 
     public Integer getId() { return id; }
@@ -45,4 +59,6 @@ public class Item {
     public boolean isAoe() { return isAoe; }
     public Integer getMaxUses() { return maxUses; }
     public String getImageThumb() { return imageThumb; }
+    public Effect getEffect() { return effects.get(0); }
+    public List<Effect> getEffects() { return effects; }
 }

@@ -21,5 +21,6 @@ public class PlayerTurn {
         this.choiceMade = choiceMade;
         this.skillCasted = skillCasted;
         this.itemUsed = itemUsed;
+        this.target = target;
     }
 }

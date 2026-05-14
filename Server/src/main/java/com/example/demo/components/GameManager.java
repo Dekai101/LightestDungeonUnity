@@ -14,6 +14,7 @@ import org.springframework.web.socket.WebSocketSession;
 import com.example.demo.api.model.Player;
 import com.example.demo.api.model.bd.CharacterService;
 import com.example.demo.api.model.bd.LootService;
+import com.example.demo.api.model.bd.SkillService;
 
 /**
  * El gestor de joc es responsabilitza de gestionar les noves connexions WS i crear les partides 
@@ -45,11 +46,13 @@ public class GameManager {
     //Serveis
     private final LootService lootService;
     private final CharacterService characterService;
+    private final SkillService skillService;
 
-    public GameManager(LootService lootService, CharacterService characterService) {
+    public GameManager(LootService lootService, CharacterService characterService, SkillService skillService) {
         executor = Executors.newFixedThreadPool(10);
         this.lootService = lootService;
         this.characterService = characterService;
+        this.skillService = skillService;
     }
 
     public void onConnect(WebSocketSession session) {
@@ -76,7 +79,7 @@ public class GameManager {
                 new Player( lastPlayerId++, waitingPlayers.poll())
             );
 
-            GameInstance game = new GameInstance(players, executor, lootService, characterService);
+            GameInstance game = new GameInstance(players, executor, lootService, characterService, skillService);
             String gameId = game.getId();
 
             // Registrem els jugadors al mapa de sessions-->joc i sessions-->Player

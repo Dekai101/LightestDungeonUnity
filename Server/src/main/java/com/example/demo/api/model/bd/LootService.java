@@ -1,16 +1,23 @@
 package com.example.demo.api.model.bd;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
 public class LootService {
 
+    @Autowired
     private final ItemRepository itemRepository;
+
     private final Random random = new Random();
 
     public LootService(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
+    }
+
+    public Optional<Item> getItemById(Integer id) {
+        return itemRepository.findById(id);
     }
 
     public List<Item> generateChestLoot(int roomLevel) {
