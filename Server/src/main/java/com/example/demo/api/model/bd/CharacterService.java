@@ -23,6 +23,12 @@ public class CharacterService {
         return characterRepository.findAll();
     }
 
+    public List<Character> getAllCharactersWithSkills(){
+        return characterRepository.findAllWithSkills();
+    }
+
+    
+
     public Optional<Character> getCharacterById(Integer id) {
         return characterRepository.findById(id);
     }

@@ -70,6 +70,9 @@ public class Character {
     @JsonIgnore
     private List<Skill> skills = new ArrayList<>();
 
+    @Transient
+    private List<Effect> effects = new ArrayList<>();
+
     public Character() {}
 
     public Integer getId() { return id; }
@@ -89,6 +92,25 @@ public class Character {
     public String getImageFull() { return imageFull; }
     public String getDescription() { return description; }
     public List<Skill> getSkills() { return skills; }
+    public List<Effect> getEffects() { return effects; }
+
+    public void setId(Integer id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
+    public void setLevel(Integer level) { this.level = level; }
     public void setHp(Integer hp) { this.hp = hp; }
+    public void setHpMax(Integer hpMax) { this.hpMax = hpMax; }
     public void setEnergy(Integer energy) { this.energy = energy; }
+    public void setEnergyMax(Integer energyMax) { this.energyMax = energyMax; }
+    public void setAttack(Integer attack) { this.attack = attack; }
+    public void setDefense(Integer defense) { this.defense = defense; }
+    public void setSpeed(Integer speed) { this.speed = speed; }
+    public void setCritChance(Float critChance) { this.critChance = critChance; }
+    public void setCritDamage(Float critDamage) { this.critDamage = critDamage; }
+    public void setAccuracyMultiplier(Float accuracyMultiplier) { this.accuracyMultiplier = accuracyMultiplier; }
+    public void setImageThumb(String imageThumb) { this.imageThumb = imageThumb; }
+    public void setImageFull(String imageFull) { this.imageFull = imageFull; }
+    public void setDescription(String description) { this.description = description; }
+    public void setSkills(List<Skill> skills) { this.skills = skills; }
+    public void setEffects(List<Effect> effects) { this.effects = effects; }
+    public void addEffect(Effect effect) { this.effects.add(effect); }
 }

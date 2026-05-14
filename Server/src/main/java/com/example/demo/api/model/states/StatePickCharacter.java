@@ -108,7 +108,7 @@ public class StatePickCharacter extends State
                     // si no està seleccionat, assignem l'id del jugador al personatge 
                     ci.selectedPlayerId = message.playerId;
                     ci.isSelected = true;
-                    game.getPlayers().get(message.playerId).setBdPlayer(ci.character, 0, 0);
+                    game.getPlayers().get(message.playerId).setBdPlayer(ci.character, 0, 3);
 
                     // Missatge individual
                     ActionResult_OUT result = new ActionResult_OUT(true, 0);
