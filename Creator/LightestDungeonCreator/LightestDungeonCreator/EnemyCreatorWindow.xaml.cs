@@ -299,7 +299,7 @@ namespace LightestDungeonCreator
 
             var enemy = new Enemy
             {
-                PassiveId = _assignedSkills.FirstOrDefault(s => s.IsPassive)?.Id ?? 0,
+                Passive_Id = _assignedSkills.FirstOrDefault(s => s.IsPassive)?.Id ?? 0,
                 Entity = new Entity
                 {
                     Name = NameInput.Text.Trim(),

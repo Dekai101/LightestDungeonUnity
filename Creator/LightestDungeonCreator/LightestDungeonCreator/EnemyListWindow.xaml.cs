@@ -153,7 +153,7 @@ namespace LightestDungeonCreator
             // Header
             DetailName.Text = en.Name.ToUpper();
             DetailLevel.Text = en.Level.ToString();
-            DetailId.Text = $"Entity ID: {en.Id}  ·  PassiveSkill ID: {enemy.PassiveId}";
+            DetailId.Text = $"Entity ID: {en.Id}  ·  PassiveSkill ID: {enemy.Passive_Id}";
 
             // Description
             DetailDescription.Text = string.IsNullOrWhiteSpace(en.Description)

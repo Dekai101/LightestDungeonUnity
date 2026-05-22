@@ -47,6 +47,10 @@ public class CharacterService {
         return (List<Enemy>) enemyRepository.findAll();
     }
 
+    public Optional<Enemy> getEnemyWithSkills(Integer id) {
+        return enemyRepository.findByIdWithSkills(id);
+    }
+
     public Optional<Enemy> getEnemyById(Integer id) {
         return enemyRepository.findById(id);
     }

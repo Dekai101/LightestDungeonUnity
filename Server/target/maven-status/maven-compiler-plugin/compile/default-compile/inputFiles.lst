@@ -26,6 +26,7 @@ D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\de
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\in\select_room\SelectRoomMessage_IN.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\JSONMessage.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\MessageBody.java
+D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\battle_state\BattleStateUpdate_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\characters_to_pick\CharacterInfo.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\characters_to_pick\PlayerInfo.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\characters_to_pick\Players2SelectMessage_OUT.java
@@ -39,6 +40,8 @@ D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\de
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\player_action\PlayerActionResult_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\rest\Rest_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\show_map\ShowMapMessage_OUT.java
+D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\status_applied\Status_Applied_OUT.java
+D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\status_applied\StatusUpdate.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\Player.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\Room.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\states\State.java
@@ -48,6 +51,7 @@ D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\de
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\states\StateMap.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\states\StatePickCharacter.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\states\StateRestRoom.java
+D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\StatusCharacter.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\User.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\components\GameInstance.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\components\GameManager.java

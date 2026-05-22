@@ -17,80 +17,140 @@ import com.example.demo.api.model.bd.LootService;
 import com.example.demo.api.model.bd.SkillService;
 
 /**
- * El gestor de joc es responsabilitza de gestionar les noves connexions WS i crear les partides 
- * quan hi ha prous jugadors. Un cop establert el WS amb cada jugador, també  
- * s'encarrega de recepcionar els missatges dels WS ja connectats, redirigint-los a les
- * partides pertinents.
+ * Gestor principal de partides.
+ * 
+ * - Guarda jugadors en espera
+ * - Crea noves partides quan hi ha 3 jugadors
+ * - Gestiona múltiples GameInstance simultànies
+ * - Redirigeix missatges WS a la seva partida
  */
 @Component
 public class GameManager {
 
-    private long lastPlayerId = 0; 
+    /** Id incremental de jugadors */
+    private long lastPlayerId = 0;
 
-    /** Executor de fils */
-    private ExecutorService executor;
-    
-    /** Cua de jugadors pendents d'assignar a partida */
+    /** Pool de fils */
+    private final ExecutorService executor;
+
+    /** Jugadors esperant partida */
     private final Queue<WebSocketSession> waitingPlayers = new ConcurrentLinkedQueue<>();
 
-
-    /** mapa que relaciona Ids de sessió de websocket(String) amb partides actuals (GameInstance).
-     * Un websocket session id pertany a un únic player connectat.*/
+    /** Sessió -> partida */
     private final Map<WebSocketSession, GameInstance> sessionToGame = new ConcurrentHashMap<>();
 
+    /** Sessió -> player */
     private final Map<WebSocketSession, Player> sessionToPlayer = new ConcurrentHashMap<>();
 
-    /** Índex de GameInstance per game_id */
+    /** gameId -> GameInstance */
     private final Map<String, GameInstance> games = new ConcurrentHashMap<>();
 
-    //Serveis
+    // Serveis
     private final LootService lootService;
     private final CharacterService characterService;
     private final SkillService skillService;
 
     public GameManager(LootService lootService, CharacterService characterService, SkillService skillService) {
-        executor = Executors.newFixedThreadPool(10);
+        // Pots canviar-ho si vols limitar fils
+        this.executor = Executors.newCachedThreadPool();
+
         this.lootService = lootService;
         this.characterService = characterService;
         this.skillService = skillService;
     }
 
+    /**
+     * Nova connexió websocket
+     */
     public void onConnect(WebSocketSession session) {
+
+        System.out.println("Jugador connectat: " + session.getId());
+
         waitingPlayers.add(session);
+
+        System.out.println("Jugadors esperant: " + waitingPlayers.size());
+
         tryStartGame();
     }
 
+    /**
+     * Missatge rebut d'un jugador
+     */
     public void handleIncoming(WebSocketSession session, String message) {
-        // Mirem si hi ha un joc associat a aquesta sessió, i si és el cas
-        // encuem la petició al joc trobat.
         GameInstance game = sessionToGame.get(session);
+
         if (game != null) {
-            Player p = sessionToPlayer.get(session);
-            game.enqueue(new GameMessage(p, message));
+
+            Player player = sessionToPlayer.get(session);
+
+            game.enqueue(new GameMessage(player, message));
         }
     }
 
-    private void tryStartGame() {
-        System.out.println("Number of waiting players:"+waitingPlayers.size()   );
-        if (waitingPlayers.size() >= 3) {
+    /**
+     * Intenta crear totes les partides possibles
+     */
+    private synchronized void tryStartGame() {
+
+        while (waitingPlayers.size() >= 3) {
+
             List<Player> players = List.of(
-                new Player( lastPlayerId++, waitingPlayers.poll()),
-                new Player( lastPlayerId++, waitingPlayers.poll()),
-                new Player( lastPlayerId++, waitingPlayers.poll())
+                    new Player(lastPlayerId++, waitingPlayers.poll()),
+                    new Player(lastPlayerId++, waitingPlayers.poll()),
+                    new Player(lastPlayerId++, waitingPlayers.poll())
             );
 
             GameInstance game = new GameInstance(players, executor, lootService, characterService, skillService);
+
             String gameId = game.getId();
 
-            // Registrem els jugadors al mapa de sessions-->joc i sessions-->Player
-            players.forEach(p -> sessionToGame.put(p.getSession(), game));
-            players.forEach(p -> sessionToPlayer.put(p.getSession(),p));
+            for (Player p : players) {
+                sessionToGame.put(p.getSession(), game);
+                sessionToPlayer.put(p.getSession(), p);
+            }
 
-            // Indexem el joc pel seu Id
             games.put(gameId, game);
 
-            // Engeguem el fil de joc
+            System.out.println("Nova partida creada: " + gameId);
+
             game.start();
         }
+    }
+
+    /**
+     * Elimina partida acabada
+     */
+    public void removeGame(String gameId) {
+
+        GameInstance game = games.remove(gameId);
+
+        if (game != null) {
+
+            for (Player p : game.getPlayers()) {
+                sessionToGame.remove(p.getSession());
+                sessionToPlayer.remove(p.getSession());
+            }
+
+            System.out.println("Partida eliminada: " + gameId);
+        }
+    }
+
+    /**
+     * Desconnexió d'un jugador
+     */
+    public void onDisconnect(WebSocketSession session) {
+
+        waitingPlayers.remove(session);
+
+        GameInstance game = sessionToGame.get(session);
+
+        if (game != null) {
+            game.onPlayerDisconnect(session);
+        }
+
+        sessionToGame.remove(session);
+        sessionToPlayer.remove(session);
+
+        System.out.println("Jugador desconnectat: " + session.getId());
     }
 }

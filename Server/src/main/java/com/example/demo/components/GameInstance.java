@@ -128,6 +128,10 @@ public class GameInstance {
         return characterService.getAllEnemies();
     }
 
+    public Enemy getEnemyWithSkills(int id){
+        return characterService.getEnemyWithSkills(id).get();
+    }
+
     public List<Enemy> getEnemiesByLevel() {
         Random rand = new Random();
 
@@ -346,6 +350,54 @@ public class GameInstance {
 
             int roomId = nextRooms.size() + 1;
             nextRooms.add(new Room(roomId, chosenType, actualRoom.getLevel()+1));
+        }
+    }
+
+    public void onPlayerDisconnect(WebSocketSession session) {
+
+        Player disconnectedPlayer = null;
+
+        for (Player player : players) {
+
+            if (player.getSession().getId().equals(session.getId())) {
+                disconnectedPlayer = player;
+                break;
+            }
+        }
+
+        if (disconnectedPlayer == null) {
+            return;
+        }
+
+        System.out.println("Jugador desconectado de la partida: " + disconnectedPlayer.getId());
+
+        playerCharacters.remove(disconnectedPlayer);
+
+        players.remove(disconnectedPlayer);
+
+        try {
+            JSONMessage msg = new JSONMessage("PLAYER_DISCONNECTED", null);
+            broadcast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (players.size() < 3) {
+
+            System.out.println("No quedan suficientes jugadores. Cerrando partida.");
+            stop();
+
+            for (Player player : players) {
+                try {
+                    if (player.getSession().isOpen()) {
+                        player.getSession().close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            players.clear();
         }
     }
 }

@@ -99,9 +99,9 @@ public partial class AppDbContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("entity_id");
-            entity.Property(e => e.PassiveId)
+            entity.Property(e => e.Passive_Id)
                 .HasColumnType("int(11)")
-                .HasColumnName("passiveId");
+                .HasColumnName("passive_id");
 
             entity.HasOne(d => d.Entity).WithOne(p => p.Enemy)
                 .HasForeignKey<Enemy>(d => d.EntityId)
