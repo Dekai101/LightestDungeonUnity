@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.example.demo.api.model.Player;
+import com.example.demo.api.model.StatusCharacter;
 import com.example.demo.api.model.bd.BdPlayer;
 import com.example.demo.api.model.bd.Character;
 import com.example.demo.api.model.bd.Effect;
@@ -21,10 +22,13 @@ import com.example.demo.api.model.messages.in.players_turn.PlayersTurn_IN;
 import com.example.demo.api.model.messages.in.room_cleared.RoomCleared_IN;
 import com.example.demo.api.model.messages.out.enemy_action.EnemyAction_OUT;
 import com.example.demo.api.model.messages.out.enemy_action.EnemyActionResult;
+import com.example.demo.api.model.messages.out.battle_state.BattleStateUpdate_OUT;
 import com.example.demo.api.model.messages.out.enemies.ShowEnemies_OUT;
 import com.example.demo.api.model.messages.out.generic.ActionResult_OUT;
 import com.example.demo.api.model.messages.out.player_action.PlayerActionResult;
 import com.example.demo.api.model.messages.out.player_action.PlayerActionResult_OUT;
+import com.example.demo.api.model.messages.out.status_applied.StatusUpdate;
+import com.example.demo.api.model.messages.out.status_applied.Status_Applied_OUT;
 import com.example.demo.components.GameInstance;
 import com.example.demo.components.GameMessage;
 
@@ -37,9 +41,9 @@ public class StateEnemyRoom extends State {
 
     private List<Enemy> enemies;
 
-    private Map<Player, PlayerTurn> pendingTurns = new HashMap<>();
+    private List<Player> memPlayers;
 
-    private Map<Integer, Integer> entityCurrentHp = new HashMap<>();
+    private Map<Player, PlayerTurn> pendingTurns = new HashMap<>();
 
     private HashMap<Player, Boolean> playersCleared = new HashMap<>();
 
@@ -51,16 +55,12 @@ public class StateEnemyRoom extends State {
 
         enemies = game.getEnemiesByLevel();
 
-        for (Enemy e : enemies) {
-            entityCurrentHp.put(e.getCombatId(), e.getHpMax());
-        }
+        memPlayers = new ArrayList<>();
 
         for (Player p : game.getPlayers()) {
-            entityCurrentHp.put((int) p.getId(), p.getCharacter().getHpMax());
-        }
-
-        for (Player p : game.getPlayers()) {
+            p.getCharacter().setEnergy(p.getCharacter().getEnergyMax());
             playersCleared.put(p, false);
+            memPlayers.add(new Player(p));
         }
 
         ShowEnemies_OUT msg = new ShowEnemies_OUT();
@@ -112,6 +112,13 @@ public class StateEnemyRoom extends State {
 
         boolean allCleared = playersCleared.values().stream().allMatch(v -> v);
         if (allCleared) {
+            for (Player player : memPlayers) {
+                game.getPlayers().stream()
+                    .filter(pl -> pl.getId() == player.getId())
+                    .findFirst()
+                    .ifPresent(pl -> pl.getCharacter().setHp(player.getCharacter().getHp()));
+            }
+            
             game.setState(new StateMap(game));
         }
     }
@@ -119,12 +126,21 @@ public class StateEnemyRoom extends State {
     private void makeTurn(Player p, JSONMessage jsonMsg) {
         PlayersTurn_IN message = mapper.treeToValue(jsonMsg.data, PlayersTurn_IN.class);
 
+        //Energy recovering system
+        for (Player player : memPlayers) {
+            int energyRecover = player.getCharacter().getEnergyMax() / 4;
+            player.getCharacter().setEnergy(player.getCharacter().getEnergy()+energyRecover);
+            if(player.getCharacter().getEnergy() > player.getCharacter().getEnergyMax()){
+                player.getCharacter().setEnergy(player.getCharacter().getEnergyMax());
+            }
+        }
+
         if (message.players != null && !message.players.isEmpty()) {
             pendingTurns.put(p, message.players.get(0));
         }
 
-        if (pendingTurns.size() < game.getPlayers().size()) {
-            System.out.println("Esperant jugadors... (" + pendingTurns.size() + "/" + game.getPlayers().size() + ")");
+        if (pendingTurns.size() < memPlayers.size()) {
+            System.out.println("Esperant jugadors... (" + pendingTurns.size() + "/" + memPlayers.size() + ")");
             return;
         }
 
@@ -133,13 +149,21 @@ public class StateEnemyRoom extends State {
         List<PlayerActionResult> playerResults = processPlayerTurns();
         List<EnemyActionResult> enemyResults   = processEnemyTurns();
 
+        Status_Applied_OUT statusApplied = processStatusEffects();
+
+        BattleStateUpdate_OUT battle_state = new BattleStateUpdate_OUT();
+        battle_state.enemies = enemies;
+        battle_state.players = memPlayers;
+
         game.broadcast(new JSONMessage(game.getId(), new PlayerActionResult_OUT(playerResults)));
         game.broadcast(new JSONMessage(game.getId(), new EnemyAction_OUT(enemyResults)));
+        game.broadcast(new JSONMessage(game.getId(), battle_state));
+        game.broadcast(new JSONMessage(game.getId(), statusApplied));
 
         pendingTurns.clear();
 
-        boolean allEnemiesDead = enemies.stream().allMatch(e -> getHp(e.getCombatId()) <= 0);
-        boolean allPlayersDead = game.getPlayers().stream().allMatch(p2 -> p2.getCharacter().getHp() <= 0);
+        boolean allEnemiesDead = enemies.stream().allMatch(e -> e.getHp() <= 0);
+        boolean allPlayersDead = memPlayers.stream().allMatch(p2 -> p2.getCharacter().getHp() <= 0);
         
         if (allEnemiesDead) {
             System.out.println("Tots els enemics han mort. Sala netejada!");
@@ -153,6 +177,22 @@ public class StateEnemyRoom extends State {
         results = new ArrayList<>();
 
         for (Map.Entry<Player, PlayerTurn> entry : pendingTurns.entrySet()) {
+            if (entry.getKey().getCharacter().hasStatus("stunned")) {
+
+                results.add(new PlayerActionResult(
+                    (int)entry.getKey().getId(),
+                    "STUNNED",
+                    -1,
+                    0,
+                    "",
+                    false,
+                    false,
+                    null
+                ));
+
+                continue;
+            }
+
             PlayerTurn turn = entry.getValue();
 
             if (!turn.choiceMade || turn.player == null) {
@@ -178,7 +218,7 @@ public class StateEnemyRoom extends State {
         System.out.println("Id del target: "   + turn.target.getId());
         System.out.println("Id de la skill: "  + turn.skillCasted.getId());
 
-        Player realPlayer = game.getPlayers().stream()
+        Player realPlayer = memPlayers.stream()
             .filter(pl -> pl.getId() == turn.player.getId()).findFirst().orElse(null);
 
         if (realPlayer == null) {
@@ -202,8 +242,8 @@ public class StateEnemyRoom extends State {
                 myTargetsId = enemies.stream().mapToInt(Enemy::getCombatId).toArray();
                 bdTargetsId = enemies.stream().mapToInt(Enemy::getId).toArray();
             } else {
-                myTargetsId = game.getPlayers().stream().mapToInt(p -> (int) p.getId()).toArray();
-                bdTargetsId = game.getPlayers().stream().mapToInt(p -> p.getCharacter().getId()).toArray();
+                myTargetsId = memPlayers.stream().mapToInt(p -> (int) p.getId()).toArray();
+                bdTargetsId = memPlayers.stream().mapToInt(p -> p.getCharacter().getId()).toArray();
             }
         } else {
             if ("ENEMY".equals(skill.getTargetType())) {
@@ -217,7 +257,7 @@ public class StateEnemyRoom extends State {
                 }
             } else {
                 int i = 0;
-                for (Player pl : game.getPlayers()) {
+                for (Player pl : memPlayers) {
                     if (pl.getId() == turn.target.getId()) {
                         myTargetsId[i] = (int) pl.getId();
                         bdTargetsId[i] = pl.getCharacter().getId();
@@ -244,17 +284,27 @@ public class StateEnemyRoom extends State {
                     boolean crit = random.nextFloat() < attacker.getCritChance();
                     if (crit) anyCrit = true;
 
-                    if (random.nextFloat() > effect.getProbability()) continue;
-
-                    if (effect.getStatus() != null) {
-                        statusApplied = effect.getStatus().getName();
-                        continue;
+                    if (random.nextFloat() < effect.getProbability()) {
+                        if (effect.getStatus() != null) {
+                            statusApplied = effect.getStatus().getName();
+                            for (Player player : memPlayers) {
+                                if (player.getId() == myTargetsId[i]) {
+                                    player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                }
+                            }
+                            for (Enemy enemy : enemies) {
+                                if (enemy.getCombatId() == myTargetsId[i]) {
+                                    enemy.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                }
+                            }
+                            continue;
+                        }
                     }
 
                     if (effect.getStatistic() == null) continue;
                     statisticName = effect.getStatistic().getName();
 
-                    if ("attack".equals(statisticName) && "ENEMY".equals(skill.getTargetType())) {
+                    if ("attack".equals(statisticName)) {
 
                         if (effect.getMinFlatPower() != null && effect.getMaxFlatPower() != null) {
                             int flatComponent = randomBetween(effect.getMinFlatPower(), effect.getMaxFlatPower());
@@ -264,16 +314,36 @@ public class StateEnemyRoom extends State {
 
                             int finalDamage = Math.max(1, rawDamage - getDefenseOf(bdTargetsId[i]));
 
-                            setHp(myTargetsId[i], Math.max(0, getHp(myTargetsId[i]) - finalDamage));
-
                             statisticName = "hp";
                             
+                            for (Player player : memPlayers) {
+                                if(player.getId() == myTargetsId[i]){
+                                    player.getCharacter().setHp(player.getCharacter().getHp()-finalDamage);
+                                }
+                            }
+                            for (Enemy enemy : enemies) {
+                                if(enemy.getCombatId() == myTargetsId[i]){
+                                    enemy.setHp(enemy.getHp()-finalDamage);
+                                }
+                            }
+
                             totalValue -= finalDamage;
                         } 
                         else if (effect.getStatMultiplier() != null) {
                             float currentAttack = getStatOf(bdTargetsId[i],"attack");
 
                             int attackChange = (int)(currentAttack * effect.getStatMultiplier());
+
+                            for (Player player : memPlayers) {
+                                if(player.getId() == myTargetsId[i]){
+                                    player.getCharacter().setAttack(player.getCharacter().getAttack()+attackChange);
+                                }
+                            }
+                            for (Enemy enemy : enemies) {
+                                if(enemy.getCombatId() == myTargetsId[i]){
+                                    enemy.setAttack(enemy.getAttack()+attackChange);
+                                }
+                            }
 
                             totalValue += attackChange;
                         }
@@ -289,22 +359,59 @@ public class StateEnemyRoom extends State {
                             value = (int) (tHpMax * effect.getStatMultiplier());
                         }
 
+                        for (Player player : memPlayers) {
+                            if(player.getId() == myTargetsId[i]){
+                                player.getCharacter().setHp(player.getCharacter().getHp()+value);
+                            }
+                        }
+                        for (Enemy enemy : enemies) {
+                            if(enemy.getCombatId() == myTargetsId[i]){
+                                enemy.setHp(enemy.getHp()+value);
+                            }
+                        }
+
                         totalValue += value;
 
                     } else if ("accuracy_multiplier".equals(statisticName)) {
 
                         float mult = effect.getStatMultiplier() != null ? effect.getStatMultiplier() : 0f;
-                        totalValue += (int) (mult * 100);
+                        float value = (mult * 100);
+
+                        for (Player player : memPlayers) {
+                            if(player.getId() == myTargetsId[i]){
+                                player.getCharacter().setAccuracyMultiplier(player.getCharacter().getAccuracyMultiplier()+value);
+                            }
+                        }
+                        for (Enemy enemy : enemies) {
+                            if(enemy.getCombatId() == myTargetsId[i]){
+                                enemy.setAccuracyMultiplier(enemy.getAccuracyMultiplier()+value);
+                            }
+                        } 
+
+                        totalValue += value;
 
                     } else {
 
                         float statValue = getStatOf(bdTargetsId[i], statisticName);
-                        float mult      = effect.getStatMultiplier() != null ? effect.getStatMultiplier() : 0f;
-                        totalValue     += (int) (statValue * mult);
+                        float mult = effect.getStatMultiplier() != null ? effect.getStatMultiplier() : 0f;
+                        float value = (statValue * mult);
+
+                        for (Player player : memPlayers) {
+                            if(player.getId() == myTargetsId[i]){
+                                player.getCharacter().setStat(statisticName, value);
+                            }
+                        }
+                        for (Enemy enemy : enemies) {
+                            if(enemy.getCombatId() == myTargetsId[i]){
+                                enemy.setStat(statisticName, value);
+                            }
+                        } 
+
+                        totalValue += value;
                     }
 
                     results.add(new PlayerActionResult(
-                        attacker.getId(), "SKILL", myTargetsId[i],
+                        (int)realPlayer.getId(), "SKILL", myTargetsId[i],
                         totalValue, statisticName, anyCrit, anyHit, statusApplied
                     ));
                 }
@@ -317,7 +424,7 @@ public class StateEnemyRoom extends State {
         System.out.println("Id del target: "   + turn.target.getId());
         System.out.println("Id de l'item: "    + turn.itemUsed.getId());
 
-        Player realPlayer = game.getPlayers().stream()
+        Player realPlayer = memPlayers.stream()
             .filter(pl -> pl.getId() == turn.player.getId()).findFirst().orElse(null);
 
         if (realPlayer == null) {
@@ -342,8 +449,8 @@ public class StateEnemyRoom extends State {
                 myTargetsId = enemies.stream().mapToInt(Enemy::getCombatId).toArray();
                 bdTargetsId = enemies.stream().mapToInt(Enemy::getId).toArray();
             } else {
-                myTargetsId = game.getPlayers().stream().mapToInt(p -> (int) p.getId()).toArray();
-                bdTargetsId = game.getPlayers().stream().mapToInt(p -> p.getCharacter().getId()).toArray();
+                myTargetsId = memPlayers.stream().mapToInt(p -> (int) p.getId()).toArray();
+                bdTargetsId = memPlayers.stream().mapToInt(p -> p.getCharacter().getId()).toArray();
             }
         } else {
             if ("ENEMY".equals(item.getTargetType())) {
@@ -360,7 +467,7 @@ public class StateEnemyRoom extends State {
             } else {
                 myTargetsId = new int[1];
                 bdTargetsId = new int[1];
-                for (Player pl : game.getPlayers()) {
+                for (Player pl : memPlayers) {
                     if (pl.getId() == turn.target.getId()) {
                         myTargetsId[0] = (int) pl.getId();
                         bdTargetsId[0] = pl.getCharacter().getId();
@@ -379,26 +486,45 @@ public class StateEnemyRoom extends State {
             for (int i = 0; i < bdTargetsId.length; i++) {
                 int totalValue = 0;
 
-                if (random.nextFloat() > effect.getProbability()) continue;
-
-                if (effect.getStatus() != null) {
-                    statusApplied = effect.getStatus().getName();
-                    continue;
+                if (random.nextFloat() < effect.getProbability()){
+                    if (effect.getStatus() != null) {
+                        statusApplied = effect.getStatus().getName();
+                        for (Player player : memPlayers) {
+                            if(player.getId() == myTargetsId[i]){
+                                player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                            }
+                        }
+                        for (Enemy enemy : enemies) {
+                            if(enemy.getCombatId() == myTargetsId[i]){
+                                enemy.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                            }
+                        }
+                        continue;
+                    }
                 }
 
                 if (effect.getStatistic() == null) continue;
                 statisticName = effect.getStatistic().getName();
 
-                if ("attack".equals(statisticName) && "ENEMY".equals(item.getTargetType())) {
+                if ("attack".equals(statisticName)) {
                     if (effect.getMinFlatPower() != null && effect.getMaxFlatPower() != null) {
                         int flatComponent = randomBetween(effect.getMinFlatPower(), effect.getMaxFlatPower());
                         int rawDamage = flatComponent;
 
                         int finalDamage = Math.max(1, rawDamage - getDefenseOf(bdTargetsId[i]));
 
-                        setHp(myTargetsId[i], Math.max(0, getHp(myTargetsId[i]) - finalDamage));
-
                         statisticName = "hp";
+
+                        for (Player player : memPlayers) {
+                            if(player.getId() == myTargetsId[i]){
+                                player.getCharacter().setHp(player.getCharacter().getHp()-finalDamage);
+                            }
+                        }
+                        for (Enemy enemy : enemies) {
+                            if(enemy.getCombatId() == myTargetsId[i]){
+                                enemy.setHp(enemy.getHp()-finalDamage);
+                            }
+                        }
 
                         totalValue -= finalDamage;
                     } 
@@ -406,6 +532,17 @@ public class StateEnemyRoom extends State {
                         float currentAttack = getStatOf(bdTargetsId[i],"attack");
 
                         int attackChange = (int)(currentAttack * effect.getStatMultiplier());
+
+                        for (Player player : memPlayers) {
+                            if(player.getId() == myTargetsId[i]){
+                                player.getCharacter().setAttack(player.getCharacter().getAttack()+attackChange);
+                            }
+                        }
+                        for (Enemy enemy : enemies) {
+                            if(enemy.getCombatId() == myTargetsId[i]){
+                                enemy.setAttack(enemy.getAttack()+attackChange);
+                            }
+                        }
 
                         totalValue += attackChange;
                     }
@@ -421,24 +558,59 @@ public class StateEnemyRoom extends State {
                         value = (int) (tHpMax * effect.getStatMultiplier());
                     }
 
-                    int newHp = Math.min(tHpMax, getHp(myTargetsId[i]) + value);
-                    setHp(myTargetsId[i], newHp);
+                    for (Player player : memPlayers) {
+                        if(player.getId() == myTargetsId[i]){
+                            player.getCharacter().setHp(player.getCharacter().getHp()+value);
+                        }
+                    }
+                    for (Enemy enemy : enemies) {
+                        if(enemy.getCombatId() == myTargetsId[i]){
+                            enemy.setHp(enemy.getHp()+value);
+                        }
+                    }
+
                     totalValue += value;
 
                 } else if ("accuracy_multiplier".equals(statisticName)) {
 
                     float mult = effect.getStatMultiplier() != null ? effect.getStatMultiplier() : 0f;
-                    totalValue += (int) (mult * 100);
+                    float value = (mult * 100);
+
+                    for (Player player : memPlayers) {
+                        if(player.getId() == myTargetsId[i]){
+                            player.getCharacter().setAccuracyMultiplier(player.getCharacter().getAccuracyMultiplier()+value);
+                        }
+                    }
+                    for (Enemy enemy : enemies) {
+                        if(enemy.getCombatId() == myTargetsId[i]){
+                            enemy.setAccuracyMultiplier(enemy.getAccuracyMultiplier()+value);
+                        }
+                    } 
+
+                    totalValue += value;
 
                 } else {
 
                     float statValue = getStatOf(bdTargetsId[i], statisticName);
                     float mult      = effect.getStatMultiplier() != null ? effect.getStatMultiplier() : 0f;
-                    totalValue     += (int) (statValue * mult);
+                    float value = (statValue * mult);
+
+                    for (Player player : memPlayers) {
+                        if(player.getId() == myTargetsId[i]){
+                            player.getCharacter().setStat(statisticName, value);
+                        }
+                    }
+                    for (Enemy enemy : enemies) {
+                        if(enemy.getCombatId() == myTargetsId[i]){
+                            enemy.setStat(statisticName, value);
+                        }
+                    }
+
+                    totalValue += value;
                 }
 
                 results.add(new PlayerActionResult(
-                    attacker.getId(), "ITEM", myTargetsId[i],
+                    (int)realPlayer.getId(), "ITEM", myTargetsId[i],
                     totalValue, statisticName, anyCrit, anyHit, statusApplied
                 ));
             }
@@ -448,13 +620,22 @@ public class StateEnemyRoom extends State {
     private List<EnemyActionResult> processEnemyTurns() {
         List<EnemyActionResult> results = new ArrayList<>();
 
-        List<Player> alivePlayers = game.getPlayers().stream()
-            .filter(p -> getHp((int) p.getId()) > 0)
+        List<Player> alivePlayers = memPlayers.stream()
+            .filter(p -> p.getCharacter().getHp() > 0)
             .collect(Collectors.toList());
 
-        for (Enemy enemy : enemies) {
+        for (Enemy e : enemies) {
+            if (e.hasStatus("stunned")) {
+                results.add(new EnemyActionResult(
+                    e.getCombatId(), "STUNNED",
+                    -1, 0, false, false, null
+                ));
+                continue;
+            }
 
-            if (getHp(enemy.getCombatId()) <= 0) continue;
+            Enemy enemy = game.getEnemyWithSkills(e.getId());
+
+            if (enemy.getHp() <= 0) continue;
             if (alivePlayers.isEmpty()) break;
 
             List<Skill> activeSkills = enemy.getSkills().stream()
@@ -463,7 +644,9 @@ public class StateEnemyRoom extends State {
 
             if (activeSkills.isEmpty()) continue;
 
-            Skill chosenSkill = activeSkills.get(random.nextInt(activeSkills.size()));
+            Skill skill = activeSkills.get(random.nextInt(activeSkills.size()));
+            
+            Skill chosenSkill = game.getSkillByIdWithEffects(skill.getId());
 
             if (chosenSkill.getEffects() == null || chosenSkill.getEffects().isEmpty()) {
                 Player fallback = alivePlayers.get(random.nextInt(alivePlayers.size()));
@@ -503,11 +686,21 @@ public class StateEnemyRoom extends State {
                         boolean crit = random.nextFloat() < enemy.getCritChance();
                         if (crit) anyCrit = true;
 
-                        if (random.nextFloat() > effect.getProbability()) continue;
-
-                        if (effect.getStatus() != null) {
-                            statusApplied = effect.getStatus().getName();
-                            continue;
+                        if (random.nextFloat() < effect.getProbability()){
+                            if (effect.getStatus() != null) {
+                                statusApplied = effect.getStatus().getName();
+                                for (Player player : memPlayers) {
+                                    if(player.getId() == myTargetsId[i]){
+                                        player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                    }
+                                }
+                                for (Enemy en : enemies) {
+                                    if(en.getCombatId() == myTargetsId[i]){
+                                        en.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                    }
+                                }
+                                continue;
+                            }
                         }
 
                         if (effect.getStatistic() == null) continue;
@@ -522,9 +715,18 @@ public class StateEnemyRoom extends State {
 
                                 int finalDamage = Math.max(1, rawDamage - getDefenseOf(bdTargetsId[i]));
 
-                                setHp(myTargetsId[i], Math.max(0, getHp(myTargetsId[i]) - finalDamage));
-
                                 statisticName = "hp";
+
+                                for (Player player : memPlayers) {
+                                    if(player.getId() == myTargetsId[i]){
+                                        player.getCharacter().setHp(player.getCharacter().getHp()-finalDamage);
+                                    }
+                                }
+                                for (Enemy en : enemies) {
+                                    if(en.getCombatId() == myTargetsId[i]){
+                                        en.setHp(en.getHp()-finalDamage);
+                                    }
+                                }
 
                                 totalValue -= finalDamage;
                             } 
@@ -533,10 +735,20 @@ public class StateEnemyRoom extends State {
 
                                 int attackChange = (int)(currentAttack * effect.getStatMultiplier());
 
+                                for (Player player : memPlayers) {
+                                    if(player.getId() == myTargetsId[i]){
+                                        player.getCharacter().setAttack(player.getCharacter().getAttack()+attackChange);
+                                    }
+                                }
+                                for (Enemy en : enemies) {
+                                    if(en.getCombatId() == myTargetsId[i]){
+                                        en.setAttack(en.getAttack()+attackChange);
+                                    }
+                                }
+
                                 totalValue += attackChange;
                             }
                         } else if ("hp".equals(statisticName)) {
-
                             int tHpMax = getHpMaxOf(bdTargetsId[i]);
                             int value  = 0;
 
@@ -547,22 +759,56 @@ public class StateEnemyRoom extends State {
                                 value = (int) (tHpMax * effect.getStatMultiplier());
                             }
 
+                            for (Player player : memPlayers) {
+                                if(player.getId() == myTargetsId[i]){
+                                    player.getCharacter().setHp(player.getCharacter().getHp()+value);
+                                }
+                            }
+                            for (Enemy en : enemies) {
+                                if(en.getCombatId() == myTargetsId[i]){
+                                    en.setHp(en.getHp()+value);
+                                }
+                            }
+
                             totalValue += value;
 
                         } else if ("accuracy_multiplier".equals(statisticName)) {
-
                             float mult = effect.getStatMultiplier() != null ? effect.getStatMultiplier() : 0f;
-                            totalValue += (int) (mult * 100);
+                            float value = (mult * 100);
 
+                            for (Player player : memPlayers) {
+                                if(player.getId() == myTargetsId[i]){
+                                    player.getCharacter().setAccuracyMultiplier(player.getCharacter().getAccuracyMultiplier()+value);
+                                }
+                            }
+                            for (Enemy en : enemies) {
+                                if(en.getCombatId() == myTargetsId[i]){
+                                    en.setAccuracyMultiplier(en.getAccuracyMultiplier()+value);
+                                }
+                            } 
+
+                            totalValue += value;
                         } else {
-
                             float statValue = getStatOf(bdTargetsId[i], statisticName);
                             float mult      = effect.getStatMultiplier() != null ? effect.getStatMultiplier() : 0f;
-                            totalValue     += (int) (statValue * mult);
+                            float value = (statValue * mult);
+
+                            for (Player player : memPlayers) {
+                                if(player.getId() == myTargetsId[i]){
+                                    player.getCharacter().setStat(statisticName, value);
+                                }
+                            }
+                            for (Enemy en : enemies) {
+                                if(en.getCombatId() == myTargetsId[i]){
+                                    en.setStat(statisticName, value);
+                                }
+                            }
+
+                            totalValue += value;
                         }
 
                         results.add(new EnemyActionResult(
-                            enemy.getCombatId(), chosenSkill.getName(), myTargetsId[i],
+                            e.getCombatId(), chosenSkill.getName(), myTargetsId[i],
                             totalValue, anyCrit, anyHit, statusApplied
                         ));
                     }
@@ -571,6 +817,135 @@ public class StateEnemyRoom extends State {
         }
 
         return results;
+    }
+
+    private Status_Applied_OUT processStatusEffects() {
+        Status_Applied_OUT statusApplied = new Status_Applied_OUT();
+        statusApplied.updates = new ArrayList<>();
+
+        // PLAYERS
+        for (Player player : memPlayers) {
+
+            BdPlayer c = player.getCharacter();
+
+            if (c.getHp() <= 0) continue;
+
+            List<StatusUpdate> tmpStatus = applyStatusEffects(c, (int)player.getId());
+
+            if(tmpStatus != null && !tmpStatus.isEmpty()){
+                for (StatusUpdate su : tmpStatus) {
+                    statusApplied.updates.add(su);
+                }
+            }
+        }
+
+        // ENEMIES
+        for (Enemy enemy : enemies) {
+
+            if (enemy.getHp() <= 0) continue;
+
+            List<StatusUpdate> tmpStatus = applyStatusEffects(enemy, enemy.getCombatId());
+
+            if(tmpStatus != null && !tmpStatus.isEmpty()){
+                for (StatusUpdate su : tmpStatus) {
+                    statusApplied.updates.add(su);
+                }
+            }
+        }
+
+        return statusApplied;
+    }
+
+    private List<StatusUpdate> applyStatusEffects(Character c, int id) {
+
+        List<StatusCharacter> statuses = c.getStatusEffects();
+
+        List<StatusUpdate> statusesList = new ArrayList<>();
+
+        if (statuses == null || statuses.isEmpty()) return null;
+
+        // BLEEDING
+        if (statuses.stream().anyMatch(se -> se.getName().equals("bleeding"))) {
+
+            int level = statuses.stream().filter(se -> se.getName().equals("bleeding")).findFirst().get().getLevel();
+            int durationTurns = statuses.stream().filter(se -> se.getName().equals("bleeding")).findFirst().get().getDurationTurns();
+            
+            float percent = switch (level) {
+                case 1 -> 0.03f;
+                case 2 -> 0.06f;
+                case 3 -> 0.09f;
+                default -> 0f;
+            };
+
+            int damage = (int)(c.getHpMax() * percent);
+
+            c.setHp(Math.max(0, c.getHp() - damage));
+
+            // debuff defensa
+            int originalDefense = c.getDefense();
+
+            float defReduction = originalDefense * 0.10f;
+
+            c.setDefense((int)(originalDefense - defReduction));
+
+            System.out.println(c.getName() + " suffers bleeding damage: -" + damage);
+
+            statusesList.add(new StatusUpdate(id, "bleeding", -damage, "hp", durationTurns, level));
+            statusesList.add(new StatusUpdate(id, "bleeding", -defReduction, "defense", durationTurns, level));
+        }
+
+        // POISONED
+        if (statuses.stream().anyMatch(se -> se.getName().equals("poisoned"))) {
+
+            int level = statuses.stream().filter(se -> se.getName().equals("poisoned")).findFirst().get().getLevel();
+            int durationTurns = statuses.stream().filter(se -> se.getName().equals("poisoned")).findFirst().get().getDurationTurns();
+
+            float percent = switch (level) {
+                case 1 -> 0.05f;
+                case 2 -> 0.10f;
+                case 3 -> 0.15f;
+                default -> 0f;
+            };
+
+            int damage = (int)(c.getHpMax() * percent);
+
+            c.setHp(Math.max(0, c.getHp() - damage));
+
+            System.out.println(c.getName() + " suffers poison damage: -" + damage);
+
+            statusesList.add(new StatusUpdate(id, "poisoned", -damage, "hp", durationTurns, level));
+        }
+
+        // STRENGTHENED
+        if (statuses.stream().anyMatch(se -> se.getName().equals("strengthened"))) {
+
+            boolean alreadyApplied = false;
+
+            if(!alreadyApplied){
+                alreadyApplied = true;
+
+                int level = statuses.stream().filter(se -> se.getName().equals("strengthened")).findFirst().get().getLevel();
+                int durationTurns = statuses.stream().filter(se -> se.getName().equals("strengthened")).findFirst().get().getDurationTurns();
+
+                float percent = switch (level) {
+                    case 1 -> 0.10f;
+                    case 2 -> 0.20f;
+                    case 3 -> 0.30f;
+                    default -> 0f;
+                };
+
+                int attackBonus = (int)(c.getAttack() * percent);
+
+                c.setAttack(c.getAttack() + attackBonus);
+
+                System.out.println(c.getName() + " gains strengthened buff: +" + attackBonus + " ATK");
+
+                statusesList.add(new StatusUpdate(id, "strengthened", attackBonus, "attack", durationTurns, level));
+            }
+        }
+
+        c.passStatusTurns();
+        return statusesList;
     }
 
     private int randomBetween(Integer min, Integer max) {
@@ -621,13 +996,5 @@ public class StateEnemyRoom extends State {
             if (bp.getId() == entityId) return bp.getDefense();
         }
         return 0;
-    }
-
-    private int getHp(int id) {
-        return entityCurrentHp.getOrDefault(id, 0);
-    }
-
-    private void setHp(int id, int hp) {
-        entityCurrentHp.put(id, hp);
     }
 }

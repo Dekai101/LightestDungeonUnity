@@ -3,6 +3,7 @@ package com.example.demo.api.model.bd;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.demo.api.model.StatusCharacter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -71,7 +72,7 @@ public class Character {
     private List<Skill> skills = new ArrayList<>();
 
     @Transient
-    private List<Effect> effects = new ArrayList<>();
+    private List<StatusCharacter> statusEffects = new ArrayList<>();
 
     public Character() {}
 
@@ -92,7 +93,6 @@ public class Character {
     public String getImageFull() { return imageFull; }
     public String getDescription() { return description; }
     public List<Skill> getSkills() { return skills; }
-    public List<Effect> getEffects() { return effects; }
 
     public void setId(Integer id) { this.id = id; }
     public void setName(String name) { this.name = name; }
@@ -111,6 +111,56 @@ public class Character {
     public void setImageFull(String imageFull) { this.imageFull = imageFull; }
     public void setDescription(String description) { this.description = description; }
     public void setSkills(List<Skill> skills) { this.skills = skills; }
-    public void setEffects(List<Effect> effects) { this.effects = effects; }
-    public void addEffect(Effect effect) { this.effects.add(effect); }
+
+    public List<StatusCharacter> getStatusEffects() {
+        return statusEffects;
+    }
+
+    public void addStatusEffect(String status, int level, int durationTurns) {
+        statusEffects.add(new StatusCharacter(status.toLowerCase(), level, durationTurns));
+    }
+
+    public boolean hasStatus(String status) {
+        return statusEffects.stream().anyMatch(se -> se.getName().toLowerCase().equals(status.toLowerCase()));
+    }
+
+    public int getStatusLevel(String status) {
+        return statusEffects.stream().findAny().filter(se -> se.getName().toLowerCase().equals(status.toLowerCase())).get().getLevel();
+    }
+
+    public int getDurationTurns(String status) {
+        return statusEffects.stream().findAny().filter(se -> se.getName().toLowerCase().equals(status.toLowerCase())).get().getDurationTurns();
+    }
+
+    public void removeStatus(String status) {
+        statusEffects.removeIf(se -> se.getName().toLowerCase().equals(status.toLowerCase()));
+    }
+
+    public void passStatusTurns() {
+        statusEffects.forEach(se -> se.setDurationTurns(se.getDurationTurns() - 1));
+        statusEffects.removeIf(se -> se.getDurationTurns() <= 0);
+    }
+
+    public void setStat(String statName, float value){
+        switch (statName.toLowerCase()) {
+            case "attack":
+                this.attack += (int) value;
+                break;
+            case "defense":
+                this.defense += (int) value;
+                break;
+            case "speed":
+                this.speed += (int) value;
+                break;
+            case "crit_chance":
+                this.critChance += value;
+                break;
+            case "crit_damage":
+                this.critDamage += value;
+                break;
+            case "accuracy_multiplier":
+                this.accuracyMultiplier += value;
+                break;
+        }
+    }
 }

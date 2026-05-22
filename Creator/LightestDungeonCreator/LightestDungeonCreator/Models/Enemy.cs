@@ -7,7 +7,7 @@ public partial class Enemy
 {
     public int EntityId { get; set; }
 
-    public int PassiveId { get; set; }
+    public int Passive_Id { get; set; }
 
     public virtual Entity Entity { get; set; } = null!;
 

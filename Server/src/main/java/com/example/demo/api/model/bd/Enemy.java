@@ -23,33 +23,33 @@ public class Enemy extends Character {
 
     public Enemy(Enemy other) {
 
-    this.setId(other.getId());
-    this.setName(other.getName());
-    this.setLevel(other.getLevel());
+        this.setId(other.getId());
+        this.setName(other.getName());
+        this.setLevel(other.getLevel());
 
-    this.setHp(other.getHp());
-    this.setHpMax(other.getHpMax());
+        this.setHp(other.getHp());
+        this.setHpMax(other.getHpMax());
 
-    this.setEnergy(other.getEnergy());
-    this.setEnergyMax(other.getEnergyMax());
+        this.setEnergy(other.getEnergy());
+        this.setEnergyMax(other.getEnergyMax());
 
-    this.setAttack(other.getAttack());
-    this.setDefense(other.getDefense());
-    this.setSpeed(other.getSpeed());
+        this.setAttack(other.getAttack());
+        this.setDefense(other.getDefense());
+        this.setSpeed(other.getSpeed());
 
-    this.setCritChance(other.getCritChance());
-    this.setCritDamage(other.getCritDamage());
-    this.setAccuracyMultiplier(other.getAccuracyMultiplier());
+        this.setCritChance(other.getCritChance());
+        this.setCritDamage(other.getCritDamage());
+        this.setAccuracyMultiplier(other.getAccuracyMultiplier());
 
-    this.setImageThumb(other.getImageThumb());
-    this.setImageFull(other.getImageFull());
-    this.setDescription(other.getDescription());
+        this.setImageThumb(other.getImageThumb());
+        this.setImageFull(other.getImageFull());
+        this.setDescription(other.getDescription());
 
-    this.setSkills(other.getSkills());
+        this.setSkills(other.getSkills());
 
-    this.passiveId = other.passiveId;
-    this.lootTable = other.lootTable;
-}
+        this.passiveId = other.passiveId;
+        this.lootTable = other.lootTable;
+    }
 
     public int getCombatId(){ return combatId; }
     public Integer getPassiveId() { return passiveId; }
