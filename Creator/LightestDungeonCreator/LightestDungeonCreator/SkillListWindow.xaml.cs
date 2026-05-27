@@ -11,7 +11,6 @@ using System.Windows.Media.Imaging;
 
 namespace LightestDungeonCreator
 {
-    // ── ViewModel para cada efecto en el panel de detalle ────────────
     public class EffectDisplayVM
     {
         public string EffectName { get; set; } = "";
@@ -27,39 +26,32 @@ namespace LightestDungeonCreator
         public Visibility DescriptionVisibility { get; set; } = Visibility.Collapsed;
         public Visibility FlatVisibility { get; set; } = Visibility.Collapsed;
         public Visibility MultiplierVisibility { get; set; } = Visibility.Collapsed;
-        // Fila entera de power — visible si al menos uno de los dos tiene valor
         public Visibility PowerRowVisibility { get; set; } = Visibility.Collapsed;
     }
 
     public partial class SkillListWindow : Window
     {
-        // ── State ────────────────────────────────────────────────────
         private List<Skill> _allSkills = new();
         private List<Skill> _filtered = new();
         private Skill? _selected;
 
-        // ── Constructor ──────────────────────────────────────────────
         public SkillListWindow()
         {
             InitializeComponent();
             LoadSkills();
         }
 
-        // ── Window drag ──────────────────────────────────────────────
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
             => DragMove();
 
-        // ── Navigation ───────────────────────────────────────────────
         private void BackButton_Click(object sender, RoutedEventArgs e)
             => Close();
 
-        // ── Data ─────────────────────────────────────────────────────
         private void LoadSkills()
         {
             try
             {
                 using var db = new AppDbContext();
-                // Include Effects y sus Stat/Status para poder mostrar nombres
                 _allSkills = db.Skills
                                .Include(s => s.Effects)
                                    .ThenInclude(e => e.Stat)
@@ -78,7 +70,6 @@ namespace LightestDungeonCreator
             ApplyFilters();
         }
 
-        // ── Filters ──────────────────────────────────────────────────
         private void FilterName_Changed(object sender, TextChangedEventArgs e)
             => ApplyFilters();
 
@@ -119,14 +110,12 @@ namespace LightestDungeonCreator
                 ClearDetail();
         }
 
-        // ── List item click ──────────────────────────────────────────
         private void SkillItem_Click(object sender, MouseButtonEventArgs e)
         {
             if (sender is Border b && b.Tag is Skill skill)
                 ShowDetail(skill);
         }
 
-        // ── Detail panel ─────────────────────────────────────────────
         private void ShowDetail(Skill skill)
         {
             _selected = skill;
@@ -154,21 +143,18 @@ namespace LightestDungeonCreator
             DetailAccuracy.Text = $"{skill.Accuracy:P0}";
             DetailTarget.Text = skill.TargetType;
 
-            // ── Efectos: construir EffectDisplayVM por cada Effect ───
             var vms = new List<EffectDisplayVM>();
 
             foreach (var eff in skill.Effects)
             {
                 bool isCleanse = eff.EffectLevel == 0;
 
-                // Nombre: prioridad Stat, luego Status, luego fallback
                 string name;
                 string description = "";
 
                 if (eff.Stat != null)
                 {
                     name = eff.Stat.Name;
-                    // Los Stats no tienen descripción en el modelo, dejamos vacío
                 }
                 else if (eff.Status != null)
                 {
@@ -177,7 +163,6 @@ namespace LightestDungeonCreator
                 }
                 else
                 {
-                    // Fallback si las navegaciones no están cargadas
                     name = eff.StatId.HasValue
                         ? $"Stat ID {eff.StatId}"
                         : eff.StatusId.HasValue
@@ -185,7 +170,6 @@ namespace LightestDungeonCreator
                             : "Unknown effect";
                 }
 
-                // Nivel: mostrar solo si hay un nivel significativo (> 0 y existe)
                 string levelStr = "";
                 bool showLevel = false;
                 if (eff.EffectLevel.HasValue && eff.EffectLevel.Value > 0)
@@ -194,14 +178,12 @@ namespace LightestDungeonCreator
                     showLevel = true;
                 }
 
-                // Flat damage: mostrar solo si min o max son != 0 y != null
                 bool showFlat = (eff.MinFlatPower.HasValue && eff.MinFlatPower.Value != 0)
                                 || (eff.MaxFlatPower.HasValue && eff.MaxFlatPower.Value != 0);
                 string flatRange = showFlat
                     ? $"{eff.MinFlatPower ?? 0} – {eff.MaxFlatPower ?? 0}"
                     : "";
 
-                // Stat multiplier: mostrar solo si != 0 y != null
                 bool showMult = eff.StatMultiplier.HasValue && eff.StatMultiplier.Value != 0f;
                 string multStr = showMult
                     ? eff.StatMultiplier!.Value.ToString("+0.##;-0.##")

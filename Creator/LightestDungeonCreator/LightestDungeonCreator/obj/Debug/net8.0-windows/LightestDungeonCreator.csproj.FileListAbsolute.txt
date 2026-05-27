@@ -201,15 +201,11 @@ C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDu
 C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\CharacterSkillAsignWindow.baml
 C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\EnemyCreatorWindow.baml
 C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\SkillCreatorWindow.baml
-C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\View\CreadorHabilitat.baml
-C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\View\CreadorPersonatge.baml
 C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\CharacterSkillAsignWindow.g.cs
 C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\EnemyCreatorWindow.g.cs
 C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\MainWindow.g.cs
 C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\SkillCreatorWindow.g.cs
 C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\SplashScreen.g.cs
-C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\View\CreadorHabilitat.g.cs
-C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\View\CreadorPersonatge.g.cs
 C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\App.g.cs
 C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\LightestDungeonCreator_MarkupCompile.cache
 C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\LightestDungeonCreator_MarkupCompile.lref
@@ -238,3 +234,9 @@ D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Creator\LightestDungeonCreator\Ligh
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\SkillListWindow.g.cs
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\ItemListWindow.baml
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\ItemListWindow.g.cs
+C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\EnemyListWindow.baml
+C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\ItemListWindow.baml
+C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\SkillListWindow.baml
+C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\EnemyListWindow.g.cs
+C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\ItemListWindow.g.cs
+C:\Users\catal\Desktop\LightestDungeon\Creator\LightestDungeonCreator\LightestDungeonCreator\obj\Debug\net8.0-windows\SkillListWindow.g.cs
