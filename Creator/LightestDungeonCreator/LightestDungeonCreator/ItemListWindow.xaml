@@ -479,6 +479,22 @@
                                Foreground="{StaticResource MutedBrush}"
                                FontFamily="Georgia" FontSize="10"
                                VerticalAlignment="Center" Opacity="0.5"/>
+                    <Button x:Name="EditItemBtn"
+                            Content="✎  EDIT ITEM"
+                            Style="{StaticResource ActionButtonStyle}"
+                            HorizontalAlignment="Right"
+                            Width="150" Height="28"
+                            Visibility="Collapsed"
+                            Click="EditItem_Click">
+                        <Button.Foreground>
+                            <SolidColorBrush Color="#C8922A"/>
+                        </Button.Foreground>
+                        <Button.FontSize>11</Button.FontSize>
+                        <Button.FontFamily>Georgia</Button.FontFamily>
+                        <Button.Effect>
+                            <DropShadowEffect Color="#C8922A" BlurRadius="8" ShadowDepth="0" Opacity="0.3"/>
+                        </Button.Effect>
+                    </Button>
                 </Grid>
             </Border>
         </Grid>

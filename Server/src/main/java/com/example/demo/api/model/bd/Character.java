@@ -111,6 +111,15 @@ public class Character {
     public void setImageFull(String imageFull) { this.imageFull = imageFull; }
     public void setDescription(String description) { this.description = description; }
     public void setSkills(List<Skill> skills) { this.skills = skills; }
+    public void addHp(int hp) { 
+        this.hp += hp;
+        if (this.hp > this.hpMax) this.hp = this.hpMax;
+    }
+    public void addEnergy(int energy) { 
+        this.energy += energy;
+        if(this.energy > this.energyMax) this.energy = this.energyMax;
+    }
+
 
     public List<StatusCharacter> getStatusEffects() {
         return statusEffects;

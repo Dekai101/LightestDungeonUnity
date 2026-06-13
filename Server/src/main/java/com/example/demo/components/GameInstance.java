@@ -18,6 +18,7 @@ import org.springframework.web.socket.WebSocketSession;
 import com.example.demo.api.model.Player;
 import com.example.demo.api.model.Room;
 import com.example.demo.api.model.messages.JSONMessage;
+import com.example.demo.api.model.messages.out.generic.Message_OUT;
 import com.example.demo.api.model.states.State;
 import com.example.demo.api.model.states.StatePickCharacter;
 import com.example.demo.api.model.bd.BdPlayer;
@@ -45,8 +46,10 @@ import java.util.UUID;
  *  - cua de missatges
  *  - estat intern del joc (@TODO)
  */
+
 public class GameInstance {
 
+    private static int MAXITEMS = 100;
     /** Les connexions dels jugadors de la partida  */
     private final List<Player> players;
 
@@ -54,6 +57,8 @@ public class GameInstance {
     private final List<Room> nextRooms;
 
     private Room actualRoom;
+
+    private Map<Integer, Item> inventory;
 
     //Services
     private final LootService lootService;
@@ -182,6 +187,57 @@ public class GameInstance {
     public Item getItemById(int id){
         return lootService.getItemById(id).get();
     }
+
+    public Map<Integer, Item> getInventory(){
+        return inventory;
+    }
+
+    public void setInventory(Map<Integer, Item> inventory){
+        this.inventory = inventory;
+    }
+
+    public void addItemToInventory(Item item){
+        if(inventory==null) inventory = new HashMap<>();
+        if(item==null) return;
+        if(inventory.size() == MAXITEMS){
+            System.out.println("Inventory is full");
+            this.broadcast(new JSONMessage("INVENTORY_FULL", new Message_OUT("Inventory is full", "INVENTORY_FULL")));
+            return;
+        } 
+
+        if(inventory.isEmpty()){
+            inventory.put(0, item);
+        } else {
+            for (int i = 0; i < MAXITEMS; i++) {
+                if(!inventory.containsKey(i)){
+                    inventory.put(i, item);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void addItemsToInventory(List<Item> items){
+        if(inventory==null) inventory = new HashMap<>();
+        if(items==null) return;
+        if(inventory.size() == MAXITEMS){
+            System.out.println("Inventory is full");
+            this.broadcast(new JSONMessage("INVENTORY_FULL", new Message_OUT("Inventory is full", "INVENTORY_FULL")));
+            return;
+        }
+        if(inventory.size() + items.size() > MAXITEMS){
+            System.out.println("Inventory is full");
+            this.broadcast(new JSONMessage("INVENTORY_FULL_CHOOSE_FEWER", new Message_OUT("Inventory is full, choose fewer items", "INVENTORY_FULL")));
+            return;
+        }
+        for (Item item : items) {
+            addItemToInventory(item);
+        }
+    }
+
+    public void removeItemFromInventory(int id){
+        inventory.remove(id);
+    }
     
     /**
      * Permet canviar l'estat actual de la partida
@@ -202,6 +258,7 @@ public class GameInstance {
         this.id = UUID.randomUUID().toString();
         this.actualRoom = new Room(0, "START_ROOM", 0);
         this.nextRooms = new ArrayList<>();
+        this.inventory = new HashMap<>();
         this.players = players;
         this.executor = executor;
         this.lootService = lootService;

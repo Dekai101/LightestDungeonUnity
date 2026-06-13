@@ -1,4 +1,5 @@
 ﻿using LightestDungeonCreator.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ namespace LightestDungeonCreator
         private readonly ObservableCollection<StatusEffect> _statusEffects = new ObservableCollection<StatusEffect>();
         private readonly ObservableCollection<StatEffect> _statEffects = new ObservableCollection<StatEffect>();
         private string? _imageThumbPath;
+        private int? _editingItemId = null;
 
         public ItemCreatorWindow()
         {
@@ -55,7 +57,7 @@ namespace LightestDungeonCreator
 
         private void ListItems_Click(object sender, RoutedEventArgs e)
         {
-            new ItemListWindow().Show();
+            new ItemListWindow(item => LoadForEdit(item)).Show();
         }
 
         // -- Data loading ------------------------------------------------------------
@@ -274,7 +276,7 @@ namespace LightestDungeonCreator
             int? maxUses = null;
             if (consumable)
             {
-                if(!int.TryParse(MaxUsesInput.Text, out int parsedUses) || parsedUses < 0 || parsedUses > 10)
+                if (!int.TryParse(MaxUsesInput.Text, out int parsedUses) || parsedUses < 0 || parsedUses > 10)
                 {
                     MessageBox.Show("Max uses must be between 0 and 10", "Validation",
                                     MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -284,62 +286,186 @@ namespace LightestDungeonCreator
                 maxUses = parsedUses;
             }
 
-            // -- Build model --
-            var item = new Item
-            {
-                Name = NameInput.Text.Trim(),
-                Description = string.IsNullOrWhiteSpace(DescInput.Text) ? null : DescInput.Text.Trim(),
-                Quality = quality.ToUpper(),
-                Consumable = consumable,
-                MaxUses = maxUses,
-                IsAoe = IsAoeCheck.IsChecked == true,
-                TargetType = (ItemTargetCombo.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Single",
-                ImageThumb = _imageThumbPath ?? ""
-            };
+            var targetType = (ItemTargetCombo.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Single";
 
-            // Status effects → Effect entities
-            // EffectLevel = 0 means CLEANSE, >= 1 means APPLY
-            foreach (var se in _statusEffects)
-            {
-                item.Effects.Add(new Effect
-                {
-                    StatusId = se.StatusId,
-                    Probability = se.Chance,
-                    DurationTurns = se.Turns,
-                    EffectLevel = se.IsClean ? 0 : se.EffectLevel
-                });
-            }
-
-            // Stat effects → Effect entities
-            foreach (var se in _statEffects)
-            {
-                item.Effects.Add(new Effect
-                {
-                    StatId = se.StatId,
-                    Probability = se.Chance,
-                    DurationTurns = se.Turns,
-                    StatMultiplier = se.Multiplier != 0 ? (float?)se.Multiplier : null,
-                    MinFlatPower = se.MinFlat != 0 ? (int?)se.MinFlat : null,
-                    MaxFlatPower = se.MaxFlat != 0 ? (int?)se.MaxFlat : null,
-                    EffectLevel = se.IsClean ? 0 : 1
-                });
-            }
-
-            // -- Persist --
             try
             {
                 using var db = new AppDbContext();
-                db.Items.Add(item);
-                db.SaveChanges();
 
-                MessageBox.Show($"Item '{item.Name}' saved successfully.\n" +
-                                $"Efects: {item.Effects.Count}",
-                                "✦ Saved ✦", MessageBoxButton.OK, MessageBoxImage.Information);
-                ResetForm();
+                if (_editingItemId.HasValue)
+                {
+                    // ── UPDATE ──────────────────────────────────────────────
+                    var existing = db.Items
+                                     .Include(i => i.Effects)
+                                     .FirstOrDefault(i => i.Id == _editingItemId.Value);
+                    if (existing == null)
+                    {
+                        MessageBox.Show("Item not found in database.", "Error",
+                                        MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    existing.Name        = NameInput.Text.Trim();
+                    existing.Description = string.IsNullOrWhiteSpace(DescInput.Text) ? null : DescInput.Text.Trim();
+                    existing.Quality     = quality.ToUpper();
+                    existing.Consumable  = consumable;
+                    existing.MaxUses     = maxUses;
+                    existing.IsAoe       = IsAoeCheck.IsChecked == true;
+                    existing.TargetType  = targetType;
+                    if (!string.IsNullOrWhiteSpace(_imageThumbPath))
+                        existing.ImageThumb = _imageThumbPath;
+
+                    existing.Effects.Clear();
+
+                    foreach (var se in _statusEffects)
+                        existing.Effects.Add(new Effect {
+                            StatusId      = se.StatusId,
+                            Probability   = se.Chance,
+                            DurationTurns = se.Turns,
+                            EffectLevel   = se.IsClean ? 0 : se.EffectLevel
+                        });
+
+                    foreach (var se in _statEffects)
+                        existing.Effects.Add(new Effect {
+                            StatId         = se.StatId,
+                            Probability    = se.Chance,
+                            DurationTurns  = se.Turns,
+                            StatMultiplier = se.Multiplier != 0 ? (float?)se.Multiplier : null,
+                            MinFlatPower   = se.MinFlat != 0 ? (int?)se.MinFlat : null,
+                            MaxFlatPower   = se.MaxFlat != 0 ? (int?)se.MaxFlat : null,
+                            EffectLevel    = se.IsClean ? 0 : 1
+                        });
+
+                    db.SaveChanges();
+
+                    MessageBox.Show($"Item '{existing.Name}' updated successfully.",
+                                    "✦ Updated ✦", MessageBoxButton.OK, MessageBoxImage.Information);
+                    _editingItemId = null;
+                    Title = "Item Creator";
+                    ResetForm();
+                }
+                else
+                {
+                    // ── INSERT ──────────────────────────────────────────────
+                    var item = new Item
+                    {
+                        Name        = NameInput.Text.Trim(),
+                        Description = string.IsNullOrWhiteSpace(DescInput.Text) ? null : DescInput.Text.Trim(),
+                        Quality     = quality.ToUpper(),
+                        Consumable  = consumable,
+                        MaxUses     = maxUses,
+                        IsAoe       = IsAoeCheck.IsChecked == true,
+                        TargetType  = targetType,
+                        ImageThumb  = _imageThumbPath ?? ""
+                    };
+
+                    foreach (var se in _statusEffects)
+                        item.Effects.Add(new Effect {
+                            StatusId      = se.StatusId,
+                            Probability   = se.Chance,
+                            DurationTurns = se.Turns,
+                            EffectLevel   = se.IsClean ? 0 : se.EffectLevel
+                        });
+
+                    foreach (var se in _statEffects)
+                        item.Effects.Add(new Effect {
+                            StatId         = se.StatId,
+                            Probability    = se.Chance,
+                            DurationTurns  = se.Turns,
+                            StatMultiplier = se.Multiplier != 0 ? (float?)se.Multiplier : null,
+                            MinFlatPower   = se.MinFlat != 0 ? (int?)se.MinFlat : null,
+                            MaxFlatPower   = se.MaxFlat != 0 ? (int?)se.MaxFlat : null,
+                            EffectLevel    = se.IsClean ? 0 : 1
+                        });
+
+                    db.Items.Add(item);
+                    db.SaveChanges();
+
+                    MessageBox.Show($"Item '{item.Name}' saved successfully.\n" +
+                                    $"Efects: {item.Effects.Count}",
+                                    "✦ Saved ✦", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ResetForm();
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error saving:\n{ex.Message}",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // -- Load for edit ------------------------------------------------------------
+
+        public void LoadForEdit(Item item)
+        {
+            try
+            {
+                using var db = new AppDbContext();
+                var it = db.Items
+                            .Include(x => x.Effects).ThenInclude(e => e.Stat)
+                            .Include(x => x.Effects).ThenInclude(e => e.Status)
+                            .FirstOrDefault(x => x.Id == item.Id);
+                if (it == null) return;
+
+                _editingItemId = it.Id;
+                Title = $"Edit Item — {it.Name}";
+
+                NameInput.Text = it.Name;
+                DescInput.Text = it.Description ?? "";
+
+                // Quality combo
+                foreach (ComboBoxItem ci in QualityCombo.Items)
+                    if (string.Equals(ci.Content?.ToString(), it.Quality, StringComparison.OrdinalIgnoreCase))
+                    { QualityCombo.SelectedItem = ci; break; }
+
+                // Target combo
+                foreach (ComboBoxItem ci in ItemTargetCombo.Items)
+                    if (string.Equals(ci.Content?.ToString(), it.TargetType, StringComparison.OrdinalIgnoreCase))
+                    { ItemTargetCombo.SelectedItem = ci; break; }
+
+                IsAoeCheck.IsChecked     = it.IsAoe;
+                ConsumableCheck.IsChecked = it.Consumable;
+                MaxUsesInput.Text        = it.MaxUses?.ToString() ?? "";
+
+                // Image
+                _imageThumbPath       = it.ImageThumb;
+                ImagePathInput.Text   = it.ImageThumb ?? "";
+
+                // Effects
+                _statusEffects.Clear();
+                _statEffects.Clear();
+
+                foreach (var eff in it.Effects)
+                {
+                    if (eff.StatusId.HasValue)
+                    {
+                        _statusEffects.Add(new StatusEffect {
+                            IsClean     = eff.EffectLevel == 0,
+                            StatusId    = eff.StatusId.Value,
+                            DisplayName = (eff.EffectLevel == 0 ? "⌫ " : "") + (eff.Status?.Name ?? $"Status {eff.StatusId}"),
+                            Turns       = eff.DurationTurns,
+                            Chance      = eff.Probability,
+                            EffectLevel = eff.EffectLevel ?? 1
+                        });
+                    }
+                    else if (eff.StatId.HasValue)
+                    {
+                        _statEffects.Add(new StatEffect {
+                            IsClean     = eff.EffectLevel == 0,
+                            StatId      = eff.StatId.Value,
+                            DisplayName = (eff.EffectLevel == 0 ? "⌫ " : "") + (eff.Stat?.Name ?? $"Stat {eff.StatId}"),
+                            Turns       = eff.DurationTurns,
+                            Chance      = eff.Probability,
+                            Multiplier  = eff.StatMultiplier ?? 0f,
+                            MinFlat     = eff.MinFlatPower ?? 0,
+                            MaxFlat     = eff.MaxFlatPower ?? 0
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading item for edit:\n{ex.Message}",
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

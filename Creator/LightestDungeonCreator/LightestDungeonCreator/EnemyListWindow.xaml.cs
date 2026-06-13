@@ -17,7 +17,7 @@ namespace LightestDungeonCreator
         public string ItemThumb { get; set; } = "";
         public string MinQuality { get; set; } = "";
         public string MaxQuality { get; set; } = "";
-        public float DropChance { get; set; }  // 0-1
+        public float DropChance { get; set; }
 
         public string DropChanceDisplay => $"{DropChance * 100:0.#}%";
     }
@@ -30,11 +30,13 @@ namespace LightestDungeonCreator
         private List<Enemy> _allEnemies = new();
         private List<Enemy> _filtered = new();
         private Enemy? _selected;
+        private readonly Action<Enemy>? _editCallback;
 
         // ── Constructor ──────────────────────────────────────────────
-        public EnemyListWindow()
+        public EnemyListWindow(Action<Enemy>? onEdit = null)
         {
             db = new AppDbContext();
+            _editCallback = onEdit;
 
             InitializeComponent();
             LoadEnemies();
@@ -48,11 +50,23 @@ namespace LightestDungeonCreator
         private void BackButton_Click(object sender, RoutedEventArgs e)
             => Close();
 
-        private void NewEnemy_Click(object sender, RoutedEventArgs e)
+        private void EditEnemy_Click(object sender, RoutedEventArgs e)
         {
-            var creator = new EnemyCreatorWindow { Owner = this };
-            creator.ShowDialog();
-            LoadEnemies();
+            if (_selected == null) return;
+
+            if (_editCallback != null)
+            {
+                _editCallback(_selected);
+                Close();
+            }
+            else
+            {
+                // Opened standalone: open a new creator pre-filled
+                var creator = new EnemyCreatorWindow();
+                creator.LoadForEdit(_selected);
+                creator.Show();
+                Close();
+            }
         }
 
         // ── Data ─────────────────────────────────────────────────────
@@ -63,9 +77,9 @@ namespace LightestDungeonCreator
                 _allEnemies = db.Enemies
                                 .Include(e => e.Entity)
                                     .ThenInclude(en => en.Skills)
-                                .Include(e => e.Loottables)           // ← loot tables del enemic
-                                    .ThenInclude(lt => lt.Lootentries) // ← entrades de loot
-                                        .ThenInclude(le => le.Item)   // ← item de cada entrada
+                                .Include(e => e.Loottables)
+                                    .ThenInclude(lt => lt.Lootentries)
+                                        .ThenInclude(le => le.Item)
                                 .OrderBy(e => e.Entity.Name)
                                 .ToList();
             }
@@ -115,7 +129,6 @@ namespace LightestDungeonCreator
                     return false;
                 if (minLvl > 1 && en.Level < minLvl)
                     return false;
-                // HpMax lives on Entity, not on Enemy directly
                 if (minHp > 0 && en.HpMax < minHp)
                     return false;
                 return true;
@@ -145,6 +158,7 @@ namespace LightestDungeonCreator
 
             DetailEmpty.Visibility = Visibility.Collapsed;
             DetailPanel.Visibility = Visibility.Visible;
+            EditEnemyBtn.Visibility = Visibility.Visible;
 
             // Images — paths stored in Entity
             DetailImage.Source = TryLoadBitmap(en.ImageThumb);
@@ -203,6 +217,7 @@ namespace LightestDungeonCreator
             _selected = null;
             DetailPanel.Visibility = Visibility.Collapsed;
             DetailEmpty.Visibility = Visibility.Visible;
+            EditEnemyBtn.Visibility = Visibility.Collapsed;
         }
 
         // ── Delete ───────────────────────────────────────────────────
@@ -255,10 +270,6 @@ namespace LightestDungeonCreator
 
         // ── Helpers ──────────────────────────────────────────────────
 
-        /// <summary>
-        /// Sets the inner bar width as a fraction of its parent container's ActualWidth.
-        /// Called after Loaded so ActualWidth is available.
-        /// </summary>
         private static void SetBarWidth(Border bar, double value, double maxRef)
         {
             double pct = Math.Clamp(value / maxRef, 0.0, 1.0);

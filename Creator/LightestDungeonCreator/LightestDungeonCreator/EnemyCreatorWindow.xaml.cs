@@ -1,4 +1,5 @@
 ﻿using LightestDungeonCreator.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,6 +33,7 @@ namespace LightestDungeonCreator
         private ObservableCollection<Skill> _availableSkills;
         private List<Skill> _allSkills;
         private ObservableCollection<LootEntryVM> _lootEntries;
+        private int? _editingEntityId = null;
 
         public EnemyCreatorWindow()
         {
@@ -71,7 +73,7 @@ namespace LightestDungeonCreator
 
         private void ListEnemies_Click(object sender, RoutedEventArgs e)
         {
-            new EnemyListWindow().Show();
+            new EnemyListWindow(enemy => LoadForEdit(enemy)).Show();
         }
 
 
@@ -273,9 +275,9 @@ namespace LightestDungeonCreator
                 MessageBox.Show("Full Image required", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (!int.TryParse(LevelInput.Text, out _))
+            if (!int.TryParse(LevelInput.Text, out int level) || level < 1 || level > 100)
             {
-                MessageBox.Show("Level has to be number", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Level has to be a number between 1 and 100", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             if (_assignedSkills.Count == 0)
@@ -283,75 +285,211 @@ namespace LightestDungeonCreator
                 MessageBox.Show("It is required to have 1 skill", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            else if (_assignedSkills.Count == 1 && _assignedSkills.First().IsPassive)
+            if (_assignedSkills.Count == 1 && _assignedSkills.First().IsPassive)
             {
                 MessageBox.Show("It is required to have 1 normal skill", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            int.TryParse(LevelInput.Text, out int level);
-
-            if (level < 1 || level > 100)
+            try
             {
-                MessageBox.Show("Level has to be a number between 1 and 100");
-                return;
-            }
-
-            var enemy = new Enemy
-            {
-                Passive_Id = _assignedSkills.FirstOrDefault(s => s.IsPassive)?.Id ?? 0,
-                Entity = new Entity
+                if (_editingEntityId.HasValue)
                 {
-                    Name = NameInput.Text.Trim(),
-                    Description = DescInput.Text.Trim(),
-                    ImageThumb = ThumbPathInput.Text,
-                    ImageFull = FullPathInput.Text,
-                    Level = level,
-                    Hp = (int)HpSlider.Value,
-                    Energy = (int)EnergySlider.Value,
-                    Attack = (int)AttackSlider.Value,
-                    Defense = (int)DefenseSlider.Value,
-                    Speed = (int)SpeedSlider.Value,
-                    CritChance = (float)CritChanceSlider.Value / 100,
-                    CritDamage = (float)CritDamageSlider.Value / 100,
-                    AccuracyMultiplier = 1,
-                    Skills = _assignedSkills
-                },
-            };
-
-            db.Entities.Add(enemy.Entity);
-            db.SaveChanges();
-            db.Enemies.Add(enemy);
-            db.SaveChanges();
-
-            // La loottable es crea automàticament pel trigger trg_enemy_create_loot_table,
-            // per tant ja existeix a la BD. Ara hi afegim les loot entries.
-            if (_lootEntries.Count > 0)
-            {
-                var lootTable = db.Loottables
-                                  .FirstOrDefault(lt => lt.EnemyId == enemy.EntityId);
-                if (lootTable != null)
-                {
-                    foreach (var entry in _lootEntries)
+                    // ── UPDATE ──────────────────────────────────────────────
+                    var existingEnemy = db.Enemies
+                                          .Include(x => x.Entity).ThenInclude(en => en.Skills)
+                                          .Include(x => x.Loottables).ThenInclude(lt => lt.Lootentries)
+                                          .FirstOrDefault(x => x.EntityId == _editingEntityId.Value);
+                    if (existingEnemy == null)
                     {
-                        db.Lootentries.Add(new Lootentry
-                        {
-                            LootTableId = lootTable.Id,
-                            ItemId = entry.ItemId,
-                            DropChance = entry.DropChance,
-                            MinQuality = entry.MinQuality,
-                            MaxQuality = entry.MaxQuality,
-                        });
+                        MessageBox.Show("Enemy not found in database.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
                     }
+
+                    var en = existingEnemy.Entity;
+                    en.Name        = NameInput.Text.Trim();
+                    en.Description = DescInput.Text.Trim();
+                    en.ImageThumb  = ThumbPathInput.Text;
+                    en.ImageFull   = FullPathInput.Text;
+                    en.Level       = level;
+                    en.Hp          = (int)HpSlider.Value;
+                    en.Energy      = (int)EnergySlider.Value;
+                    en.Attack      = (int)AttackSlider.Value;
+                    en.Defense     = (int)DefenseSlider.Value;
+                    en.Speed       = (int)SpeedSlider.Value;
+                    en.CritChance  = (float)CritChanceSlider.Value / 100f;
+                    en.CritDamage  = (float)CritDamageSlider.Value / 100f;
+
+                    existingEnemy.Passive_Id = _assignedSkills.FirstOrDefault(s => s.IsPassive)?.Id ?? 0;
+
+                    // Update skills
+                    en.Skills.Clear();
+                    foreach (var s in _assignedSkills)
+                    {
+                        var dbSkill = db.Skills.Find(s.Id);
+                        if (dbSkill != null) en.Skills.Add(dbSkill);
+                    }
+
+                    // Update loot entries
+                    var lt = existingEnemy.Loottables.FirstOrDefault();
+                    if (lt != null)
+                    {
+                        db.Lootentries.RemoveRange(lt.Lootentries);
+                        foreach (var entry in _lootEntries)
+                            db.Lootentries.Add(new Lootentry {
+                                LootTableId = lt.Id,
+                                ItemId      = entry.ItemId,
+                                DropChance  = entry.DropChance,
+                                MinQuality  = entry.MinQuality,
+                                MaxQuality  = entry.MaxQuality,
+                            });
+                    }
+
                     db.SaveChanges();
+
+                    MessageBox.Show($"Enemy «{en.Name}» updated successfully!",
+                                    "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    _editingEntityId = null;
+                    Title = "Enemy Creator";
+                    ResetForm();
+                }
+                else
+                {
+                    // ── INSERT ──────────────────────────────────────────────
+                    var enemy = new Enemy
+                    {
+                        Passive_Id = _assignedSkills.FirstOrDefault(s => s.IsPassive)?.Id ?? 0,
+                        Entity = new Entity
+                        {
+                            Name               = NameInput.Text.Trim(),
+                            Description        = DescInput.Text.Trim(),
+                            ImageThumb         = ThumbPathInput.Text,
+                            ImageFull          = FullPathInput.Text,
+                            Level              = level,
+                            Hp                 = (int)HpSlider.Value,
+                            Energy             = (int)EnergySlider.Value,
+                            Attack             = (int)AttackSlider.Value,
+                            Defense            = (int)DefenseSlider.Value,
+                            Speed              = (int)SpeedSlider.Value,
+                            CritChance         = (float)CritChanceSlider.Value / 100,
+                            CritDamage         = (float)CritDamageSlider.Value / 100,
+                            AccuracyMultiplier = 1,
+                            Skills             = _assignedSkills
+                        },
+                    };
+
+                    db.Entities.Add(enemy.Entity);
+                    db.SaveChanges();
+                    db.Enemies.Add(enemy);
+                    db.SaveChanges();
+
+                    // La loottable es crea automàticament pel trigger trg_enemy_create_loot_table
+                    if (_lootEntries.Count > 0)
+                    {
+                        var lootTable = db.Loottables.FirstOrDefault(lt => lt.EnemyId == enemy.EntityId);
+                        if (lootTable != null)
+                        {
+                            foreach (var entry in _lootEntries)
+                                db.Lootentries.Add(new Lootentry {
+                                    LootTableId = lootTable.Id,
+                                    ItemId      = entry.ItemId,
+                                    DropChance  = entry.DropChance,
+                                    MinQuality  = entry.MinQuality,
+                                    MaxQuality  = entry.MaxQuality,
+                                });
+                            db.SaveChanges();
+                        }
+                    }
+
+                    MessageBox.Show($"Enemy «{enemy.Entity.Name}» successfully created!" +
+                                    (_lootEntries.Count > 0 ? $"\n{_lootEntries.Count} loot entry/ies added." : ""),
+                                    "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    new SplashScreen().Show();
+                    Close();
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving enemy:\n{ex.Message}",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
-            MessageBox.Show($"Enemy «{enemy.Entity.Name}» successfully created!" +
-                            (_lootEntries.Count > 0 ? $"\n{_lootEntries.Count} loot entry/ies added." : ""),
-                            "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            new SplashScreen().Show();
-            Close();
+        // ── Load for edit ─────────────────────────────────────────────
+        public void LoadForEdit(Enemy enemy)
+        {
+            try
+            {
+                var e = db.Enemies
+                           .Include(x => x.Entity).ThenInclude(en => en.Skills)
+                           .Include(x => x.Loottables).ThenInclude(lt => lt.Lootentries).ThenInclude(le => le.Item)
+                           .FirstOrDefault(x => x.EntityId == enemy.EntityId);
+                if (e == null) return;
+
+                _editingEntityId = e.EntityId;
+                var en = e.Entity;
+                Title = $"Edit Enemy — {en.Name}";
+
+                NameInput.Text      = en.Name;
+                DescInput.Text      = en.Description ?? "";
+                ThumbPathInput.Text = en.ImageThumb ?? "";
+                FullPathInput.Text  = en.ImageFull ?? "";
+                LevelInput.Text     = en.Level.ToString();
+
+                HpSlider.Value         = en.Hp;
+                EnergySlider.Value     = en.Energy;
+                AttackSlider.Value     = en.Attack;
+                DefenseSlider.Value    = en.Defense;
+                SpeedSlider.Value      = en.Speed;
+                CritChanceSlider.Value = en.CritChance * 100;
+                CritDamageSlider.Value = en.CritDamage * 100;
+
+                // Skills
+                _assignedSkills.Clear();
+                foreach (var s in en.Skills)
+                    _assignedSkills.Add(s);
+                UpdateNoSkillsPlaceholder();
+
+                // Loot entries
+                _lootEntries.Clear();
+                foreach (var lt in e.Loottables)
+                    foreach (var le in lt.Lootentries)
+                        _lootEntries.Add(new LootEntryVM {
+                            ItemId      = le.ItemId,
+                            ItemName    = le.Item?.Name ?? $"Item {le.ItemId}",
+                            MinQuality  = le.MinQuality,
+                            MaxQuality  = le.MaxQuality,
+                            DropChance  = le.DropChance,
+                        });
+                UpdateLootPlaceholder();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading enemy for edit:\n{ex.Message}",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ResetForm()
+        {
+            NameInput.Text      = "";
+            DescInput.Text      = "";
+            ThumbPathInput.Text = "";
+            FullPathInput.Text  = "";
+            LevelInput.Text     = "1";
+
+            HpSlider.Value         = 100;
+            EnergySlider.Value     = 100;
+            AttackSlider.Value     = 10;
+            DefenseSlider.Value    = 5;
+            SpeedSlider.Value      = 5;
+            CritChanceSlider.Value = 5;
+            CritDamageSlider.Value = 150;
+
+            _assignedSkills.Clear();
+            _lootEntries.Clear();
+            UpdateNoSkillsPlaceholder();
+            UpdateLootPlaceholder();
         }
 
         // ── Helpers ───────────────────────────────────────────────────

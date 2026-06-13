@@ -37,10 +37,12 @@ namespace LightestDungeonCreator
         private List<Skill> _allSkills = new();
         private List<Skill> _filtered = new();
         private Skill? _selected;
+        private readonly Action<Skill>? _editCallback;
 
         // ── Constructor ──────────────────────────────────────────────
-        public SkillListWindow()
+        public SkillListWindow(Action<Skill>? onEdit = null)
         {
+            _editCallback = onEdit;
             InitializeComponent();
             LoadSkills();
         }
@@ -52,6 +54,24 @@ namespace LightestDungeonCreator
         // ── Navigation ───────────────────────────────────────────────
         private void BackButton_Click(object sender, RoutedEventArgs e)
             => Close();
+
+        private void EditSkill_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selected == null) return;
+
+            if (_editCallback != null)
+            {
+                _editCallback(_selected);
+                Close();
+            }
+            else
+            {
+                var creator = new SkillCreatorWindow();
+                creator.LoadForEdit(_selected);
+                creator.Show();
+                Close();
+            }
+        }
 
         // ── Data ─────────────────────────────────────────────────────
         private void LoadSkills()
@@ -133,6 +153,7 @@ namespace LightestDungeonCreator
 
             DetailEmpty.Visibility = Visibility.Collapsed;
             DetailPanel.Visibility = Visibility.Visible;
+            EditSkillBtn.Visibility = Visibility.Visible;
 
             DetailImage.Source = TryLoadBitmap(skill.ImageThumb);
             DetailName.Text = skill.Name.ToUpper();
@@ -248,6 +269,7 @@ namespace LightestDungeonCreator
             _selected = null;
             DetailPanel.Visibility = Visibility.Collapsed;
             DetailEmpty.Visibility = Visibility.Visible;
+            EditSkillBtn.Visibility = Visibility.Collapsed;
         }
 
         // ── Delete ───────────────────────────────────────────────────

@@ -515,11 +515,13 @@
                                Foreground="{StaticResource MutedBrush}"
                                FontFamily="Georgia" FontSize="10"
                                VerticalAlignment="Center" Opacity="0.5"/>
-                    <Button Content="＋  NEW ENEMY"
+                    <Button x:Name="EditEnemyBtn"
+                            Content="✎  EDIT ENEMY"
                             Style="{StaticResource ActionButtonStyle}"
                             HorizontalAlignment="Right"
                             Width="150" Height="28"
-                            Click="NewEnemy_Click">
+                            Visibility="Collapsed"
+                            Click="EditEnemy_Click">
                         <Button.Foreground>
                             <SolidColorBrush Color="#8B1A1A"/>
                         </Button.Foreground>
