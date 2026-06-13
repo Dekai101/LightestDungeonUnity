@@ -30,6 +30,12 @@ public class StateRestRoom extends State {
             playersCleared.put(game.getPlayers().get(i), false);
         }
 
+        for (int i = 0; i < game.getPlayers().size(); i++){
+            Player p = game.getPlayers().get(i);
+            int hpgained = p.getCharacter().getHpMax()*40/100;
+            p.getCharacter().addHp(hpgained);
+        }
+        
         msg = new Rest_OUT();
         msg.percentHealed = 40;
 

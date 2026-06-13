@@ -112,16 +112,20 @@
                                                     CornerRadius="2"
                                                     BorderBrush="#3D2210" BorderThickness="1"
                                                     Background="#0A0704">
-                                                <Image Source="{Binding ThumbSource}"
+                                                <Image Source="{Binding Entity.ImageThumb}"
                                                        Stretch="UniformToFill"/>
                                             </Border>
                                             <StackPanel Grid.Column="1" Margin="8,0,0,0"
                                                         VerticalAlignment="Center">
-                                                <TextBlock Text="{Binding Name}"
+                                                <TextBlock Text="{Binding Entity.Name}"
                                                            Foreground="#D4C5A9"
                                                            FontFamily="Georgia" FontSize="12"/>
-                                                <TextBlock Text="{Binding LevelDisplay}"
+                                                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                                    <TextBlock Text="Level: "
                                                            Style="{StaticResource SmallMuted}"/>
+                                                    <TextBlock Text="{Binding Entity.Level}"
+                                                           Style="{StaticResource SmallMuted}"/>
+                                                </StackPanel>
                                             </StackPanel>
                                         </Grid>
                                     </DataTemplate>

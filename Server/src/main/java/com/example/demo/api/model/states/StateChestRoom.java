@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.example.demo.api.model.Player;
 import com.example.demo.api.model.messages.JSONMessage;
+import com.example.demo.api.model.messages.in.items_picked.ItemsPicked_IN;
 import com.example.demo.api.model.messages.in.room_cleared.RoomCleared_IN;
 import com.example.demo.api.model.messages.out.chest_loot.ShowChestLoot_OUT;
 import com.example.demo.api.model.messages.out.generic.ActionResult_OUT;
@@ -51,7 +52,9 @@ public class StateChestRoom extends State
                 case RoomCleared_IN.TYPE:
                     waitAllPlayers(message.player(), gm);
                     break;
-            
+                case ItemsPicked_IN.TYPE:
+                    game.addItemsToInventory(mapper.treeToValue(gm.data, ItemsPicked_IN.class).items);
+                    break;
                 default:
                     break;
             }

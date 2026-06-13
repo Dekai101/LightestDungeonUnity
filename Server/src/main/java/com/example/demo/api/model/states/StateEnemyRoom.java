@@ -15,8 +15,10 @@ import com.example.demo.api.model.bd.Character;
 import com.example.demo.api.model.bd.Effect;
 import com.example.demo.api.model.bd.Enemy;
 import com.example.demo.api.model.bd.Item;
+import com.example.demo.api.model.bd.LootEntry;
 import com.example.demo.api.model.bd.Skill;
 import com.example.demo.api.model.messages.JSONMessage;
+import com.example.demo.api.model.messages.in.items_picked.ItemsPicked_IN;
 import com.example.demo.api.model.messages.in.players_turn.PlayerTurn;
 import com.example.demo.api.model.messages.in.players_turn.PlayersTurn_IN;
 import com.example.demo.api.model.messages.in.room_cleared.RoomCleared_IN;
@@ -25,6 +27,7 @@ import com.example.demo.api.model.messages.out.enemy_action.EnemyActionResult;
 import com.example.demo.api.model.messages.out.battle_state.BattleStateUpdate_OUT;
 import com.example.demo.api.model.messages.out.enemies.ShowEnemies_OUT;
 import com.example.demo.api.model.messages.out.generic.ActionResult_OUT;
+import com.example.demo.api.model.messages.out.loot.ShowEnemyLoot_OUT;
 import com.example.demo.api.model.messages.out.player_action.PlayerActionResult;
 import com.example.demo.api.model.messages.out.player_action.PlayerActionResult_OUT;
 import com.example.demo.api.model.messages.out.status_applied.StatusUpdate;
@@ -78,10 +81,18 @@ public class StateEnemyRoom extends State {
 
                 switch (gm.messageType) {
                     case PlayersTurn_IN.TYPE:
+                        if(enemies.stream().allMatch(e -> e.getHp() <= 0)){
+                            break;
+                        }
                         makeTurn(message.player(), gm);
                         break;
                     case RoomCleared_IN.TYPE:
                         waitAllPlayers(message.player(), gm);
+                        break;
+                    case ItemsPicked_IN.TYPE:
+                        game.addItemsToInventory(mapper.treeToValue(gm.data, ItemsPicked_IN.class).items);
+                        break;
+                    default:
                         break;
                 }
             }
@@ -118,6 +129,9 @@ public class StateEnemyRoom extends State {
                     .findFirst()
                     .ifPresent(pl -> pl.getCharacter().setHp(player.getCharacter().getHp()));
             }
+            for (Player player : game.getPlayers()){
+                player.getCharacter().setEnergy(player.getCharacter().getEnergyMax());
+            }
             
             game.setState(new StateMap(game));
         }
@@ -125,15 +139,6 @@ public class StateEnemyRoom extends State {
 
     private void makeTurn(Player p, JSONMessage jsonMsg) {
         PlayersTurn_IN message = mapper.treeToValue(jsonMsg.data, PlayersTurn_IN.class);
-
-        //Energy recovering system
-        for (Player player : memPlayers) {
-            int energyRecover = player.getCharacter().getEnergyMax() / 4;
-            player.getCharacter().setEnergy(player.getCharacter().getEnergy()+energyRecover);
-            if(player.getCharacter().getEnergy() > player.getCharacter().getEnergyMax()){
-                player.getCharacter().setEnergy(player.getCharacter().getEnergyMax());
-            }
-        }
 
         if (message.players != null && !message.players.isEmpty()) {
             pendingTurns.put(p, message.players.get(0));
@@ -167,9 +172,36 @@ public class StateEnemyRoom extends State {
         
         if (allEnemiesDead) {
             System.out.println("Tots els enemics han mort. Sala netejada!");
+            Random rand = new Random();
+            List<Item> items = new ArrayList<>();
+
+            for (Enemy en : enemies) {
+                for (LootEntry loot : en.getLootTable().getEntries()) {
+
+                    double roll = rand.nextDouble();
+
+                    if (roll < loot.getDropChance()) {
+                        System.out.println("Dropped: " + loot.getItem().getName());
+                        items.add(loot.getItem());
+                    }
+                }
+            }
+
+            game.broadcast(new JSONMessage(game.getId(), new ShowEnemyLoot_OUT(items)));
+            return;
         } else if (allPlayersDead) {
             System.out.println("Tots els jugadors han mort. Game Over.");
             game.stop();
+            return;
+        }
+
+        //Energy recovering system
+        for (Player player : memPlayers) {
+            int energyRecover = player.getCharacter().getEnergyMax() / 4;
+            player.getCharacter().setEnergy(player.getCharacter().getEnergy()+energyRecover);
+            if(player.getCharacter().getEnergy() > player.getCharacter().getEnergyMax()){
+                player.getCharacter().setEnergy(player.getCharacter().getEnergyMax());
+            }
         }
     }
 
@@ -289,12 +321,42 @@ public class StateEnemyRoom extends State {
                             statusApplied = effect.getStatus().getName();
                             for (Player player : memPlayers) {
                                 if (player.getId() == myTargetsId[i]) {
-                                    player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                    if(player.getCharacter().hasStatus(effect.getStatus().getName())){
+                                        int level = player.getCharacter().getStatusLevel(statusApplied);
+                                        int turns = player.getCharacter().getDurationTurns(statusApplied);
+                                        
+                                        if(level < effect.getEffectLevel()){
+                                            player.getCharacter().removeStatus(statusApplied);
+                                            player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                            System.out.println("Status level of new effect is bigger, applying new status effect");
+                                        } else if(level == effect.getEffectLevel() && turns < effect.getDurationTurns()){
+                                            player.getCharacter().removeStatus(statusApplied);
+                                            player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                            System.out.println("Turns of new effect is bigger, applying new status effect");
+                                        }
+                                    } else{
+                                        player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                    }
                                 }
                             }
                             for (Enemy enemy : enemies) {
                                 if (enemy.getCombatId() == myTargetsId[i]) {
-                                    enemy.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                    if(enemy.hasStatus(effect.getStatus().getName())){
+                                        int level = enemy.getStatusLevel(statusApplied);
+                                        int turns = enemy.getDurationTurns(statusApplied);
+                                        
+                                        if(level < effect.getEffectLevel()){
+                                            enemy.removeStatus(statusApplied);
+                                            enemy.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                            System.out.println("Status level of new effect is bigger, applying new status effect");
+                                        } else if(level == effect.getEffectLevel() && turns < effect.getDurationTurns()){
+                                            enemy.removeStatus(statusApplied);
+                                            enemy.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                            System.out.println("Turns of new effect is bigger, applying new status effect");
+                                        }
+                                    } else{
+                                        enemy.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                    }
                                 }
                             }
                             continue;

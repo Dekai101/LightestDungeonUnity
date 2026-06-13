@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using LightestDungeonCreator.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 
 namespace LightestDungeonCreator
@@ -58,6 +59,7 @@ namespace LightestDungeonCreator
         private readonly ObservableCollection<StatusEffect> _statusEffects = new ObservableCollection<StatusEffect>();
         private readonly ObservableCollection<StatEffect> _statEffects = new ObservableCollection<StatEffect>();
         private string? _imageThumbPath;
+        private int? _editingSkillId = null;
 
         public SkillCreatorWindow()
         {
@@ -86,7 +88,7 @@ namespace LightestDungeonCreator
 
         private void ListSkills_Click(object sender, RoutedEventArgs e)
         {
-            new SkillListWindow().Show();
+            new SkillListWindow(skill => LoadForEdit(skill)).Show();
         }
 
         // -- Data loading ------------------------------------------------------------
@@ -291,67 +293,184 @@ namespace LightestDungeonCreator
             }
 
             var targetType = (SkillTargetCombo.SelectedItem as ComboBoxItem)
-                                 ?.Content?.ToString() ?? "Single";
-
-            // -- Build model ------------------------------------------------------------
-            var skill = new Skill
-            {
-                Name = NameInput.Text.Trim(),
-                Description = string.IsNullOrWhiteSpace(DescInput.Text)
-                                  ? null
-                                  : DescInput.Text.Trim(),
-                EnergyCost = Math.Max(0, cost),
-                Accuracy = accuracy / 100f,
-                Hits = Math.Max(1, hits),
-                TargetType = targetType,
-                IsAoe = IsAoeCheck.IsChecked == true,
-                IsPassive = IsPassiveCheck.IsChecked == true,
-                ImageThumb = _imageThumbPath ?? ""
-            };
-
-            // Status effects -> Effect entities
-            // EffectLevel = 0 CLEANSE, >= 1 APPLY
-            foreach (var se in _statusEffects)
-            {
-                skill.Effects.Add(new Effect
-                {
-                    StatusId = se.StatusId,
-                    Probability = se.Chance,
-                    DurationTurns = se.Turns,
-                    EffectLevel = se.IsClean ? 0 : se.EffectLevel
-                });
-            }
-
-            // Stat effects -> Effect entities
-            foreach (var se in _statEffects)
-            {
-                skill.Effects.Add(new Effect
-                {
-                    StatId = se.StatId,
-                    Probability = se.Chance,
-                    DurationTurns = se.Turns,
-                    StatMultiplier = se.Multiplier != 0 ? (float?)se.Multiplier : null,
-                    MinFlatPower = se.MinFlat != 0 ? (int?)se.MinFlat : null,
-                    MaxFlatPower = se.MaxFlat != 0 ? (int?)se.MaxFlat : null,
-                    EffectLevel = se.IsClean ? 0 : 1
-                });
-            }
+                                 ?.Content?.ToString() ?? "ENEMY";
 
             // -- Persist -----------------------------------------------------------
             try
             {
                 using var db = new AppDbContext();
-                db.Skills.Add(skill);
-                db.SaveChanges();
 
-                MessageBox.Show($"Skill '{skill.Name}' saved successfully.\n" +
-                                $"Effects: {skill.Effects.Count}",
-                                "✦ Saved ✦", MessageBoxButton.OK, MessageBoxImage.Information);
-                ResetForm();
+                if (_editingSkillId.HasValue)
+                {
+                    // ── UPDATE ──────────────────────────────────────────────
+                    var existing = db.Skills
+                                     .Include(s => s.Effects)
+                                     .FirstOrDefault(s => s.Id == _editingSkillId.Value);
+                    if (existing == null)
+                    {
+                        MessageBox.Show("Skill not found in database.", "Error",
+                                        MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    existing.Name        = NameInput.Text.Trim();
+                    existing.Description = string.IsNullOrWhiteSpace(DescInput.Text) ? null : DescInput.Text.Trim();
+                    existing.EnergyCost  = Math.Max(0, cost);
+                    existing.Accuracy    = accuracy / 100f;
+                    existing.Hits        = Math.Max(1, hits);
+                    existing.TargetType  = targetType;
+                    existing.IsAoe       = IsAoeCheck.IsChecked == true;
+                    existing.IsPassive   = IsPassiveCheck.IsChecked == true;
+                    existing.ImageThumb  = _imageThumbPath ?? existing.ImageThumb;
+
+                    // Replace effects
+                    existing.Effects.Clear();
+
+                    foreach (var se in _statusEffects)
+                        existing.Effects.Add(new Effect {
+                            StatusId      = se.StatusId,
+                            Probability   = se.Chance,
+                            DurationTurns = se.Turns,
+                            EffectLevel   = se.IsClean ? 0 : se.EffectLevel
+                        });
+
+                    foreach (var se in _statEffects)
+                        existing.Effects.Add(new Effect {
+                            StatId         = se.StatId,
+                            Probability    = se.Chance,
+                            DurationTurns  = se.Turns,
+                            StatMultiplier = se.Multiplier != 0 ? (float?)se.Multiplier : null,
+                            MinFlatPower   = se.MinFlat != 0 ? (int?)se.MinFlat : null,
+                            MaxFlatPower   = se.MaxFlat != 0 ? (int?)se.MaxFlat : null,
+                            EffectLevel    = se.IsClean ? 0 : 1
+                        });
+
+                    db.SaveChanges();
+
+                    MessageBox.Show($"Skill '{existing.Name}' updated successfully.",
+                                    "✦ Updated ✦", MessageBoxButton.OK, MessageBoxImage.Information);
+                    _editingSkillId = null;
+                    Title = "Skill Creator";
+                    ResetForm();
+                }
+                else
+                {
+                    // ── INSERT ──────────────────────────────────────────────
+                    var skill = new Skill
+                    {
+                        Name        = NameInput.Text.Trim(),
+                        Description = string.IsNullOrWhiteSpace(DescInput.Text) ? null : DescInput.Text.Trim(),
+                        EnergyCost  = Math.Max(0, cost),
+                        Accuracy    = accuracy / 100f,
+                        Hits        = Math.Max(1, hits),
+                        TargetType  = targetType,
+                        IsAoe       = IsAoeCheck.IsChecked == true,
+                        IsPassive   = IsPassiveCheck.IsChecked == true,
+                        ImageThumb  = _imageThumbPath ?? ""
+                    };
+
+                    foreach (var se in _statusEffects)
+                        skill.Effects.Add(new Effect {
+                            StatusId      = se.StatusId,
+                            Probability   = se.Chance,
+                            DurationTurns = se.Turns,
+                            EffectLevel   = se.IsClean ? 0 : se.EffectLevel
+                        });
+
+                    foreach (var se in _statEffects)
+                        skill.Effects.Add(new Effect {
+                            StatId         = se.StatId,
+                            Probability    = se.Chance,
+                            DurationTurns  = se.Turns,
+                            StatMultiplier = se.Multiplier != 0 ? (float?)se.Multiplier : null,
+                            MinFlatPower   = se.MinFlat != 0 ? (int?)se.MinFlat : null,
+                            MaxFlatPower   = se.MaxFlat != 0 ? (int?)se.MaxFlat : null,
+                            EffectLevel    = se.IsClean ? 0 : 1
+                        });
+
+                    db.Skills.Add(skill);
+                    db.SaveChanges();
+
+                    MessageBox.Show($"Skill '{skill.Name}' saved successfully.\n" +
+                                    $"Effects: {skill.Effects.Count}",
+                                    "✦ Saved ✦", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ResetForm();
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error saving:\n{ex.Message}",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // ── Load for edit ────────────────────────────────────────────────────
+        public void LoadForEdit(Skill skill)
+        {
+            try
+            {
+                using var db = new AppDbContext();
+                var s = db.Skills
+                           .Include(x => x.Effects).ThenInclude(e => e.Stat)
+                           .Include(x => x.Effects).ThenInclude(e => e.Status)
+                           .FirstOrDefault(x => x.Id == skill.Id);
+                if (s == null) return;
+
+                _editingSkillId = s.Id;
+                Title = $"Edit Skill — {s.Name}";
+
+                NameInput.Text     = s.Name;
+                DescInput.Text     = s.Description ?? "";
+                HitsInput.Text     = s.Hits.ToString();
+                CostInput.Text     = s.EnergyCost.ToString();
+                AccuracyInput.Text = (s.Accuracy * 100f).ToString("0");
+                IsAoeCheck.IsChecked     = s.IsAoe;
+                IsPassiveCheck.IsChecked = s.IsPassive;
+
+                // Match TargetType in combo
+                foreach (ComboBoxItem ci in SkillTargetCombo.Items)
+                    if (string.Equals(ci.Content?.ToString(), s.TargetType, StringComparison.OrdinalIgnoreCase))
+                    { SkillTargetCombo.SelectedItem = ci; break; }
+
+                // Image
+                _imageThumbPath     = s.ImageThumb;
+                ImagePathInput.Text = s.ImageThumb ?? "";
+
+                // Effects
+                _statusEffects.Clear();
+                _statEffects.Clear();
+
+                foreach (var eff in s.Effects)
+                {
+                    if (eff.StatusId.HasValue)
+                    {
+                        _statusEffects.Add(new StatusEffect {
+                            IsClean     = eff.EffectLevel == 0,
+                            StatusId    = eff.StatusId.Value,
+                            DisplayName = (eff.EffectLevel == 0 ? "⌫ " : "") + (eff.Status?.Name ?? $"Status {eff.StatusId}"),
+                            Turns       = eff.DurationTurns,
+                            Chance      = eff.Probability,
+                            EffectLevel = eff.EffectLevel ?? 1
+                        });
+                    }
+                    else if (eff.StatId.HasValue)
+                    {
+                        _statEffects.Add(new StatEffect {
+                            IsClean     = eff.EffectLevel == 0,
+                            StatId      = eff.StatId.Value,
+                            DisplayName = (eff.EffectLevel == 0 ? "⌫ " : "") + (eff.Stat?.Name ?? $"Stat {eff.StatId}"),
+                            Turns       = eff.DurationTurns,
+                            Chance      = eff.Probability,
+                            Multiplier  = eff.StatMultiplier ?? 0f,
+                            MinFlat     = eff.MinFlatPower ?? 0,
+                            MaxFlat     = eff.MaxFlatPower ?? 0
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading skill for edit:\n{ex.Message}",
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

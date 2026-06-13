@@ -705,7 +705,7 @@
                                Foreground="{StaticResource MutedBrush}"
                                FontFamily="Georgia" FontSize="10"
                                VerticalAlignment="Center" Opacity="0.4"/>
-                    <Button Content="  ☠  CREATE ENEMY  ☠  "
+                    <Button Content="  ☠  SAVE ENEMY  ☠  "
                             Style="{StaticResource ActionButtonStyle}"
                             HorizontalAlignment="Right" Width="200" Height="36"
                             Click="SaveEnemy_Click">

@@ -19,11 +19,13 @@ namespace LightestDungeonCreator
         private List<Item> _allItems = new();
         private List<Item> _filtered = new();
         private Item?      _selected;
+        private readonly Action<Item>? _editCallback;
 
         // ── Constructor ──────────────────────────────────────────────
-        public ItemListWindow()
+        public ItemListWindow(Action<Item>? onEdit = null)
         {
             db = new AppDbContext();
+            _editCallback = onEdit;
 
             InitializeComponent();
             LoadItems();
@@ -36,6 +38,24 @@ namespace LightestDungeonCreator
         // ── Navigation ───────────────────────────────────────────────
         private void BackButton_Click(object sender, RoutedEventArgs e)
             => Close();
+
+        private void EditItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selected == null) return;
+
+            if (_editCallback != null)
+            {
+                _editCallback(_selected);
+                Close();
+            }
+            else
+            {
+                var creator = new ItemCreatorWindow();
+                creator.LoadForEdit(_selected);
+                creator.Show();
+                Close();
+            }
+        }
 
         // ── Data ─────────────────────────────────────────────────────
         private void LoadItems()
@@ -134,6 +154,7 @@ namespace LightestDungeonCreator
 
             DetailEmpty.Visibility = Visibility.Collapsed;
             DetailPanel.Visibility = Visibility.Visible;
+            EditItemBtn.Visibility = Visibility.Visible;
 
             DetailImage.Source = TryLoadBitmap(item.ImageThumb);
             DetailName.Text    = item.Name.ToUpper();
@@ -254,6 +275,7 @@ namespace LightestDungeonCreator
             _selected              = null;
             DetailPanel.Visibility = Visibility.Collapsed;
             DetailEmpty.Visibility = Visibility.Visible;
+            EditItemBtn.Visibility = Visibility.Collapsed;
         }
 
         // ── Delete ───────────────────────────────────────────────────
