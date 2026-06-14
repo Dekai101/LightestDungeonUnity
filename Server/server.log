@@ -1,24 +1,4 @@
 [INFO] Scanning for projects...
-Downloading from central: https://repo.maven.apache.org/maven2/org/flywaydb/maven-metadata.xml
-Downloading from central: https://repo.maven.apache.org/maven2/io/github/git-commit-id/maven-metadata.xml
-Downloading from central: https://repo.maven.apache.org/maven2/org/cyclonedx/maven-metadata.xml
-Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/boot/maven-metadata.xml
-Progress (1): 234 BProgress (2): 234 B | 249 BProgress (3): 234 B | 249 B | 243 B                                   Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/boot/maven-metadata.xml (249 B at 474 B/s)
-Downloaded from central: https://repo.maven.apache.org/maven2/org/cyclonedx/maven-metadata.xml (243 B at 462 B/s)
-Downloaded from central: https://repo.maven.apache.org/maven2/org/flywaydb/maven-metadata.xml (234 B at 445 B/s)
-Downloading from central: https://repo.maven.apache.org/maven2/org/jooq/maven-metadata.xml
-Downloading from central: https://repo.maven.apache.org/maven2/org/liquibase/maven-metadata.xml
-Downloading from central: https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/maven-metadata.xml
-Progress (1): 255 B                   Downloaded from central: https://repo.maven.apache.org/maven2/io/github/git-commit-id/maven-metadata.xml (255 B at 473 B/s)
-Downloading from central: https://repo.maven.apache.org/maven2/org/graalvm/buildtools/maven-metadata.xml
-Progress (1): 398 B                   Downloaded from central: https://repo.maven.apache.org/maven2/org/jooq/maven-metadata.xml (398 B at 14 kB/s)
-Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-metadata.xml
-Progress (1): 375 BProgress (2): 375 B | 394 BProgress (3): 375 B | 394 B | 242 B                                   Downloaded from central: https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/maven-metadata.xml (375 B at 11 kB/s)
-Downloaded from central: https://repo.maven.apache.org/maven2/org/liquibase/maven-metadata.xml (394 B at 11 kB/s)
-Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/mojo/maven-metadata.xml
-Downloaded from central: https://repo.maven.apache.org/maven2/org/graalvm/buildtools/maven-metadata.xml (242 B at 8.3 kB/s)
-Progress (1): 3.1 kBProgress (1): 7.7 kBProgress (1): 12 kB Progress (1): 17 kBProgress (1): 20 kBProgress (1): 21 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/mojo/maven-metadata.xml (21 kB at 389 kB/s)
-Progress (1): 4.6 kBProgress (1): 12 kB Progress (1): 14 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-metadata.xml (14 kB at 41 kB/s)
 [INFO] 
 [INFO] --------------------------< com.example:demo >--------------------------
 [INFO] Building  0.0.1-SNAPSHOT
@@ -55,32 +35,2264 @@ Progress (1): 4.6 kBProgress (1): 12 kB Progress (1): 14 kB                  
 
  :: Spring Boot ::                (v4.0.4)
 
-2026-05-27T16:48:24.440+02:00  INFO 1620 --- [demo] [           main] com.example.demo.DemoApplication         : Starting DemoApplication using Java 21.0.1 with PID 1620 (D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\target\classes started by metae in D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server)
-2026-05-27T16:48:24.445+02:00  INFO 1620 --- [demo] [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
-2026-05-27T16:48:25.168+02:00  INFO 1620 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-27T16:48:25.265+02:00  INFO 1620 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 86 ms. Found 5 JPA repository interfaces.
-2026-05-27T16:48:25.828+02:00  INFO 1620 --- [demo] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
-2026-05-27T16:48:25.844+02:00  INFO 1620 --- [demo] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-05-27T16:48:25.844+02:00  INFO 1620 --- [demo] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
-2026-05-27T16:48:25.915+02:00  INFO 1620 --- [demo] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1413 ms
-2026-05-27T16:48:26.698+02:00  INFO 1620 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-05-27T16:48:26.736+02:00  INFO 1620 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-05-27T16:48:26.919+02:00  INFO 1620 --- [demo] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@62ab5e63
-2026-05-27T16:48:26.920+02:00  INFO 1620 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-05-27T16:48:28.224+02:00  INFO 1620 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-27T16:48:28.303+02:00  INFO 1620 --- [demo] [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-05-27T16:48:29.249+02:00  WARN 1620 --- [demo] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-05-27T16:48:29.544+02:00  INFO 1620 --- [demo] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
-2026-05-27T16:48:29.550+02:00  INFO 1620 --- [demo] [           main] com.example.demo.DemoApplication         : Started DemoApplication in 5.641 seconds (process running for 6.153)
-2026-05-27T19:56:46.647+02:00  INFO 1620 --- [demo] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
-2026-05-27T19:56:46.667+02:00  INFO 1620 --- [demo] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
-2026-05-27T19:56:46.683+02:00  INFO 1620 --- [demo] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-05-27T19:56:46.707+02:00  INFO 1620 --- [demo] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-05-27T19:56:46.712+02:00  INFO 1620 --- [demo] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-06-14T14:59:47.175+02:00  INFO 21724 --- [demo] [           main] com.example.demo.DemoApplication         : Starting DemoApplication using Java 21.0.1 with PID 21724 (D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\target\classes started by metae in D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server)
+2026-06-14T14:59:47.183+02:00  INFO 21724 --- [demo] [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+2026-06-14T14:59:47.834+02:00  INFO 21724 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-14T14:59:47.933+02:00  INFO 21724 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 89 ms. Found 5 JPA repository interfaces.
+2026-06-14T14:59:48.618+02:00  INFO 21724 --- [demo] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-06-14T14:59:48.634+02:00  INFO 21724 --- [demo] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-14T14:59:48.634+02:00  INFO 21724 --- [demo] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-06-14T14:59:48.707+02:00  INFO 21724 --- [demo] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1471 ms
+2026-06-14T14:59:49.424+02:00  INFO 21724 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-14T14:59:49.458+02:00  INFO 21724 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-06-14T14:59:49.617+02:00  INFO 21724 --- [demo] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@62ab5e63
+2026-06-14T14:59:49.619+02:00  INFO 21724 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-06-14T14:59:51.468+02:00  INFO 21724 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-14T14:59:51.551+02:00  INFO 21724 --- [demo] [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-14T14:59:52.504+02:00  WARN 21724 --- [demo] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-14T14:59:52.823+02:00  INFO 21724 --- [demo] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-06-14T14:59:52.828+02:00  INFO 21724 --- [demo] [           main] com.example.demo.DemoApplication         : Started DemoApplication in 6.129 seconds (process running for 6.584)
+2026-06-14T14:59:58.889+02:00  INFO 21724 --- [demo] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-14T14:59:58.889+02:00  INFO 21724 --- [demo] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-14T14:59:58.890+02:00  INFO 21724 --- [demo] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+new connection stablished f0629d47-2bdc-b2d2-f827-ad5becb4552b
+Jugador connectat: f0629d47-2bdc-b2d2-f827-ad5becb4552b
+Jugadors esperant: 1
+new connection stablished 55f23ac9-7fcc-56df-5f8c-e1d45fa12c23
+Jugador connectat: 55f23ac9-7fcc-56df-5f8c-e1d45fa12c23
+Jugadors esperant: 2
+new connection stablished 21c695cb-499b-81b7-2555-7f9244e02627
+Jugador connectat: 21c695cb-499b-81b7-2555-7f9244e02627
+Jugadors esperant: 3
+Starting the game instance.
+2026-06-14T15:00:02.331+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        bp1_0.entity_id,
+        bp1_1.accuracy_multiplier,
+        bp1_1.attack,
+        bp1_1.crit_chance,
+        bp1_1.crit_damage,
+        bp1_1.defense,
+        bp1_1.description,
+        bp1_1.energy,
+        bp1_1.energy_max,
+        bp1_1.hp,
+        bp1_1.hp_max,
+        bp1_1.image_full,
+        bp1_1.image_thumb,
+        bp1_1.level,
+        bp1_1.name,
+        s1_0.entity_id,
+        s1_1.id,
+        s1_1.accuracy,
+        s1_1.description,
+        s1_1.energy_cost,
+        s1_1.hits,
+        s1_1.image_thumb,
+        s1_1.is_aoe,
+        s1_1.is_passive,
+        s1_1.name,
+        s1_1.target_type,
+        bp1_1.speed,
+        bp1_0.skill_points,
+        bp1_0.xp_points 
+    from
+        Player bp1_0 
+    join
+        Entity bp1_1 
+            on bp1_0.entity_id=bp1_1.id 
+    left join
+        EntitySkill s1_0 
+            on bp1_1.id=s1_0.entity_id 
+    left join
+        Skill s1_1 
+            on s1_1.id=s1_0.skill_id
+Hibernate: 
+    select
+        bp1_0.entity_id,
+        bp1_1.accuracy_multiplier,
+        bp1_1.attack,
+        bp1_1.crit_chance,
+        bp1_1.crit_damage,
+        bp1_1.defense,
+        bp1_1.description,
+        bp1_1.energy,
+        bp1_1.energy_max,
+        bp1_1.hp,
+        bp1_1.hp_max,
+        bp1_1.image_full,
+        bp1_1.image_thumb,
+        bp1_1.level,
+        bp1_1.name,
+        s1_0.entity_id,
+        s1_1.id,
+        s1_1.accuracy,
+        s1_1.description,
+        s1_1.energy_cost,
+        s1_1.hits,
+        s1_1.image_thumb,
+        s1_1.is_aoe,
+        s1_1.is_passive,
+        s1_1.name,
+        s1_1.target_type,
+        bp1_1.speed,
+        bp1_0.skill_points,
+        bp1_0.xp_points 
+    from
+        Player bp1_0 
+    join
+        Entity bp1_1 
+            on bp1_0.entity_id=bp1_1.id 
+    left join
+        EntitySkill s1_0 
+            on bp1_1.id=s1_0.entity_id 
+    left join
+        Skill s1_1 
+            on s1_1.id=s1_0.skill_id
+2026-06-14T15:00:02.390+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.397+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.399+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.401+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.403+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.405+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.407+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.409+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.410+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.414+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.415+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.416+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.418+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.420+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+Hibernate: 
+    select
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s1_0.id,
+        s1_0.name,
+        s2_0.id,
+        s2_0.description,
+        s2_0.max_level,
+        s2_0.name,
+        s2_0.scaling_formula 
+    from
+        SkillEffect e1_0 
+    join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s1_0 
+            on s1_0.id=e1_1.stat_id 
+    left join
+        Status s2_0 
+            on s2_0.id=e1_1.status_id 
+    where
+        e1_0.skill_id=?
+2026-06-14T15:00:02.452+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.460+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.465+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.468+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.472+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.477+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.482+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.485+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.487+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.493+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.498+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.501+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.504+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.510+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+2026-06-14T15:00:02.515+02:00 DEBUG 21724 --- [demo] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.accuracy,
+        s1_0.description,
+        s1_0.energy_cost,
+        s1_0.hits,
+        s1_0.image_thumb,
+        s1_0.is_aoe,
+        s1_0.is_passive,
+        s1_0.name,
+        s1_0.target_type,
+        e1_0.skill_id,
+        e1_1.id,
+        e1_1.duration_turns,
+        e1_1.effect_level,
+        e1_1.max_flat_power,
+        e1_1.min_flat_power,
+        e1_1.probability,
+        e1_1.stat_multiplier,
+        s2_0.id,
+        s2_0.name,
+        s3_0.id,
+        s3_0.description,
+        s3_0.max_level,
+        s3_0.name,
+        s3_0.scaling_formula 
+    from
+        Skill s1_0 
+    left join
+        SkillEffect e1_0 
+            on s1_0.id=e1_0.skill_id 
+    left join
+        Effect e1_1 
+            on e1_1.id=e1_0.effect_id 
+    left join
+        Statistic s2_0 
+            on s2_0.id=e1_1.stat_id 
+    left join
+        Status s3_0 
+            on s3_0.id=e1_1.status_id 
+    where
+        s1_0.id=?
+Nova partida creada: e3d20311-bd7f-49e4-bcd5-f1054dec4dab
+The thread has been started.
+2026-06-14T15:01:40.455+02:00  INFO 21724 --- [demo] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-14T15:01:40.462+02:00  INFO 21724 --- [demo] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-06-14T15:01:40.468+02:00  INFO 21724 --- [demo] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-14T15:01:40.471+02:00  INFO 21724 --- [demo] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-06-14T15:01:40.479+02:00  INFO 21724 --- [demo] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+connection closed f0629d47-2bdc-b2d2-f827-ad5becb4552b
+connection closed 21c695cb-499b-81b7-2555-7f9244e02627
+connection closed 55f23ac9-7fcc-56df-5f8c-e1d45fa12c23
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  03:08 h
-[INFO] Finished at: 2026-05-27T19:56:46+02:00
+[INFO] Total time:  01:56 min
+[INFO] Finished at: 2026-06-14T15:01:40+02:00
 [INFO] ------------------------------------------------------------------------
 ¨Desea terminar el trabajo por lotes (S/N)? 

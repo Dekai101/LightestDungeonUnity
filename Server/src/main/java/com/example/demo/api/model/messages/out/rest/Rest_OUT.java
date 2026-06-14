@@ -11,5 +11,7 @@ public class Rest_OUT extends MessageBody {
         return TYPE;
     }
 
-    public int percentHealed;
+    public int playerId;
+    public int hpHealed;
+    public int currentHp;
 }

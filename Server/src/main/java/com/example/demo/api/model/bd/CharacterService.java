@@ -35,7 +35,7 @@ public class CharacterService {
 
     // ---- PLAYERS ----
     public List<BdPlayer> getAllPlayers() {
-        return bdPlayerRepository.findAll();
+        return bdPlayerRepository.findAllWithSkills();
     }
 
     public Optional<BdPlayer> getPlayerById(Integer id) {

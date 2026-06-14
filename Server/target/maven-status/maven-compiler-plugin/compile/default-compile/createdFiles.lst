@@ -8,7 +8,6 @@ com\example\demo\api\model\messages\MessageBody.class
 com\example\demo\api\model\messages\in\pick_characters\PickCharacterMessage_IN.class
 com\example\demo\api\model\states\State.class
 com\example\demo\api\model\messages\in\room_cleared\RoomCleared_IN.class
-com\example\demo\api\model\messages\out\chest_loot\ShowChestLoot_OUT.class
 com\example\demo\api\model\messages\in\character_action\CharacterActionMessage_IN.class
 com\example\demo\components\GameInstance.class
 com\example\demo\api\ApiRest.class

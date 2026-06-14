@@ -62,6 +62,5 @@ public class Skill {
     public Boolean getIsAoe() { return isAoe; }
     public Boolean getIsPassive() { return isPassive; }
     public String getImageThumb() { return imageThumb; }
-    public Effect getEffect() { return effects.get(0); }
     public List<Effect> getEffects() { return effects; }
 }

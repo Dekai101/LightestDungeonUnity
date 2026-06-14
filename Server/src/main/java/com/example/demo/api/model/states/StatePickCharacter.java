@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.example.demo.api.model.Player;
 import com.example.demo.api.model.bd.BdPlayer;
+import com.example.demo.api.model.bd.Skill;
 import com.example.demo.api.model.messages.JSONMessage;
 import com.example.demo.api.model.messages.in.pick_characters.PickCharacterMessage_IN;
 import com.example.demo.api.model.messages.out.characters_to_pick.CharacterInfo;
@@ -43,7 +44,18 @@ public class StatePickCharacter extends State
 
         List<CharacterInfo> characterInfos = new ArrayList<>();
         for (BdPlayer bdPlayer : game.getBdPlayers()) {
-            characterInfos.add(new CharacterInfo(bdPlayer, -1, false));
+            List<Skill> sk = new ArrayList<>();
+            
+            for(Skill s : bdPlayer.getSkills()){
+                sk.add(game.getSkillById(s.getId()));
+            }
+
+            for(Skill s : sk){
+                s.getEffects().clear();
+            }
+            
+            bdPlayer.getSkills().clear();
+            characterInfos.add(new CharacterInfo(bdPlayer, -1, false, sk));
         }
 
         m = new Players2SelectMessage_OUT();
