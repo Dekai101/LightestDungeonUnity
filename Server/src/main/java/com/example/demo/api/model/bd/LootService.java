@@ -17,7 +17,7 @@ public class LootService {
     }
 
     public Optional<Item> getItemById(Integer id) {
-        return itemRepository.findById(id);
+        return itemRepository.findByIdWithEffects(id);
     }
 
     public List<Item> generateChestLoot(int roomLevel) {
