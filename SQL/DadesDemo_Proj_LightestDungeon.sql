@@ -405,10 +405,10 @@ INSERT INTO Entity
  crit_chance, crit_damage, accuracy_multiplier,
  image_thumb, image_full, description)
 VALUES
-('Hero Knight',     1, 90,  90,  100, 100, 25, 40, 20, 0.05, 1.5, 1.0, 'https://i.pinimg.com/564x/a0/f7/ee/a0f7ee0df7562a5ddb46193c9726f5d7.jpg',   'https://i.pinimg.com/564x/a0/f7/ee/a0f7ee0df7562a5ddb46193c9726f5d7.jpg',   'Sturdy knight.'),
-('Ocean Priestess', 1, 70,  70,  100, 100, 20, 25, 35, 0.05, 1.5, 1.0, 'https://www.shutterstock.com/image-vector/pixel-art-female-water-mage-260nw-2690764367.jpg', 'https://www.shutterstock.com/image-vector/pixel-art-female-water-mage-260nw-2690764367.jpg', 'Support priestess.'),
-('Arcane Mage',     1, 40,  40,  100, 100, 40, 20, 30, 0.05, 1.5, 1.0, 'https://www.shutterstock.com/image-vector/pixel-art-royal-battlemage-casting-260nw-2704667127.jpg', 'https://www.shutterstock.com/image-vector/pixel-art-royal-battlemage-casting-260nw-2704667127.jpg',   'Versatile mage.'),
-('Forest Ranger',   1, 60,  60,  100, 100, 35, 20, 40, 0.05, 1.5, 1.0, 'https://www.shutterstock.com/image-vector/pixel-art-forest-ranger-sentinel-260nw-2704248221.jpg', 'https://www.shutterstock.com/image-vector/pixel-art-forest-ranger-sentinel-260nw-2704248221.jpg', 'Forest dweller.');
+('Hero Knight',     1, 90,  90,  100, 100, 25, 40, 20, 0.05, 1.5, 1.0, 'https://www.sprite-ai.art/sprite-img/950983fc-6115-417d-b306-c75e4f8ebb1b/retro-16-bit-pixel-hero-sprite-courageous-knight-clad-128x128-pixel-art-fbb5.png',   'https://www.sprite-ai.art/sprite-img/950983fc-6115-417d-b306-c75e4f8ebb1b/retro-16-bit-pixel-hero-sprite-courageous-knight-clad-128x128-pixel-art-fbb5.png',   'Sturdy knight.'),
+('Ocean Priestess', 1, 70,  70,  100, 100, 20, 25, 35, 0.05, 1.5, 1.0, 'https://static.tildacdn.com/tild3635-6434-4965-b664-386236613036/Witch_water_tr.png', 'https://static.tildacdn.com/tild3635-6434-4965-b664-386236613036/Witch_water_tr.png', 'Support priestess.'),
+('Arcane Mage',     1, 40,  40,  100, 100, 40, 20, 30, 0.05, 1.5, 1.0, 'https://www.sprite-ai.art/sprite-img/be2d0a60-2eda-484c-b3aa-438390725ca3/pixel-art-mage-avec-sceptre-cape-bleu-16x16-64x64-pixel-art-b52e.png', 'https://www.sprite-ai.art/sprite-img/be2d0a60-2eda-484c-b3aa-438390725ca3/pixel-art-mage-avec-sceptre-cape-bleu-16x16-64x64-pixel-art-b52e.png',   'Versatile mage.'),
+('Forest Ranger',   1, 60,  60,  100, 100, 35, 20, 40, 0.05, 1.5, 1.0, 'https://www.sprite-ai.art/sprite-img/437e4b8c-80d2-4cd9-a5d5-709ce23db090/a-skilled-bowman-wearing-a-green-tunic-aiming-32x32-pixel-art-a2e9.png', 'https://www.sprite-ai.art/sprite-img/437e4b8c-80d2-4cd9-a5d5-709ce23db090/a-skilled-bowman-wearing-a-green-tunic-aiming-32x32-pixel-art-a2e9.png', 'Forest dweller.');
 
 INSERT INTO Player (entity_id, xp_points, skill_points)
 SELECT id, 0, 3 FROM Entity
