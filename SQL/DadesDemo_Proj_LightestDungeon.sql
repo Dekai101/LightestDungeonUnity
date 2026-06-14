@@ -422,10 +422,10 @@ INSERT INTO Entity
  crit_chance, crit_damage, accuracy_multiplier,
  image_thumb, image_full, description)
 VALUES
-('Goblin Berserker', 2,  40,  40,  100, 100, 35, 15, 25, 0.05, 1.5, 1.0, '/img/goblin_t.png',   '/img/goblin_f.png',   'Strong but fragile.'),
-('Stone Golem',      3, 100, 100,  100, 100, 15, 30, 15, 0.05, 1.5, 1.0, '/img/golem_t.png',    '/img/golem_f.png',    'Walking Fortress, almost no offensive capabilities.'),
-('Vampire Lord',     5,  70,  70,  100, 100, 35, 25, 25, 0.05, 1.5, 1.0, '/img/vampire_t.png',  '/img/vampire_f.png',  'Expert in blood manipulation, draining his opponents blood heals him.'),
-('Dark Assassin',    4,  50,  50,  100, 100, 40, 15, 40, 0.15, 1.7, 1.0, '/img/assassin_t.png', '/img/assassin_f.png', 'Speedy sneaky assassin.');
+('Goblin Berserker', 2,  40,  40,  100, 100, 35, 15, 25, 0.05, 1.5, 1.0, 'https://www.sprite-ai.art/sprite-img/c9d7071f-a616-46f2-9638-bf3099096ea5/pixel-art-for-a-tcg-in-a-jrpg-124x124-pixel-art-9879.png',   'https://www.sprite-ai.art/sprite-img/c9d7071f-a616-46f2-9638-bf3099096ea5/pixel-art-for-a-tcg-in-a-jrpg-124x124-pixel-art-9879.png',   'Strong but fragile.'),
+('Stone Golem',      3, 100, 100,  100, 100, 15, 30, 15, 0.05, 1.5, 1.0, 'https://art.pixilart.com/5b83fa17af18340.png',    'https://art.pixilart.com/5b83fa17af18340.png',    'Walking Fortress, almost no offensive capabilities.'),
+('Vampire Lord',     5,  70,  70,  100, 100, 35, 25, 25, 0.05, 1.5, 1.0, 'https://www.sprite-ai.art/sprite-img/e463b247-96f9-4015-82b6-17bb10d065aa/vampire-with-cloak-visible-fangs-claws-64x64-pixel-art-e27d.png',  'https://www.sprite-ai.art/sprite-img/e463b247-96f9-4015-82b6-17bb10d065aa/vampire-with-cloak-visible-fangs-claws-64x64-pixel-art-e27d.png',  'Expert in blood manipulation, draining his opponents blood heals him.'),
+('Dark Assassin',    4,  50,  50,  100, 100, 40, 15, 40, 0.15, 1.7, 1.0, 'https://www.sprite-ai.art/sprite-img/ea2516b3-4417-4a37-83e9-c8758669c3a9/medival-assain-16x16-piels-with-2-daggers-with-64x64-pixel-art-4fe1.png', 'https://www.sprite-ai.art/sprite-img/ea2516b3-4417-4a37-83e9-c8758669c3a9/medival-assain-16x16-piels-with-2-daggers-with-64x64-pixel-art-4fe1.png', 'Speedy sneaky assassin.');
 
 -- (El trigger trg_enemy_create_loot_table crea la LootTable automáticamente)
 INSERT INTO Enemy (entity_id, passive_id)
