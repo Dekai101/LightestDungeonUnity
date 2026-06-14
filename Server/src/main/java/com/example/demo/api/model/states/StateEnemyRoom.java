@@ -140,6 +140,16 @@ public class StateEnemyRoom extends State {
     private void makeTurn(Player p, JSONMessage jsonMsg) {
         PlayersTurn_IN message = mapper.treeToValue(jsonMsg.data, PlayersTurn_IN.class);
 
+        boolean idPlayerValid = message.players.stream().anyMatch(e -> e.player.getId() == p.getId());
+
+        if (!idPlayerValid) {
+            System.out.println("Missatge erroni, el jugador no existeix al joc.");
+            game.send(p.getSession(), new JSONMessage(game.getId(), new ActionResult_OUT(false, 1)));
+            return;
+        }
+
+        game.send(p.getSession(), new JSONMessage(game.getId(), new ActionResult_OUT(true, 0)));
+
         if (message.players != null && !message.players.isEmpty()) {
             pendingTurns.put(p, message.players.get(0));
         }
@@ -168,7 +178,14 @@ public class StateEnemyRoom extends State {
         pendingTurns.clear();
 
         boolean allEnemiesDead = enemies.stream().allMatch(e -> e.getHp() <= 0);
-        boolean allPlayersDead = memPlayers.stream().allMatch(p2 -> p2.getCharacter().getHp() <= 0);
+        boolean allPlayersDead = memPlayers.stream().allMatch(p2 -> p2.getCharacter().getHp() <= 0) || memPlayers.isEmpty();
+
+        for(Player pl : memPlayers){
+            if(pl.getCharacter().getHp() <= 0){
+                memPlayers.remove(pl);
+                game.getPlayers().remove(pl);
+            }
+        }
         
         if (allEnemiesDead) {
             System.out.println("Tots els enemics han mort. Sala netejada!");
@@ -552,13 +569,43 @@ public class StateEnemyRoom extends State {
                     if (effect.getStatus() != null) {
                         statusApplied = effect.getStatus().getName();
                         for (Player player : memPlayers) {
-                            if(player.getId() == myTargetsId[i]){
-                                player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                            if (player.getId() == myTargetsId[i]) {
+                                if(player.getCharacter().hasStatus(effect.getStatus().getName())){
+                                    int level = player.getCharacter().getStatusLevel(statusApplied);
+                                    int turns = player.getCharacter().getDurationTurns(statusApplied);
+                                        
+                                    if(level < effect.getEffectLevel()){
+                                        player.getCharacter().removeStatus(statusApplied);
+                                        player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                        System.out.println("Status level of new effect is bigger, applying new status effect");
+                                    } else if(level == effect.getEffectLevel() && turns < effect.getDurationTurns()){
+                                        player.getCharacter().removeStatus(statusApplied);
+                                        player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                        System.out.println("Turns of new effect is bigger, applying new status effect");
+                                    }
+                                } else{
+                                    player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                }
                             }
                         }
                         for (Enemy enemy : enemies) {
-                            if(enemy.getCombatId() == myTargetsId[i]){
-                                enemy.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                            if (enemy.getCombatId() == myTargetsId[i]) {
+                                if(enemy.hasStatus(effect.getStatus().getName())){
+                                    int level = enemy.getStatusLevel(statusApplied);
+                                    int turns = enemy.getDurationTurns(statusApplied);
+                                    
+                                    if(level < effect.getEffectLevel()){
+                                        enemy.removeStatus(statusApplied);
+                                        enemy.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                        System.out.println("Status level of new effect is bigger, applying new status effect");
+                                    } else if(level == effect.getEffectLevel() && turns < effect.getDurationTurns()){
+                                        enemy.removeStatus(statusApplied);
+                                        enemy.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                        System.out.println("Turns of new effect is bigger, applying new status effect");
+                                    }
+                                } else{
+                                    enemy.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                }
                             }
                         }
                         continue;
@@ -752,13 +799,43 @@ public class StateEnemyRoom extends State {
                             if (effect.getStatus() != null) {
                                 statusApplied = effect.getStatus().getName();
                                 for (Player player : memPlayers) {
-                                    if(player.getId() == myTargetsId[i]){
-                                        player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                    if (player.getId() == myTargetsId[i]) {
+                                        if(player.getCharacter().hasStatus(effect.getStatus().getName())){
+                                            int level = player.getCharacter().getStatusLevel(statusApplied);
+                                            int turns = player.getCharacter().getDurationTurns(statusApplied);
+                                            
+                                            if(level < effect.getEffectLevel()){
+                                                player.getCharacter().removeStatus(statusApplied);
+                                                player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                                System.out.println("Status level of new effect is bigger, applying new status effect");
+                                            } else if(level == effect.getEffectLevel() && turns < effect.getDurationTurns()){
+                                                player.getCharacter().removeStatus(statusApplied);
+                                                player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                                System.out.println("Turns of new effect is bigger, applying new status effect");
+                                            }
+                                        } else{
+                                            player.getCharacter().addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                        }
                                     }
                                 }
                                 for (Enemy en : enemies) {
-                                    if(en.getCombatId() == myTargetsId[i]){
-                                        en.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                    if (en.getCombatId() == myTargetsId[i]) {
+                                        if(en.hasStatus(effect.getStatus().getName())){
+                                            int level = en.getStatusLevel(statusApplied);
+                                            int turns = en.getDurationTurns(statusApplied);
+                                            
+                                            if(level < effect.getEffectLevel()){
+                                                en.removeStatus(statusApplied);
+                                                en.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                                System.out.println("Status level of new effect is bigger, applying new status effect");
+                                            } else if(level == effect.getEffectLevel() && turns < effect.getDurationTurns()){
+                                                en.removeStatus(statusApplied);
+                                                en.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                                System.out.println("Turns of new effect is bigger, applying new status effect");
+                                            }
+                                        } else{
+                                            en.addStatusEffect(statusApplied, effect.getEffectLevel(), effect.getDurationTurns());
+                                        }
                                     }
                                 }
                                 continue;
