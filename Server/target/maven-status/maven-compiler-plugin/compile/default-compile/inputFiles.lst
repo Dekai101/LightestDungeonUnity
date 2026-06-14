@@ -39,6 +39,7 @@ D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\de
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\identify_player\PlayerIdentifier_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\loot\ShowChestLoot_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\loot\ShowEnemyLoot_OUT.java
+D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\loot\ShowInventory_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\player_action\PlayerActionResult.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\player_action\PlayerActionResult_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\rest\Rest_OUT.java

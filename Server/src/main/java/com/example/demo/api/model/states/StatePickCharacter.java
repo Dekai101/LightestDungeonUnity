@@ -126,7 +126,6 @@ public class StatePickCharacter extends State
                     ActionResult_OUT result = new ActionResult_OUT(true, 0);
                     game.send(p.getSession(), new JSONMessage(game.getId(), result) );
 
-                    // Missatge a tothom amb l'actualització de les assignacions.
                     JSONMessage ogm = new JSONMessage(game.getId(),m);
                     game.broadcast(ogm);
 

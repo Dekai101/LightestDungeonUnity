@@ -58,7 +58,7 @@ public class Item {
     public String getTargetType() { return targetType; }
     public boolean isAoe() { return isAoe; }
     public Integer getMaxUses() { return maxUses; }
+    public void use() { this.maxUses--; }
     public String getImageThumb() { return imageThumb; }
-    public Effect getEffect() { return effects.get(0); }
     public List<Effect> getEffects() { return effects; }
 }
