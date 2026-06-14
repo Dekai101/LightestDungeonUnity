@@ -28,6 +28,7 @@ import com.example.demo.api.model.messages.out.battle_state.BattleStateUpdate_OU
 import com.example.demo.api.model.messages.out.enemies.ShowEnemies_OUT;
 import com.example.demo.api.model.messages.out.generic.ActionResult_OUT;
 import com.example.demo.api.model.messages.out.loot.ShowEnemyLoot_OUT;
+import com.example.demo.api.model.messages.out.loot.ShowInventory_OUT;
 import com.example.demo.api.model.messages.out.player_action.PlayerActionResult;
 import com.example.demo.api.model.messages.out.player_action.PlayerActionResult_OUT;
 import com.example.demo.api.model.messages.out.status_applied.StatusUpdate;
@@ -44,6 +45,10 @@ public class StateEnemyRoom extends State {
 
     private List<Enemy> enemies;
 
+    private List<Item> enemyLoot;
+
+    private boolean alreadyPicked = false;
+
     private List<Player> memPlayers;
 
     private Map<Player, PlayerTurn> pendingTurns = new HashMap<>();
@@ -55,6 +60,10 @@ public class StateEnemyRoom extends State {
     public StateEnemyRoom(GameInstance game) {
         super(game);
         mapper = new ObjectMapper();
+
+        enemyLoot = new ArrayList<>();
+
+        alreadyPicked = false;
 
         enemies = game.getEnemiesByLevel();
 
@@ -90,7 +99,35 @@ public class StateEnemyRoom extends State {
                         waitAllPlayers(message.player(), gm);
                         break;
                     case ItemsPicked_IN.TYPE:
-                        game.addItemsToInventory(mapper.treeToValue(gm.data, ItemsPicked_IN.class).items);
+                        if(!enemies.stream().allMatch(e -> e.getHp() <= 0)){
+                            game.broadcast(new JSONMessage(game.getId(), new ActionResult_OUT(false, 5)));
+                            break;
+                        }
+                        if(alreadyPicked){
+                            game.broadcast(new JSONMessage(game.getId(), new ActionResult_OUT(false, 6)));
+                            break;
+                        }
+
+                        List<Item> items = new ArrayList<>();
+
+                        for(Integer itemId : mapper.treeToValue(gm.data, ItemsPicked_IN.class).items){
+                            Item item = enemyLoot.stream()
+                                .filter(i -> i.getId() == itemId)
+                                .findFirst()
+                                .orElse(null);
+
+                            if(item != null){
+                                items.add(item);
+                            }
+                        }
+                        if(!items.isEmpty()){
+                            alreadyPicked = true;
+                            game.addItemsToInventory(items);
+                            game.broadcast(new JSONMessage(game.getId(), new ShowInventory_OUT(game.getInventory().values())));
+                        } else {
+                            System.out.println("No items picked");
+                        }
+                        
                         break;
                     default:
                         break;
@@ -148,11 +185,35 @@ public class StateEnemyRoom extends State {
             return;
         }
 
-        boolean isPlayerAlive = message.players.get(0).player.getHp() > 0;
+        boolean isPlayerAlive = true;
+        for(Player pl : game.getPlayers()){
+            if(pl.getId() == p.getId()){
+                if(pl.getCharacter().getHp() <= 0){
+                    isPlayerAlive = false;
+                    break;
+                }
+            }
+        }
 
         if (!isPlayerAlive) {
             System.out.println("Missatge erroni, el jugador es mort.");
             game.send(p.getSession(), new JSONMessage(game.getId(), new ActionResult_OUT(false, 2)));
+            return;
+        }
+
+        boolean isEnemyAlive = true;
+        for(Enemy en : enemies){
+            if(en.getId() == message.players.get(0).target.getId()){
+                if(en.getHp() <= 0){
+                    isEnemyAlive = false;
+                    break;
+                }
+            }
+        }
+
+        if (!isEnemyAlive) {
+            System.out.println("Missatge erroni, l'enemic es mort.");
+            game.send(p.getSession(), new JSONMessage(game.getId(), new ActionResult_OUT(false, 3)));
             return;
         }
 
@@ -204,7 +265,7 @@ public class StateEnemyRoom extends State {
                     }
                 }
             }
-
+            enemyLoot = items;
             game.broadcast(new JSONMessage(game.getId(), new ShowEnemyLoot_OUT(items)));
             return;
         } else if (allPlayersDead) {
@@ -254,7 +315,12 @@ public class StateEnemyRoom extends State {
             if ("SKILL".equals(turn.choiceType) && turn.skillCasted != null) {
                 processSkillAction(turn);
             } else if ("ITEM".equals(turn.choiceType) && turn.itemUsed != null) {
-                processItemAction(turn);
+                if(game.getInventory().values().contains(turn.itemUsed)){
+                    processItemAction(turn);
+                } else {
+                    System.out.println("Item not found in inventory");
+                    results.add(new PlayerActionResult(turn.player.getId(), "PASS", -1, 0, "", false, false, null));
+                }
             } else {
                 results.add(new PlayerActionResult(turn.player.getId(), "PASS", -1, 0, "", false, false, null));
             }
@@ -289,17 +355,31 @@ public class StateEnemyRoom extends State {
 
         if (skill.getIsAoe() != null && skill.getIsAoe()) {
             if ("ENEMY".equals(skill.getTargetType())) {
-                myTargetsId = enemies.stream().mapToInt(Enemy::getCombatId).toArray();
-                bdTargetsId = enemies.stream().mapToInt(Enemy::getId).toArray();
+                myTargetsId = enemies.stream()
+                        .filter(en -> en.getHp() > 0)
+                        .mapToInt(Enemy::getCombatId)
+                        .toArray();
+
+                bdTargetsId = enemies.stream()
+                        .filter(en -> en.getHp() > 0)
+                        .mapToInt(Enemy::getId)
+                        .toArray();
             } else {
-                myTargetsId = memPlayers.stream().mapToInt(p -> (int) p.getId()).toArray();
-                bdTargetsId = memPlayers.stream().mapToInt(p -> p.getCharacter().getId()).toArray();
+                myTargetsId = memPlayers.stream()
+                        .filter(pl -> pl.getCharacter().getHp() > 0)
+                        .mapToInt(p -> (int) p.getId())
+                        .toArray();
+
+                bdTargetsId = memPlayers.stream()
+                        .filter(pl -> pl.getCharacter().getHp() > 0)
+                        .mapToInt(p -> p.getCharacter().getId())
+                        .toArray();
             }
         } else {
             if ("ENEMY".equals(skill.getTargetType())) {
                 int i = 0;
                 for (Enemy en : enemies) {
-                    if (en.getCombatId() == turn.target.getId()) {
+                    if (en.getHp() > 0 && en.getCombatId() == turn.target.getId()) {
                         myTargetsId[i] = en.getCombatId();
                         bdTargetsId[i] = en.getId();
                         i++;
@@ -308,7 +388,7 @@ public class StateEnemyRoom extends State {
             } else {
                 int i = 0;
                 for (Player pl : memPlayers) {
-                    if (pl.getId() == turn.target.getId()) {
+                    if (pl.getCharacter().getHp() > 0 && pl.getId() == turn.target.getId()) {
                         myTargetsId[i] = (int) pl.getId();
                         bdTargetsId[i] = pl.getCharacter().getId();
                         i++;
@@ -521,37 +601,48 @@ public class StateEnemyRoom extends State {
         String statisticName = "";
         String statusApplied = null;
 
-        int[] myTargetsId;
-        int[] bdTargetsId;
+        int[] myTargetsId = new int[3];
+        int[] bdTargetsId = new int[3];
 
         if (item.isAoe()) {
             if ("ENEMY".equals(item.getTargetType())) {
-                myTargetsId = enemies.stream().mapToInt(Enemy::getCombatId).toArray();
-                bdTargetsId = enemies.stream().mapToInt(Enemy::getId).toArray();
+                myTargetsId = enemies.stream()
+                        .filter(en -> en.getHp() > 0)
+                        .mapToInt(Enemy::getCombatId)
+                        .toArray();
+
+                bdTargetsId = enemies.stream()
+                        .filter(en -> en.getHp() > 0)
+                        .mapToInt(Enemy::getId)
+                        .toArray();
             } else {
-                myTargetsId = memPlayers.stream().mapToInt(p -> (int) p.getId()).toArray();
-                bdTargetsId = memPlayers.stream().mapToInt(p -> p.getCharacter().getId()).toArray();
+                myTargetsId = memPlayers.stream()
+                        .filter(pl -> pl.getCharacter().getHp() > 0)
+                        .mapToInt(p -> (int) p.getId())
+                        .toArray();
+
+                bdTargetsId = memPlayers.stream()
+                        .filter(pl -> pl.getCharacter().getHp() > 0)
+                        .mapToInt(p -> p.getCharacter().getId())
+                        .toArray();
             }
         } else {
             if ("ENEMY".equals(item.getTargetType())) {
-                int idx = 0;
-                myTargetsId = new int[1];
-                bdTargetsId = new int[1];
+                int i = 0;
                 for (Enemy en : enemies) {
-                    if (en.getCombatId() == turn.target.getId()) {
-                        myTargetsId[idx] = en.getCombatId();
-                        bdTargetsId[idx] = en.getId();
-                        break;
+                    if (en.getHp() > 0 && en.getCombatId() == turn.target.getId()) {
+                        myTargetsId[i] = en.getCombatId();
+                        bdTargetsId[i] = en.getId();
+                        i++;
                     }
                 }
             } else {
-                myTargetsId = new int[1];
-                bdTargetsId = new int[1];
+                int i = 0;
                 for (Player pl : memPlayers) {
-                    if (pl.getId() == turn.target.getId()) {
-                        myTargetsId[0] = (int) pl.getId();
-                        bdTargetsId[0] = pl.getCharacter().getId();
-                        break;
+                    if (pl.getCharacter().getHp() > 0 && pl.getId() == turn.target.getId()) {
+                        myTargetsId[i] = (int) pl.getId();
+                        bdTargetsId[i] = pl.getCharacter().getId();
+                        i++;
                     }
                 }
             }
@@ -718,12 +809,19 @@ public class StateEnemyRoom extends State {
 
                     totalValue += value;
                 }
-
+                
                 results.add(new PlayerActionResult(
                     (int)realPlayer.getId(), "ITEM", myTargetsId[i],
                     totalValue, statisticName, anyCrit, anyHit, statusApplied
                 ));
             }
+        }
+        
+        game.getInventory().values().stream().filter(i -> i.getId() == item.getId()).findFirst().get().use();
+        Item it = game.getInventory().values().stream().filter(i -> i.getId() == item.getId()).findFirst().get();
+
+        if(it.getMaxUses() <= 0){
+            game.getInventory().values().remove(it);
         }
     }
 

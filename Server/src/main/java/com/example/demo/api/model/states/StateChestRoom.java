@@ -1,14 +1,18 @@
 package com.example.demo.api.model.states;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.example.demo.api.model.Player;
+import com.example.demo.api.model.bd.Item;
 import com.example.demo.api.model.messages.JSONMessage;
 import com.example.demo.api.model.messages.in.items_picked.ItemsPicked_IN;
 import com.example.demo.api.model.messages.in.room_cleared.RoomCleared_IN;
 import com.example.demo.api.model.messages.out.generic.ActionResult_OUT;
 import com.example.demo.api.model.messages.out.loot.ShowChestLoot_OUT;
+import com.example.demo.api.model.messages.out.loot.ShowInventory_OUT;
 import com.example.demo.components.GameInstance;
 import com.example.demo.components.GameMessage;
 
@@ -22,9 +26,13 @@ public class StateChestRoom extends State
 
     private HashMap<Player, Boolean> playersCleared;
 
+    private boolean alreadyPicked = false;
+
     public StateChestRoom(GameInstance game) {
         super(game);
         mapper = new ObjectMapper();
+
+        alreadyPicked = false;
 
         //Ficar el valor dels jugadors en false per saber que no han acabat la room
         playersCleared = new HashMap<>();
@@ -53,7 +61,30 @@ public class StateChestRoom extends State
                     waitAllPlayers(message.player(), gm);
                     break;
                 case ItemsPicked_IN.TYPE:
-                    game.addItemsToInventory(mapper.treeToValue(gm.data, ItemsPicked_IN.class).items);
+                    if(alreadyPicked){
+                        game.broadcast(new JSONMessage(game.getId(), new ActionResult_OUT(false, 1)));
+                        break;
+                    }
+                    List<Item> items = new ArrayList<>();
+                        
+                        for(Integer itemId : mapper.treeToValue(gm.data, ItemsPicked_IN.class).items){
+                            Item item = msg.loot.stream()
+                                .filter(i -> i.getId() == itemId)
+                                .findFirst()
+                                .orElse(null);
+
+                            if(item != null){
+                                items.add(item);
+                            }
+                        }
+                        if(!items.isEmpty()){
+                            alreadyPicked = true;
+                            game.addItemsToInventory(items);
+                            game.broadcast(new JSONMessage(game.getId(), new ShowInventory_OUT(game.getInventory().values())));
+                        } else {
+                            System.out.println("No items picked");
+                        }
+                            
                     break;
                 default:
                     break;
