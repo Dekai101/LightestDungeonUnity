@@ -33,11 +33,13 @@ public class StateRestRoom extends State {
         for (int i = 0; i < game.getPlayers().size(); i++){
             Player p = game.getPlayers().get(i);
             int hpgained = p.getCharacter().getHpMax()*40/100;
-            p.getCharacter().addHp(hpgained);
             msg = new Rest_OUT();
-            msg.percentHealed = p.getCharacter().getHp();
+            msg.hpHealed = hpgained;
+            msg.currentHp = p.getCharacter().getHp();
+            msg.playerId = (int)p.getId();
+            p.getCharacter().addHp(hpgained);
             JSONMessage gm = new JSONMessage(game.getId(), msg);
-            game.send(p.getSession(), gm);
+            game.broadcast(gm);
         }
     }
 

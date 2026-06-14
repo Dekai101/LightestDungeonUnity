@@ -148,6 +148,14 @@ public class StateEnemyRoom extends State {
             return;
         }
 
+        boolean isPlayerAlive = message.players.get(0).player.getHp() > 0;
+
+        if (!isPlayerAlive) {
+            System.out.println("Missatge erroni, el jugador es mort.");
+            game.send(p.getSession(), new JSONMessage(game.getId(), new ActionResult_OUT(false, 2)));
+            return;
+        }
+
         game.send(p.getSession(), new JSONMessage(game.getId(), new ActionResult_OUT(true, 0)));
 
         if (message.players != null && !message.players.isEmpty()) {
@@ -178,14 +186,7 @@ public class StateEnemyRoom extends State {
         pendingTurns.clear();
 
         boolean allEnemiesDead = enemies.stream().allMatch(e -> e.getHp() <= 0);
-        boolean allPlayersDead = memPlayers.stream().allMatch(p2 -> p2.getCharacter().getHp() <= 0) || memPlayers.isEmpty();
-
-        for(Player pl : memPlayers){
-            if(pl.getCharacter().getHp() <= 0){
-                memPlayers.remove(pl);
-                game.getPlayers().remove(pl);
-            }
-        }
+        boolean allPlayersDead = memPlayers.stream().allMatch(p2 -> p2.getCharacter().getHp() <= 0);
         
         if (allEnemiesDead) {
             System.out.println("Tots els enemics han mort. Sala netejada!");

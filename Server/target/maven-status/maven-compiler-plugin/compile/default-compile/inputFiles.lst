@@ -18,6 +18,7 @@ D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\de
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\bd\Statistic.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\bd\Status.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\in\character_action\CharacterActionMessage_IN.java
+D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\in\items_picked\ItemsPicked_IN.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\in\pick_characters\PickCharacterMessage_IN.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\in\players_turn\PlayersTurn_IN.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\in\players_turn\PlayerTurn.java
@@ -30,12 +31,14 @@ D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\de
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\characters_to_pick\CharacterInfo.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\characters_to_pick\PlayerInfo.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\characters_to_pick\Players2SelectMessage_OUT.java
-D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\chest_loot\ShowChestLoot_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\enemies\ShowEnemies_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\enemy_action\EnemyAction_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\enemy_action\EnemyActionResult.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\generic\ActionResult_OUT.java
+D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\generic\Message_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\identify_player\PlayerIdentifier_OUT.java
+D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\loot\ShowChestLoot_OUT.java
+D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\loot\ShowEnemyLoot_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\player_action\PlayerActionResult.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\player_action\PlayerActionResult_OUT.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\out\rest\Rest_OUT.java
