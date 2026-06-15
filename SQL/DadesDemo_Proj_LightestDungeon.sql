@@ -59,7 +59,7 @@ VALUES
 ('Stun Smash',       'Strong hit with a chance to stun.',                              45, 0.88, 1, 'ENEMY', false, false, 'https://cdna.artstation.com/p/marketplace/presentation_assets/000/134/976/large/file.png'),
 ('Frost Nova',       'Ice burst that stuns all enemies.',                              75, 0.80, 1, 'ENEMY', true,  false, 'https://i.pinimg.com/1200x/cf/3c/05/cf3c05494a54196a819c76de6debae36.jpg'),
 ('Evasion Mastery',  'Increases the base accuracy of the user.',                       0,  1.00, 0, 'SELF',  false, true,  'https://files.d20.io/marketplace/2960094/q6DzRX-MUTafsq8waiN9PA/med.png'),
-('Berserker Rage',   'When HP drops below 30%, automatically increases attack.',       0,  1.00, 0, 'SELF',  false, true,  'https://ih1.redbubble.net/image.5516888541.0428/st,extra_large,507x507-pad,600x600,f8f8f8.jpg');
+('Berserker Rage',   'When HP drops below 30%, automatically increases attack.',       0,  1.00, 0, 'SELF',  false, true,  'https://ih1.redbubble.net/image.5516888541.0428/st,extra_large,507x507-pad,600x600,f8f8f8.jpg'),
 ('Destroy',   'Te revienta', 0,  1.00, 2, 'ENEMY',  true, false,  'https://cdn-icons-png.flaticon.com/512/5663/5663908.png');
 
 -- =====================================================
