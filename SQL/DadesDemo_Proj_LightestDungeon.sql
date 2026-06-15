@@ -450,6 +450,85 @@ INSERT INTO Item (name, description, quality, consumable, max_uses, image_thumb,
 ('Elixir of Speed',    'Increases speed by 30% for 3 turns.',         'UNCOMMON', true, 1, 'https://art.pixilart.com/11a1cd892fd2a0b.png',  'SELF',  false);
 
 -- =====================================================
+-- ITEM EFFECTS
+-- =====================================================
+
+-- IDs necesarios
+SET @HP       = (SELECT id FROM Statistic WHERE name = 'hp');
+SET @Energy   = (SELECT id FROM Statistic WHERE name = 'energy');
+SET @Speed    = (SELECT id FROM Statistic WHERE name = 'speed');
+
+SET @Poisoned     = (SELECT id FROM Status WHERE name = 'Poisoned');
+SET @Strengthened = (SELECT id FROM Status WHERE name = 'Strengthened');
+SET @Stunned      = (SELECT id FROM Status WHERE name = 'Stunned');
+
+-- Health Potion (+30% HP)
+INSERT INTO Effect
+(stat_id, stat_multiplier, status_id, effect_level, probability, duration_turns)
+VALUES
+(@HP, 1.30, NULL, 1, 1.0, 1);
+
+-- Energy Elixir (+30% Energy)
+INSERT INTO Effect
+(stat_id, stat_multiplier, status_id, effect_level, probability, duration_turns)
+VALUES
+(@Energy, 1.30, NULL, 1, 1.0, 1);
+
+-- Antidote
+INSERT INTO Effect
+(stat_id, stat_multiplier, status_id, effect_level, probability, duration_turns)
+VALUES
+(NULL, NULL, @Poisoned, 0, 1.0, 0);
+
+-- Rage Brew
+INSERT INTO Effect
+(stat_id, stat_multiplier, status_id, effect_level, probability, duration_turns)
+VALUES
+(NULL, NULL, @Strengthened, 1, 1.0, 3);
+
+-- =====================================================
+-- LINK ITEM ↔ EFFECT
+-- =====================================================
+
+-- Health Potion
+INSERT INTO ItemEffect (item_id, effect_id)
+SELECT i.id, e.id
+FROM Item i, Effect e
+WHERE i.name = 'Health Potion'
+  AND e.stat_id = @HP
+  AND e.stat_multiplier BETWEEN 1.299 AND 1.301
+  AND e.effect_level = 1
+  LIMIT 1;
+
+-- Energy Elixir
+INSERT INTO ItemEffect (item_id, effect_id)
+SELECT i.id, e.id
+FROM Item i, Effect e
+WHERE i.name = 'Energy Elixir'
+  AND e.stat_id = @Energy
+  AND e.stat_multiplier BETWEEN 1.299 AND 1.301
+  AND e.effect_level = 1
+  LIMIT 1;
+
+-- Antidote
+INSERT INTO ItemEffect (item_id, effect_id)
+SELECT i.id, e.id
+FROM Item i, Effect e
+WHERE i.name = 'Antidote'
+  AND e.status_id = @Poisoned
+  AND e.effect_level = 0
+  LIMIT 1;
+
+-- Rage Brew
+INSERT INTO ItemEffect (item_id, effect_id)
+SELECT i.id, e.id
+FROM Item i, Effect e
+WHERE i.name = 'Rage Brew'
+  AND e.status_id = @Strengthened
+  AND e.effect_level = 1
+  LIMIT 1;
+
+-- =====================================================
 -- 1️⃣1️⃣ LOOT ENTRIES
 -- =====================================================
 
