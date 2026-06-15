@@ -173,6 +173,7 @@ INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_fla
 (NULL,    NULL, @Stunned,      NULL, NULL, 1, 0.80, 1),  -- Smoke Bomb         Stunned 80% AOE
 (@HP,     1.60, NULL,          NULL, NULL, 1, 1.0,  1),  -- Greater Health Pot +60% HP max
 (@Speed,  1.30, NULL,          NULL, NULL, 1, 1.0,  3),  -- Elixir of Speed    +30% spd temporal
+(@HP,     1.50, NULL,          NULL, NULL, 1, 1.0,  1);  -- Phoenix Feather    +50% HP al revivir
 
 -- =====================================================
 -- 5️⃣ LINK SKILL ↔ EFFECT
@@ -394,7 +395,7 @@ INSERT INTO Item (name, description, quality, consumable, max_uses, image_thumb,
 ('Rage Brew',          'Applies Strengthened lv1 to user.',            'UNCOMMON', true, 1, 'https://i.pinimg.com/736x/cb/ca/5e/cbca5ed5aed24778866103608c0bc890.jpg', 'SELF',  false),
 ('Smoke Bomb',         'Stuns all enemies for 1 turn.',               'UNCOMMON', true, 1, 'https://img.magnific.com/premium-vector/8-bits-pixel-smoke-blast-vector-illustration_1310125-42.jpg',    'ENEMY', true),
 ('Greater Health Pot', 'Restores 60% HP.',                             'RARE',     true, 1, 'https://i.postimg.cc/K1PHMgJD/pixil-frame-0.png',    'SELF',  false),
-('Elixir of Speed',    'Increases speed by 30% for 3 turns.',         'UNCOMMON', true, 1, 'https://art.pixilart.com/11a1cd892fd2a0b.png',  'SELF',  false),
+('Elixir of Speed',    'Increases speed by 30% for 3 turns.',         'UNCOMMON', true, 1, 'https://art.pixilart.com/11a1cd892fd2a0b.png',  'SELF',  false);
 
 -- =====================================================
 -- 1️⃣1️⃣ LOOT ENTRIES
