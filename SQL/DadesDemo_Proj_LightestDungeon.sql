@@ -163,98 +163,6 @@ INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_fla
 VALUES (@Attack, 1.40, NULL, NULL, NULL, NULL, 1.00, 0);
 
 -- -------------------------------------------------------
--- EFECTOS DE ITEMS — HEAD
--- -------------------------------------------------------
-INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
-(@Defense, 1.10, NULL, NULL, NULL, 1, 1.0, 0),   -- Iron Helm         +10% def
-(@Defense, 1.20, NULL, NULL, NULL, 1, 1.0, 0),   -- Knight Visor      +20% def
-(@Speed,   1.15, NULL, NULL, NULL, 1, 1.0, 0),   -- Shadow Hood       +15% spd
-(@Energy,  1.25, NULL, NULL, NULL, 1, 1.0, 0),   -- Arcane Crown      +25% energy
-(@Speed,   1.10, NULL, NULL, NULL, 1, 1.0, 0),   -- Ranger Cap        +10% spd
-(@HP,      1.15, NULL, NULL, NULL, 1, 1.0, 0),   -- Vampire Mask      +15% hp
-(@Defense, 1.35, NULL, NULL, NULL, 1, 1.0, 0),   -- Golem Skull Plate +35% def
-(NULL,     NULL, NULL, NULL, NULL, 1, 1.0, 0);   -- Blessed Tiara     (se actualiza abajo)
-
--- Blessed Tiara: +20% speed como proxy de accuracy
-UPDATE Effect SET stat_id = @Speed, stat_multiplier = 1.20
-WHERE id = LAST_INSERT_ID();
-
--- -------------------------------------------------------
--- EFECTOS DE ITEMS — CHEST
--- -------------------------------------------------------
-INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
-(@Defense, 1.15, NULL, NULL, NULL, 1, 1.0, 0),   -- Iron Chestplate   +15% def
-(@Defense, 1.25, NULL, NULL, NULL, 1, 1.0, 0),   -- Battle Armor      +25% def
-(@Speed,   1.12, NULL, NULL, NULL, 1, 1.0, 0),   -- Leather Vest      +12% spd
-(@Energy,  1.30, NULL, NULL, NULL, 1, 1.0, 0),   -- Mage Robe         +30% energy
-(@Speed,   1.18, NULL, NULL, NULL, 1, 1.0, 0),   -- Shadow Cloak      +18% spd
-(@HP,      1.20, NULL, NULL, NULL, 1, 1.0, 0),   -- Blessed Vestment  +20% hp
-(@Defense, 1.40, NULL, NULL, NULL, 1, 1.0, 0),   -- Golem Shell       +40% def
-(@Energy,  1.25, NULL, NULL, NULL, 1, 1.0, 0);   -- Vampiric Coat     +25% energy
-
--- -------------------------------------------------------
--- EFECTOS DE ITEMS — LOWER
--- -------------------------------------------------------
-INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
-(@Defense, 1.08, NULL, NULL, NULL, 1, 1.0, 0),   -- Iron Greaves      +8%  def
-(@Defense, 1.18, NULL, NULL, NULL, 1, 1.0, 0),   -- Knight Leggings   +18% def
-(@Speed,   1.25, NULL, NULL, NULL, 1, 1.0, 0),   -- Swift Boots       +25% spd
-(@Energy,  1.10, NULL, NULL, NULL, 1, 1.0, 0),   -- Mage Sandals      +10% energy
-(@Speed,   1.20, NULL, NULL, NULL, 1, 1.0, 0),   -- Shadow Leggings   +20% spd
-(@Speed,   1.15, NULL, NULL, NULL, 1, 1.0, 0),   -- Ranger Boots      +15% spd
-(@Attack,  1.12, NULL, NULL, NULL, 1, 1.0, 0),   -- Golem Stompers    +12% atk
-(@Defense, 1.15, NULL, NULL, NULL, 1, 1.0, 0);   -- Blessed Sandals   +15% def
-
--- -------------------------------------------------------
--- EFECTOS DE ITEMS — WEAPONS
--- -------------------------------------------------------
-INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
-(@Attack, NULL, NULL,  6,    9,    1, 1.0, 0),   -- Short Sword
-(@Attack, NULL, NULL, 10,   14,    1, 1.0, 0),   -- Longsword
-(@Attack, NULL, NULL,  7,   10,    1, 1.0, 0),   -- Shadow Dagger
-(@Attack, 1.18, NULL, NULL, NULL,  1, 1.0, 0),   -- Poison Blade
-(@Attack, NULL, NULL, 16,   22,    1, 1.0, 0),   -- War Hammer
-(@Energy, 1.35, NULL, NULL, NULL,  1, 1.0, 0),   -- Arcane Staff
-(@HP,     1.10, NULL, NULL, NULL,  1, 1.0, 0),   -- Holy Wand
-(@Attack, NULL, NULL,  9,   13,    1, 1.0, 0),   -- Longbow
-(@Attack, NULL, NULL, 12,   17,    1, 1.0, 0),   -- Crossbow
-(@Attack, 1.30, NULL, NULL, NULL,  1, 1.0, 0),   -- Blood Scythe
-(@Attack, NULL, NULL, 20,   28,    1, 1.0, 0),   -- Stone Fist Gauntlet
-(@Attack, NULL, NULL,  7,   10,    1, 1.0, 0);   -- Twin Blades
-
--- Poison Blade: Poisoned on-hit 25%
-INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Poisoned, NULL, NULL, 1, 0.25, 3);
-
--- Blood Scythe: Bleeding on-hit 20%
-INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Bleeding, NULL, NULL, 1, 0.20, 3);
-
--- -------------------------------------------------------
--- EFECTOS DE ITEMS — NON-CONSUMABLES
--- -------------------------------------------------------
-
--- Vampire Ring: Bleeding lv2 on-hit 30%
-INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Bleeding, NULL, NULL, 2, 0.30, 3);
-
--- Poison Amulet: Poisoned lv2 on-hit 30%
-INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Poisoned, NULL, NULL, 2, 0.30, 4);
-
--- Battle Banner: Strengthened lv1 a aliados 2 turnos
-INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (NULL, NULL, @Strengthened, NULL, NULL, 1, 1.00, 2);
-
--- Lucky Charm, Stone Totem, Speed Anklet, Accuracy Lens, Crit Gem
-INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
-(@Speed,   1.15, NULL, NULL, NULL, 1, 1.0, 0),   -- Lucky Charm   +15% spd
-(@Defense, 1.20, NULL, NULL, NULL, 1, 1.0, 0),   -- Stone Totem   +20% def
-(@Speed,   1.20, NULL, NULL, NULL, 1, 1.0, 0),   -- Speed Anklet  +20% spd
-(@Speed,   1.18, NULL, NULL, NULL, 1, 1.0, 0),   -- Accuracy Lens +18% spd
-(@Attack,  1.10, NULL, NULL, NULL, 1, 1.0, 0);   -- Crit Gem      +10% atk
-
--- -------------------------------------------------------
 -- EFECTOS DE ITEMS — CONSUMABLES
 -- -------------------------------------------------------
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns) VALUES
@@ -265,7 +173,6 @@ INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_fla
 (NULL,    NULL, @Stunned,      NULL, NULL, 1, 0.80, 1),  -- Smoke Bomb         Stunned 80% AOE
 (@HP,     1.60, NULL,          NULL, NULL, 1, 1.0,  1),  -- Greater Health Pot +60% HP max
 (@Speed,  1.30, NULL,          NULL, NULL, 1, 1.0,  3),  -- Elixir of Speed    +30% spd temporal
-(@HP,     1.50, NULL,          NULL, NULL, 1, 1.0,  1);  -- Phoenix Feather    +50% HP al revivir
 
 -- =====================================================
 -- 5️⃣ LINK SKILL ↔ EFFECT
@@ -480,75 +387,14 @@ WHERE e.name = 'Dark Assassin'
 -- 9️⃣ ITEMS
 -- =====================================================
 
--- ---- HEAD (8) ----
 INSERT INTO Item (name, description, quality, consumable, max_uses, image_thumb, target_type, is_aoe) VALUES
-('Iron Helm',         'Basic iron helmet.',                         'COMMON',   false, NULL, '/img/iron_helm.png',    'SELF', false),
-('Knight Visor',      'Knight visor with high defense.',            'UNCOMMON', false, NULL, '/img/knight_visor.png', 'SELF', false),
-('Shadow Hood',       'Dark hood that increases speed.',            'UNCOMMON', false, NULL, '/img/shadow_hood.png',  'SELF', false),
-('Arcane Crown',      'Magical crown that boosts energy.',          'RARE',     false, NULL, '/img/arcane_crown.png', 'SELF', false),
-('Ranger Cap',        'Light cap for archers.',                      'COMMON',   false, NULL, '/img/ranger_cap.png',   'SELF', false),
-('Vampire Mask',      'Mask that grants dark regeneration.',         'RARE',     false, NULL, '/img/vamp_mask.png',    'SELF', false),
-('Golem Skull Plate', 'Stone plate from a defeated golem.',         'EPIC',     false, NULL, '/img/golem_skull.png',  'SELF', false),
-('Blessed Tiara',     'Sacred tiara that increases accuracy.',      'RARE',     false, NULL, '/img/tiara.png',        'SELF', false);
-
--- ---- CHEST (8) ----
-INSERT INTO Item (name, description, quality, consumable, max_uses, image_thumb, target_type, is_aoe) VALUES
-('Iron Chestplate',  'Standard iron chestplate.',                  'COMMON',   false, NULL, '/img/iron_chest.png',   'SELF', false),
-('Battle Armor',     'Reinforced battle armor.',                   'UNCOMMON', false, NULL, '/img/battle_armor.png', 'SELF', false),
-('Leather Vest',     'Light vest for agility.',                     'COMMON',   false, NULL, '/img/leather_vest.png', 'SELF', false),
-('Mage Robe',        'Magical robe that amplifies energy.',        'UNCOMMON', false, NULL, '/img/mage_robe.png',    'SELF', false),
-('Shadow Cloak',     'Dark cloak that improves evasion.',          'RARE',     false, NULL, '/img/shadow_cloak.png', 'SELF', false),
-('Blessed Vestment', 'Sacred garment with healing aura.',           'RARE',     false, NULL, '/img/vestment.png',     'SELF', false),
-('Golem Shell',      'Magical stone cuirass.',                      'EPIC',     false, NULL, '/img/golem_shell.png',  'SELF', false),
-('Vampiric Coat',    'Dark coat that drains energy.',               'EPIC',     false, NULL, '/img/vamp_coat.png',    'SELF', false);
-
--- ---- LOWER (8) ----
-INSERT INTO Item (name, description, quality, consumable, max_uses, image_thumb, target_type, is_aoe) VALUES
-('Iron Greaves',    'Basic iron greaves.',                          'COMMON',   false, NULL, '/img/iron_greaves.png',    'SELF', false),
-('Knight Leggings', 'Sturdy knight leggings.',                       'UNCOMMON', false, NULL, '/img/knight_legs.png',     'SELF', false),
-('Swift Boots',     'Light boots for high speed.',                  'UNCOMMON', false, NULL, '/img/swift_boots.png',     'SELF', false),
-('Mage Sandals',    'Sandals that channel magic.',                  'COMMON',   false, NULL, '/img/mage_sandals.png',    'SELF', false),
-('Shadow Leggings', 'Stealth leggings.',                             'RARE',     false, NULL, '/img/shadow_legs.png',     'SELF', false),
-('Ranger Boots',    'Explorer boots for rough terrain.',            'UNCOMMON', false, NULL, '/img/ranger_boots.png',    'SELF', false),
-('Golem Stompers',  'Stone hooves with seismic impact.',            'EPIC',     false, NULL, '/img/golem_stomp.png',     'SELF', false),
-('Blessed Sandals', 'Sacred sandals that improve critical chance.', 'RARE',     false, NULL, '/img/blessed_sandals.png', 'SELF', false);
-
--- ---- WEAPONS (12) ----
-INSERT INTO Item (name, description, quality, consumable, max_uses, image_thumb, target_type, is_aoe) VALUES
-('Short Sword',         'Starter short sword.',                       'COMMON',   false, NULL, '/img/short_sword.png',  'SELF', false),
-('Longsword',           'Knights long sword.',                        'UNCOMMON', false, NULL, '/img/longsword.png',    'SELF', false),
-('Shadow Dagger',       'Assassins fast dagger.',                     'UNCOMMON', false, NULL, '/img/shadow_dagger.png','SELF', false),
-('Poison Blade',        'Dagger coated with poison.',                  'RARE',     false, NULL, '/img/poison_blade.png', 'SELF', false),
-('War Hammer',          'Heavy war hammer.',                            'UNCOMMON', false, NULL, '/img/war_hammer.png',   'SELF', false),
-('Arcane Staff',        'Staff that amplifies spells.',                'RARE',     false, NULL, '/img/arcane_staff.png', 'SELF', false),
-('Holy Wand',           'Holy wand for healers.',                       'RARE',     false, NULL, '/img/holy_wand.png',    'SELF', false),
-('Longbow',             'High-precision longbow.',                      'UNCOMMON', false, NULL, '/img/longbow.png',      'SELF', false),
-('Crossbow',            'Compact and powerful crossbow.',               'RARE',     false, NULL, '/img/crossbow.png',     'SELF', false),
-('Blood Scythe',        'Scythe that absorbs enemy life.',              'EPIC',     false, NULL, '/img/blood_scythe.png', 'SELF', false),
-('Stone Fist Gauntlet', 'Stone gauntlet with tremendous impact.',       'EPIC',     false, NULL, '/img/stone_fist.png',   'SELF', false),
-('Twin Blades',         'Pair of daggers for double attacks.',         'RARE',     false, NULL, '/img/twin_blades.png',  'SELF', false);
-
--- ---- CONSUMABLES (8) ----
-INSERT INTO Item (name, description, quality, consumable, max_uses, image_thumb, target_type, is_aoe) VALUES
-('Health Potion',      'Restores 30% HP.',                             'COMMON',   true, 1, 'https://art.pixilart.com/cb38cacb9cd5e61.png',    'SELF',  false),
+('Health Potion',      'Restores 30% HP.',                             'COMMON',   true, 1, 'https://art.pixilart.com/cb38cacb9cd5e61.png', 'SELF',  false),
 ('Energy Elixir',      'Restores 30% energy.',                         'COMMON',   true, 1, 'https://dinopixel.com/preload/0223/Energy-Potion.png', 'SELF',  false),
-('Antidote',           'Removes the Poisoned status.',                 'COMMON',   true, 1, '/img/antidote.png',      'SELF',  false),
-('Rage Brew',          'Applies Strengthened lv1 to user.',            'UNCOMMON', true, 1, '/img/rage_brew.png',     'SELF',  false),
-('Smoke Bomb',         'Stuns all enemies for 1 turn.',               'UNCOMMON', true, 1, '/img/smoke_bomb.png',    'ENEMY', true),
-('Greater Health Pot', 'Restores 60% HP.',                             'RARE',     true, 1, '/img/greater_hp.png',    'SELF',  false),
-('Elixir of Speed',    'Increases speed by 30% for 3 turns.',         'UNCOMMON', true, 1, '/img/speed_elixir.png',  'SELF',  false),
-('Phoenix Feather',    'Revives user with 50% HP.',                   'EPIC',     true, 1, '/img/phoenix.png',       'SELF',  false);
-
--- ---- NON-CONSUMABLES (8) ----
-INSERT INTO Item (name, description, quality, consumable, max_uses, image_thumb, target_type, is_aoe) VALUES
-('Lucky Charm',   'Amulet that increases crit chance.',          'UNCOMMON', false, NULL, '/img/lucky_charm.png',   'SELF',  false),
-('Stone Totem',   'Totem that passively improves defense.',      'UNCOMMON', false, NULL, '/img/stone_totem.png',   'SELF',  false),
-('Vampire Ring',  'Ring that applies Bleeding on attack.',      'RARE',     false, NULL, '/img/vamp_ring.png',     'ENEMY', false),
-('Poison Amulet', 'Amulet that applies Poisoned on attack.',     'RARE',     false, NULL, '/img/poison_amulet.png', 'ENEMY', false),
-('Battle Banner', 'Banner that grants Strengthened to allies.', 'RARE',     false, NULL, '/img/banner.png',        'ALLY',  true),
-('Speed Anklet',  'Anklet that increases speed.',               'UNCOMMON', false, NULL, '/img/anklet.png',        'SELF',  false),
-('Accuracy Lens', 'Lens that improves accuracy.',               'UNCOMMON', false, NULL, '/img/lens.png',          'SELF',  false),
-('Crit Gem',      'Gem that improves critical damage.',         'RARE',     false, NULL, '/img/crit_gem.png',      'SELF',  false);
+('Antidote',           'Removes the Poisoned status.',                 'COMMON',   true, 1, 'https://art.pixilart.com/sr2f4a5a186faaws3.png', 'SELF',  false),
+('Rage Brew',          'Applies Strengthened lv1 to user.',            'UNCOMMON', true, 1, 'https://i.pinimg.com/736x/cb/ca/5e/cbca5ed5aed24778866103608c0bc890.jpg', 'SELF',  false),
+('Smoke Bomb',         'Stuns all enemies for 1 turn.',               'UNCOMMON', true, 1, 'https://img.magnific.com/premium-vector/8-bits-pixel-smoke-blast-vector-illustration_1310125-42.jpg',    'ENEMY', true),
+('Greater Health Pot', 'Restores 60% HP.',                             'RARE',     true, 1, 'https://i.postimg.cc/K1PHMgJD/pixil-frame-0.png',    'SELF',  false),
+('Elixir of Speed',    'Increases speed by 30% for 3 turns.',         'UNCOMMON', true, 1, 'https://art.pixilart.com/11a1cd892fd2a0b.png',  'SELF',  false),
 
 -- =====================================================
 -- 1️⃣1️⃣ LOOT ENTRIES
@@ -556,52 +402,119 @@ INSERT INTO Item (name, description, quality, consumable, max_uses, image_thumb,
 
 -- Goblin Berserker
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.80, 'COMMON', 'COMMON' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Health Potion' WHERE e.name = 'Goblin Berserker';
+SELECT lt.id, i.id, 0.80, 'COMMON', 'COMMON'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Health Potion'
+WHERE e.name = 'Goblin Berserker';
+
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.60, 'COMMON', 'COMMON' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Short Sword' WHERE e.name = 'Goblin Berserker';
+SELECT lt.id, i.id, 0.60, 'COMMON', 'COMMON'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Energy Elixir'
+WHERE e.name = 'Goblin Berserker';
+
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.40, 'COMMON', 'UNCOMMON' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Shadow Dagger' WHERE e.name = 'Goblin Berserker';
-INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.30, 'COMMON', 'UNCOMMON' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Iron Helm' WHERE e.name = 'Goblin Berserker';
-INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.20, 'UNCOMMON', 'UNCOMMON' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Rage Brew' WHERE e.name = 'Goblin Berserker';
+SELECT lt.id, i.id, 0.40, 'COMMON', 'UNCOMMON'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Rage Brew'
+WHERE e.name = 'Goblin Berserker';
+
 
 -- Stone Golem
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.85, 'COMMON', 'UNCOMMON' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Iron Chestplate' WHERE e.name = 'Stone Golem';
+SELECT lt.id, i.id, 0.85, 'COMMON', 'UNCOMMON'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Health Potion'
+WHERE e.name = 'Stone Golem';
+
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.70, 'UNCOMMON', 'RARE' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Stone Totem' WHERE e.name = 'Stone Golem';
+SELECT lt.id, i.id, 0.70, 'UNCOMMON', 'UNCOMMON'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Smoke Bomb'
+WHERE e.name = 'Stone Golem';
+
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.55, 'UNCOMMON', 'RARE' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'War Hammer' WHERE e.name = 'Stone Golem';
-INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.40, 'RARE', 'EPIC' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Golem Shell' WHERE e.name = 'Stone Golem';
-INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.15, 'EPIC', 'EPIC' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Stone Fist Gauntlet' WHERE e.name = 'Stone Golem';
+SELECT lt.id, i.id, 0.45, 'UNCOMMON', 'RARE'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Greater Health Pot'
+WHERE e.name = 'Stone Golem';
+
 
 -- Vampire Lord
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.90, 'UNCOMMON', 'RARE' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Vampire Ring' WHERE e.name = 'Vampire Lord';
+SELECT lt.id, i.id, 0.90, 'UNCOMMON', 'RARE'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Greater Health Pot'
+WHERE e.name = 'Vampire Lord';
+
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.70, 'RARE', 'EPIC' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Blood Scythe' WHERE e.name = 'Vampire Lord';
+SELECT lt.id, i.id, 0.75, 'UNCOMMON', 'RARE'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Energy Elixir'
+WHERE e.name = 'Vampire Lord';
+
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.50, 'RARE', 'EPIC' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Vampiric Coat' WHERE e.name = 'Vampire Lord';
+SELECT lt.id, i.id, 0.60, 'UNCOMMON', 'RARE'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Elixir of Speed'
+WHERE e.name = 'Vampire Lord';
+
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.35, 'RARE', 'EPIC' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Vampire Mask' WHERE e.name = 'Vampire Lord';
-INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.20, 'EPIC', 'EPIC' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Phoenix Feather' WHERE e.name = 'Vampire Lord';
-INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.60, 'COMMON', 'UNCOMMON' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Greater Health Pot' WHERE e.name = 'Vampire Lord';
+SELECT lt.id, i.id, 0.40, 'RARE', 'RARE'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Smoke Bomb'
+WHERE e.name = 'Vampire Lord';
+
 
 -- Dark Assassin
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.80, 'UNCOMMON', 'RARE' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Poison Blade' WHERE e.name = 'Dark Assassin';
+SELECT lt.id, i.id, 0.80, 'UNCOMMON', 'RARE'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Elixir of Speed'
+WHERE e.name = 'Dark Assassin';
+
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.65, 'UNCOMMON', 'RARE' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Shadow Cloak' WHERE e.name = 'Dark Assassin';
+SELECT lt.id, i.id, 0.65, 'UNCOMMON', 'RARE'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Smoke Bomb'
+WHERE e.name = 'Dark Assassin';
+
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.50, 'UNCOMMON', 'RARE' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Twin Blades' WHERE e.name = 'Dark Assassin';
+SELECT lt.id, i.id, 0.55, 'COMMON', 'UNCOMMON'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Antidote'
+WHERE e.name = 'Dark Assassin';
+
 INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.40, 'UNCOMMON', 'RARE' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Shadow Hood' WHERE e.name = 'Dark Assassin';
-INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.30, 'RARE', 'RARE' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Poison Amulet' WHERE e.name = 'Dark Assassin';
-INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
-SELECT lt.id, i.id, 0.55, 'COMMON', 'UNCOMMON' FROM LootTable lt JOIN Enemy en ON lt.enemy_id = en.entity_id JOIN Entity e ON en.entity_id = e.id JOIN Item i ON i.name = 'Antidote' WHERE e.name = 'Dark Assassin';
+SELECT lt.id, i.id, 0.35, 'UNCOMMON', 'RARE'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Rage Brew'
+WHERE e.name = 'Dark Assassin';
