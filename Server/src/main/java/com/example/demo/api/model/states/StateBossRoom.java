@@ -8,6 +8,8 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
+
 import com.example.demo.api.model.Player;
 import com.example.demo.api.model.StatusCharacter;
 import com.example.demo.api.model.bd.BdPlayer;
@@ -219,6 +221,9 @@ public class StateBossRoom extends State {
             List<Item> items = new ArrayList<>();
 
             for (Enemy en : enemies) {
+
+                Hibernate.initialize(en.getLootTable().getEntries());
+
                 for (LootEntry loot : en.getLootTable().getEntries()) {
 
                     double roll = rand.nextDouble();
@@ -229,10 +234,12 @@ public class StateBossRoom extends State {
                     }
                 }
             }
+
             game.broadcast(new JSONMessage(game.getId(), new ShowEnemyLoot_OUT(items)));
 
-            if(items != null)
+            if (!items.isEmpty()) {
                 game.addItemsToInventory(items);
+            }
 
             game.broadcast(new JSONMessage(game.getId(), new ShowInventory_OUT(game.getInventory().values())));
             return;

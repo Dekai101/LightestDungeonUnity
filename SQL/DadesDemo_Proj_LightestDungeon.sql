@@ -134,9 +134,9 @@ VALUES (@HP, 1.25, NULL, NULL, NULL, NULL, 1.00, 1);
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@Defense, 1.30, NULL, NULL, NULL, NULL, 1.00, 2);
 
--- Revive: restaura HP porcentual
+-- Revive: restaura HP porcentual (duration_turns=0 → instantáneo, para distinguirlo del HP de Aquatic Blessing)
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
-VALUES (@HP, 1.30, NULL, NULL, NULL, NULL, 1.00, 1);
+VALUES (@HP, 1.30, NULL, NULL, NULL, NULL, 1.00, 0);
 
 -- Stun Smash: DAÑO FIJO
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
@@ -172,8 +172,7 @@ INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_fla
 (NULL,    NULL, @Strengthened, NULL, NULL, 1, 1.0,  3),  -- Rage Brew          Strengthened lv1
 (NULL,    NULL, @Stunned,      NULL, NULL, 1, 0.80, 1),  -- Smoke Bomb         Stunned 80% AOE
 (@HP,     1.60, NULL,          NULL, NULL, 1, 1.0,  1),  -- Greater Health Pot +60% HP max
-(@Speed,  1.30, NULL,          NULL, NULL, 1, 1.0,  3),  -- Elixir of Speed    +30% spd temporal
-(@HP,     1.50, NULL,          NULL, NULL, 1, 1.0,  1);  -- Phoenix Feather    +50% HP al revivir
+(@Speed,  1.30, NULL,          NULL, NULL, 1, 1.0,  3);  -- Elixir of Speed    +30% spd temporal
 
 -- =====================================================
 -- 5️⃣ LINK SKILL ↔ EFFECT
@@ -183,6 +182,7 @@ INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_fla
 INSERT INTO SkillEffect (skill_id, effect_id)
 SELECT s.id, e.id FROM Skill s JOIN Effect e
   ON e.stat_id = @HP AND e.stat_multiplier = 1.30
+     AND e.effect_level IS NULL AND e.duration_turns = 1
 WHERE s.name = 'Aquatic Blessing';
 
 -- Aquatic Blessing Energy
@@ -242,7 +242,8 @@ WHERE s.name = 'Soul Drain';
 -- Soul Drain curación
 INSERT INTO SkillEffect (skill_id, effect_id)
 SELECT s.id, e.id FROM Skill s JOIN Effect e
-  ON e.stat_id = @HP AND e.stat_multiplier = 1.50 AND e.duration_turns = 1
+  ON e.stat_id = @HP AND e.stat_multiplier = 1.50
+     AND e.duration_turns = 1 AND e.effect_level IS NULL
 WHERE s.name = 'Soul Drain';
 
 -- Battle Cry
@@ -266,7 +267,8 @@ WHERE s.name = 'Barrier Shield';
 -- Revive
 INSERT INTO SkillEffect (skill_id, effect_id)
 SELECT s.id, e.id FROM Skill s JOIN Effect e
-  ON e.stat_id = @HP AND e.stat_multiplier = 1.30 AND e.duration_turns = 1
+  ON e.stat_id = @HP AND e.stat_multiplier = 1.30
+     AND e.effect_level IS NULL AND e.duration_turns = 0
 WHERE s.name = 'Revive';
 
 -- Stun Smash daño (fijo: min=16)
@@ -304,6 +306,56 @@ INSERT INTO SkillEffect (skill_id, effect_id)
 SELECT s.id, e.id FROM Skill s JOIN Effect e
   ON e.stat_id = @Attack AND e.stat_multiplier = 1.40 AND e.duration_turns = 0
 WHERE s.name = 'Berserker Rage';
+
+-- =====================================================
+-- 5️⃣b LINK ITEM ↔ EFFECT
+-- =====================================================
+
+-- Health Potion: +30% HP (instantáneo) — distinguible por effect_level=1
+INSERT INTO ItemEffect (item_id, effect_id)
+SELECT i.id, e.id FROM Item i JOIN Effect e
+  ON e.stat_id = @HP AND e.stat_multiplier = 1.30
+     AND e.effect_level = 1 AND e.duration_turns = 1
+WHERE i.name = 'Health Potion';
+
+-- Energy Elixir: +30% Energy
+INSERT INTO ItemEffect (item_id, effect_id)
+SELECT i.id, e.id FROM Item i JOIN Effect e
+  ON e.stat_id = @Energy AND e.stat_multiplier = 1.30
+     AND e.effect_level = 1 AND e.duration_turns = 1
+WHERE i.name = 'Energy Elixir';
+
+-- Antidote: limpia Poisoned (effect_level=0 = cleanse)
+INSERT INTO ItemEffect (item_id, effect_id)
+SELECT i.id, e.id FROM Item i JOIN Effect e
+  ON e.status_id = @Poisoned AND e.effect_level = 0 AND e.duration_turns = 0
+WHERE i.name = 'Antidote';
+
+-- Rage Brew: Strengthened lv1
+INSERT INTO ItemEffect (item_id, effect_id)
+SELECT i.id, e.id FROM Item i JOIN Effect e
+  ON e.status_id = @Strengthened AND e.effect_level = 1 AND e.duration_turns = 3
+WHERE i.name = 'Rage Brew';
+
+-- Smoke Bomb: Stunned 80% AOE
+INSERT INTO ItemEffect (item_id, effect_id)
+SELECT i.id, e.id FROM Item i JOIN Effect e
+  ON e.status_id = @Stunned AND e.probability = 0.80 AND e.duration_turns = 1
+WHERE i.name = 'Smoke Bomb';
+
+-- Greater Health Pot: +60% HP
+INSERT INTO ItemEffect (item_id, effect_id)
+SELECT i.id, e.id FROM Item i JOIN Effect e
+  ON e.stat_id = @HP AND e.stat_multiplier = 1.60
+     AND e.effect_level = 1 AND e.duration_turns = 1
+WHERE i.name = 'Greater Health Pot';
+
+-- Elixir of Speed: +30% Speed durante 3 turnos
+INSERT INTO ItemEffect (item_id, effect_id)
+SELECT i.id, e.id FROM Item i JOIN Effect e
+  ON e.stat_id = @Speed AND e.stat_multiplier = 1.30
+     AND e.effect_level = 1 AND e.duration_turns = 3
+WHERE i.name = 'Elixir of Speed';
 
 -- =====================================================
 -- 6️⃣ PLAYERS

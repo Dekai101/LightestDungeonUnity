@@ -56,6 +56,6 @@ public class CharacterService {
     }
 
     public List<Enemy> getEnemiesByLevel(Integer level) {
-        return enemyRepository.findByLevel(level);
+        return enemyRepository.findByLevelWithLoot(level);
     }
 }

@@ -9,8 +9,20 @@ import java.util.Optional;
 
 public interface EnemyRepository extends CrudRepository<Enemy, Integer> {
 
-    List<Enemy> findByLevel(Integer level);
+    @Query("""
+        SELECT e
+        FROM Enemy e
+        LEFT JOIN FETCH e.lootTable lt
+        LEFT JOIN FETCH lt.entries
+        WHERE e.level = :level
+    """)
+    List<Enemy> findByLevelWithLoot(@Param("level") Integer level);
 
-    @Query("SELECT e FROM Enemy e LEFT JOIN FETCH e.skills WHERE e.id = :id")
+    @Query("""
+        SELECT e
+        FROM Enemy e
+        LEFT JOIN FETCH e.skills
+        WHERE e.id = :id
+    """)
     Optional<Enemy> findByIdWithSkills(@Param("id") Integer id);
 }

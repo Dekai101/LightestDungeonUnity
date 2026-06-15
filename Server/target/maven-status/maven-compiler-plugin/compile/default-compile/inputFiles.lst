@@ -18,7 +18,6 @@ D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\de
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\bd\Statistic.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\bd\Status.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\in\character_action\CharacterActionMessage_IN.java
-D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\in\items_picked\ItemsPicked_IN.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\in\pick_characters\PickCharacterMessage_IN.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\in\players_turn\PlayersTurn_IN.java
 D:\Archius DAM\PROJECTE DAM2\PracticaDDUnity\Server\src\main\java\com\example\demo\api\model\messages\in\players_turn\PlayerTurn.java

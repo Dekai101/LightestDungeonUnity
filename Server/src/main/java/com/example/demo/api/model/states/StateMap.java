@@ -103,8 +103,11 @@ public class StateMap extends State
                     break;
 
                 case "BOSS_ROOM":
+                    game.setState(new StateBossRoom(game));
+                    break;
+
+                default:
                     game.setState(new StateMap(game));
-                    System.out.println("Boss room selected: TO DO");
                     break;
             }
         }
