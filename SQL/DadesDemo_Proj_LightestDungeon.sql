@@ -60,6 +60,7 @@ VALUES
 ('Frost Nova',       'Ice burst that stuns all enemies.',                              75, 0.80, 1, 'ENEMY', true,  false, 'https://i.pinimg.com/1200x/cf/3c/05/cf3c05494a54196a819c76de6debae36.jpg'),
 ('Evasion Mastery',  'Increases the base accuracy of the user.',                       0,  1.00, 0, 'SELF',  false, true,  'https://files.d20.io/marketplace/2960094/q6DzRX-MUTafsq8waiN9PA/med.png'),
 ('Berserker Rage',   'When HP drops below 30%, automatically increases attack.',       0,  1.00, 0, 'SELF',  false, true,  'https://ih1.redbubble.net/image.5516888541.0428/st,extra_large,507x507-pad,600x600,f8f8f8.jpg');
+('Destroy',   'Te revienta', 0,  1.00, 2, 'ENEMY',  true, false,  'https://cdn-icons-png.flaticon.com/512/5663/5663908.png');
 
 -- =====================================================
 -- 4️⃣ EFECTOS
@@ -161,6 +162,10 @@ VALUES (@Speed, 1.20, NULL, NULL, NULL, NULL, 1.00, 0);
 -- Berserker Rage (pasiva): buff porcentual de ataque
 INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
 VALUES (@Attack, 1.40, NULL, NULL, NULL, NULL, 1.00, 0);
+
+-- Destroy
+INSERT INTO Effect (stat_id, stat_multiplier, status_id, min_flat_power, max_flat_power, effect_level, probability, duration_turns)
+VALUES (@Attack, NULL, NULL, 100, 100, NULL, 1.00, 0);
 
 -- -------------------------------------------------------
 -- EFECTOS DE ITEMS — CONSUMABLES
@@ -307,6 +312,12 @@ SELECT s.id, e.id FROM Skill s JOIN Effect e
   ON e.stat_id = @Attack AND e.stat_multiplier = 1.40 AND e.duration_turns = 0
 WHERE s.name = 'Berserker Rage';
 
+-- Destroy
+INSERT INTO SkillEffect (skill_id, effect_id)
+SELECT s.id, e.id FROM Skill s JOIN Effect e
+  ON e.stat_id = @Attack AND e.stat_multiplier IS NULL AND e.duration_turns = 0 AND e.min_flat_power = 100 AND e.max_flat_power = 100
+WHERE s.name = 'Destroy';
+
 -- =====================================================
 -- 5️⃣b LINK ITEM ↔ EFFECT
 -- =====================================================
@@ -386,11 +397,12 @@ VALUES
 ('Stone Golem',      3, 100, 100,  100, 100, 15, 30, 15, 0.05, 1.5, 1.0, 'https://art.pixilart.com/5b83fa17af18340.png',    'https://art.pixilart.com/5b83fa17af18340.png',    'Walking Fortress, almost no offensive capabilities.'),
 ('Vampire Lord',     5,  70,  70,  100, 100, 35, 25, 25, 0.05, 1.5, 1.0, 'https://www.sprite-ai.art/sprite-img/e463b247-96f9-4015-82b6-17bb10d065aa/vampire-with-cloak-visible-fangs-claws-64x64-pixel-art-e27d.png',  'https://www.sprite-ai.art/sprite-img/e463b247-96f9-4015-82b6-17bb10d065aa/vampire-with-cloak-visible-fangs-claws-64x64-pixel-art-e27d.png',  'Expert in blood manipulation, draining his opponents blood heals him.'),
 ('Dark Assassin',    4,  50,  50,  100, 100, 40, 15, 40, 0.15, 1.7, 1.0, 'https://www.sprite-ai.art/sprite-img/ea2516b3-4417-4a37-83e9-c8758669c3a9/medival-assain-16x16-piels-with-2-daggers-with-64x64-pixel-art-4fe1.png', 'https://www.sprite-ai.art/sprite-img/ea2516b3-4417-4a37-83e9-c8758669c3a9/medival-assain-16x16-piels-with-2-daggers-with-64x64-pixel-art-4fe1.png', 'Speedy sneaky assassin.');
+('Brainrot Kid',    6,  70,  70,  100, 100, 40, 15, 40, 0.15, 1.7, 1.0, 'https://www.sprite-ai.art/sprite-img/ea2516b3-4417-4a37-83e9-c8758669c3a9/medival-assain-16x16-piels-with-2-daggers-with-64x64-pixel-art-4fe1.png', 'https://www.sprite-ai.art/sprite-img/ea2516b3-4417-4a37-83e9-c8758669c3a9/medival-assain-16x16-piels-with-2-daggers-with-64x64-pixel-art-4fe1.png', 'Brainrot Kid.');
 
 -- (El trigger trg_enemy_create_loot_table crea la LootTable automáticamente)
 INSERT INTO Enemy (entity_id, passive_id)
 SELECT id, 0 FROM Entity
-WHERE name IN ('Goblin Berserker', 'Stone Golem', 'Vampire Lord', 'Dark Assassin');
+WHERE name IN ('Goblin Berserker', 'Stone Golem', 'Vampire Lord', 'Dark Assassin', 'Brainrot Kid');
 
 -- =====================================================
 -- 8️⃣ ASIGNAR SKILLS A PERSONAJES
@@ -409,7 +421,7 @@ WHERE e.name = 'Ocean Priestess'
 INSERT INTO EntitySkill (entity_id, skill_id)
 SELECT e.id, s.id FROM Entity e, Skill s
 WHERE e.name = 'Arcane Mage'
-  AND s.name IN ('Meteor Crash', 'Frost Nova', 'Poison Dart', 'Evasion Mastery');
+  AND s.name IN ('Meteor Crash', 'Frost Nova', 'Poison Dart', 'Destroy');
 
 INSERT INTO EntitySkill (entity_id, skill_id)
 SELECT e.id, s.id FROM Entity e, Skill s
@@ -434,6 +446,11 @@ WHERE e.name = 'Vampire Lord'
 INSERT INTO EntitySkill (entity_id, skill_id)
 SELECT e.id, s.id FROM Entity e, Skill s
 WHERE e.name = 'Dark Assassin'
+  AND s.name IN ('Shadow Strike', 'Twin Slash', 'Poison Dart', 'Evasion Mastery');
+
+INSERT INTO EntitySkill (entity_id, skill_id)
+SELECT e.id, s.id FROM Entity e, Skill s
+WHERE e.name = 'Brainrot Kid'
   AND s.name IN ('Shadow Strike', 'Twin Slash', 'Poison Dart', 'Evasion Mastery');
 
 -- =====================================================
@@ -650,3 +667,11 @@ JOIN Enemy en ON lt.enemy_id = en.entity_id
 JOIN Entity e ON en.entity_id = e.id
 JOIN Item i ON i.name = 'Rage Brew'
 WHERE e.name = 'Dark Assassin';
+
+INSERT INTO LootEntry (loot_table_id, item_id, drop_chance, min_quality, max_quality)
+SELECT lt.id, i.id, 0.35, 'UNCOMMON', 'RARE'
+FROM LootTable lt
+JOIN Enemy en ON lt.enemy_id = en.entity_id
+JOIN Entity e ON en.entity_id = e.id
+JOIN Item i ON i.name = 'Rage Brew'
+WHERE e.name = 'Brainrot Kid';
