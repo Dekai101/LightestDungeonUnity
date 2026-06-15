@@ -241,8 +241,8 @@ public class StateEnemyRoom extends State {
 
         game.broadcast(new JSONMessage(game.getId(), new PlayerActionResult_OUT(playerResults)));
         game.broadcast(new JSONMessage(game.getId(), new EnemyAction_OUT(enemyResults)));
-        game.broadcast(new JSONMessage(game.getId(), battle_state));
         game.broadcast(new JSONMessage(game.getId(), statusApplied));
+        game.broadcast(new JSONMessage(game.getId(), battle_state));
 
         pendingTurns.clear();
 
@@ -267,6 +267,11 @@ public class StateEnemyRoom extends State {
             }
             enemyLoot = items;
             game.broadcast(new JSONMessage(game.getId(), new ShowEnemyLoot_OUT(items)));
+
+            if(items != null)
+                game.addItemsToInventory(items);
+
+            game.broadcast(new JSONMessage(game.getId(), new ShowInventory_OUT(game.getInventory().values())));
             return;
         } else if (allPlayersDead) {
             System.out.println("Tots els jugadors han mort. Game Over.");
@@ -282,6 +287,8 @@ public class StateEnemyRoom extends State {
                 player.getCharacter().setEnergy(player.getCharacter().getEnergyMax());
             }
         }
+
+        game.broadcast(new JSONMessage(game.getId(), new ShowInventory_OUT(game.getInventory().values())));
     }
 
     private List<PlayerActionResult> processPlayerTurns() {
@@ -315,7 +322,7 @@ public class StateEnemyRoom extends State {
             if ("SKILL".equals(turn.choiceType) && turn.skillCasted != null) {
                 processSkillAction(turn);
             } else if ("ITEM".equals(turn.choiceType) && turn.itemUsed != null) {
-                if(game.getInventory().values().contains(turn.itemUsed)){
+                if(game.getInventory().values().stream().anyMatch(i -> i.getId() == turn.itemUsed.getId())){
                     processItemAction(turn);
                 } else {
                     System.out.println("Item not found in inventory");
@@ -418,7 +425,7 @@ public class StateEnemyRoom extends State {
                         if (effect.getStatus() != null) {
                             statusApplied = effect.getStatus().getName();
                             for (Player player : memPlayers) {
-                                if (player.getId() == myTargetsId[i]) {
+                                if (player.getId() == myTargetsId[i] && player.getCharacter().getHp() > 0){
                                     if(player.getCharacter().hasStatus(effect.getStatus().getName())){
                                         int level = player.getCharacter().getStatusLevel(statusApplied);
                                         int turns = player.getCharacter().getDurationTurns(statusApplied);
@@ -438,7 +445,7 @@ public class StateEnemyRoom extends State {
                                 }
                             }
                             for (Enemy enemy : enemies) {
-                                if (enemy.getCombatId() == myTargetsId[i]) {
+                                if (enemy.getCombatId() == myTargetsId[i] && enemy.getHp() > 0){
                                     if(enemy.hasStatus(effect.getStatus().getName())){
                                         int level = enemy.getStatusLevel(statusApplied);
                                         int turns = enemy.getDurationTurns(statusApplied);
@@ -661,7 +668,7 @@ public class StateEnemyRoom extends State {
                     if (effect.getStatus() != null) {
                         statusApplied = effect.getStatus().getName();
                         for (Player player : memPlayers) {
-                            if (player.getId() == myTargetsId[i]) {
+                            if (player.getId() == myTargetsId[i] && player.getCharacter().getHp() > 0){
                                 if(player.getCharacter().hasStatus(effect.getStatus().getName())){
                                     int level = player.getCharacter().getStatusLevel(statusApplied);
                                     int turns = player.getCharacter().getDurationTurns(statusApplied);
@@ -681,7 +688,7 @@ public class StateEnemyRoom extends State {
                             }
                         }
                         for (Enemy enemy : enemies) {
-                            if (enemy.getCombatId() == myTargetsId[i]) {
+                            if (enemy.getCombatId() == myTargetsId[i] && enemy.getHp() > 0){
                                 if(enemy.hasStatus(effect.getStatus().getName())){
                                     int level = enemy.getStatusLevel(statusApplied);
                                     int turns = enemy.getDurationTurns(statusApplied);
@@ -816,7 +823,7 @@ public class StateEnemyRoom extends State {
                 ));
             }
         }
-        
+
         game.getInventory().values().stream().filter(i -> i.getId() == item.getId()).findFirst().get().use();
         Item it = game.getInventory().values().stream().filter(i -> i.getId() == item.getId()).findFirst().get();
 
