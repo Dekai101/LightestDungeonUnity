@@ -44,22 +44,22 @@ INSERT INTO Status (name, max_level, description, scaling_formula) VALUES
 INSERT INTO Skill
 (name, description, energy_cost, accuracy, hits, target_type, is_aoe, is_passive, image_thumb)
 VALUES
-('Aquatic Blessing', 'Restores HP and Energy to an ally',                              40, 0.90, 1, 'ALLY',  false, false, '/img/aquatic.png'),
-('Iron Body',        'It increases the user defense',                                  30, 1.00, 1, 'SELF',  false, false, '/img/iron.png'),
-('Blood Rain',       'Area attack with potential bleeding',                             70, 0.95, 1, 'ENEMY', true,  false, '/img/blood.png'),
-('Shadow Strike',    'Fast strike that ignores part of the defense.',                  25, 0.95, 1, 'ENEMY', false, false, '/img/shadow_strike.png'),
-('Meteor Crash',     'Massive impact that damages all enemies.',                        80, 0.85, 1, 'ENEMY', true,  false, '/img/meteor.png'),
-('Poison Dart',      'Shot that applies Poisoned to the target.',                      20, 0.90, 1, 'ENEMY', false, false, '/img/poison_dart.png'),
-('Twin Slash',       'Two consecutive fast strikes on the same target.',               35, 0.90, 2, 'ENEMY', false, false, '/img/twin_slash.png'),
-('Soul Drain',       'Absorbs enemy HP and heals self for 50%.',                       50, 0.85, 1, 'ENEMY', false, false, '/img/soul_drain.png'),
-('Battle Cry',       'Applies Strengthened to all allies.',                            45, 1.00, 1, 'ALLY',  true,  false, '/img/battle_cry.png'),
-('Healing Wave',     'Moderately heals all allies.',                                   60, 1.00, 1, 'ALLY',  true,  false, '/img/healing_wave.png'),
-('Barrier Shield',   'Applies a defense shield to the target ally.',                   40, 1.00, 1, 'ALLY',  false, false, '/img/barrier.png'),
-('Revive',           'Revives a fallen ally with 30% HP.',                             90, 1.00, 1, 'ALLY',  false, false, '/img/revive.png'),
-('Stun Smash',       'Strong hit with a chance to stun.',                              45, 0.88, 1, 'ENEMY', false, false, '/img/stun_smash.png'),
-('Frost Nova',       'Ice burst that stuns all enemies.',                              75, 0.80, 1, 'ENEMY', true,  false, '/img/frost_nova.png'),
-('Evasion Mastery',  'Increases the base accuracy of the user.',                       0,  1.00, 0, 'SELF',  false, true,  '/img/evasion.png'),
-('Berserker Rage',   'When HP drops below 30%, automatically increases attack.',       0,  1.00, 0, 'SELF',  false, true,  '/img/berserk.png');
+('Aquatic Blessing', 'Restores HP and Energy to an ally',                              40, 0.90, 1, 'ALLY',  false, false, 'https://art.pixilart.com/d16e02d1168d72a.png'),
+('Iron Body',        'It increases the user defense',                                  30, 1.00, 1, 'SELF',  false, false, 'https://dinopixel.com/preload/0223/Iron-Armor.png'),
+('Blood Rain',       'Area attack with potential bleeding',                             70, 0.95, 1, 'ENEMY', true,  false, 'https://i.postimg.cc/xdnvgH4F/Blood-Rain.png'),
+('Shadow Strike',    'Fast strike that ignores part of the defense.',                  25, 0.95, 1, 'ENEMY', false, false, 'https://art.pixilart.com/57e7b9e3361ddb3.png'),
+('Meteor Crash',     'Massive impact that damages all enemies.',                        80, 0.85, 1, 'ENEMY', true,  false, 'https://art.pixilart.com/02ffa52bad60aca.png'),
+('Poison Dart',      'Shot that applies Poisoned to the target.',                      20, 0.90, 1, 'ENEMY', false, false, 'https://www.sprite-ai.art/sprite-img/a64613b4-5540-45f3-8784-a42be61f5f6f/a-beam-of-green-noxious-bubbles-16x16-pixel-art-6c50.png'),
+('Twin Slash',       'Two consecutive fast strikes on the same target.',               35, 0.90, 2, 'ENEMY', false, false, 'https://i.postimg.cc/L8DK6crg/pixilart-sprite.png'),
+('Soul Drain',       'Absorbs enemy HP and heals self for 50%.',                       50, 0.85, 1, 'ENEMY', false, false, 'https://riftwizard2.wiki.gg/images/256_drain_pulse.png'),
+('Battle Cry',       'Applies Strengthened to all allies.',                            45, 1.00, 1, 'ALLY',  true,  false, 'https://static.wikia.nocookie.net/icewind-dale/images/8/8c/Strength_SPWI214C_Spell_icon_IWD.png'),
+('Healing Wave',     'Moderately heals all allies.',                                   60, 1.00, 1, 'ALLY',  true,  false, 'https://art.pixilart.com/bcab0df4223d963.png'),
+('Barrier Shield',   'Applies a defense shield to the target ally.',                   40, 1.00, 1, 'ALLY',  false, false, 'https://art.pixilart.com/sr2c3a62e1292aws3.png'),
+('Revive',           'Revives a fallen ally with 30% HP.',                             90, 1.00, 1, 'ALLY',  false, false, 'https://thumb.ac-illust.com/46/46a7e5f601813270100cc2b018dbaa36_t.jpeg'),
+('Stun Smash',       'Strong hit with a chance to stun.',                              45, 0.88, 1, 'ENEMY', false, false, 'https://cdna.artstation.com/p/marketplace/presentation_assets/000/134/976/large/file.png'),
+('Frost Nova',       'Ice burst that stuns all enemies.',                              75, 0.80, 1, 'ENEMY', true,  false, 'https://i.pinimg.com/1200x/cf/3c/05/cf3c05494a54196a819c76de6debae36.jpg'),
+('Evasion Mastery',  'Increases the base accuracy of the user.',                       0,  1.00, 0, 'SELF',  false, true,  'https://files.d20.io/marketplace/2960094/q6DzRX-MUTafsq8waiN9PA/med.png'),
+('Berserker Rage',   'When HP drops below 30%, automatically increases attack.',       0,  1.00, 0, 'SELF',  false, true,  'https://ih1.redbubble.net/image.5516888541.0428/st,extra_large,507x507-pad,600x600,f8f8f8.jpg');
 
 -- =====================================================
 -- 4️⃣ EFECTOS
@@ -530,8 +530,8 @@ INSERT INTO Item (name, description, quality, consumable, max_uses, image_thumb,
 
 -- ---- CONSUMABLES (8) ----
 INSERT INTO Item (name, description, quality, consumable, max_uses, image_thumb, target_type, is_aoe) VALUES
-('Health Potion',      'Restores 30% HP.',                             'COMMON',   true, 1, '/img/health_pot.png',    'SELF',  false),
-('Energy Elixir',      'Restores 30% energy.',                         'COMMON',   true, 1, '/img/energy_elixir.png', 'SELF',  false),
+('Health Potion',      'Restores 30% HP.',                             'COMMON',   true, 1, 'https://art.pixilart.com/cb38cacb9cd5e61.png',    'SELF',  false),
+('Energy Elixir',      'Restores 30% energy.',                         'COMMON',   true, 1, 'https://dinopixel.com/preload/0223/Energy-Potion.png', 'SELF',  false),
 ('Antidote',           'Removes the Poisoned status.',                 'COMMON',   true, 1, '/img/antidote.png',      'SELF',  false),
 ('Rage Brew',          'Applies Strengthened lv1 to user.',            'UNCOMMON', true, 1, '/img/rage_brew.png',     'SELF',  false),
 ('Smoke Bomb',         'Stuns all enemies for 1 turn.',               'UNCOMMON', true, 1, '/img/smoke_bomb.png',    'ENEMY', true),

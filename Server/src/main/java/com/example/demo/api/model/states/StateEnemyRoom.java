@@ -223,7 +223,7 @@ public class StateEnemyRoom extends State {
             pendingTurns.put(p, message.players.get(0));
         }
 
-        if (pendingTurns.size() < memPlayers.size()) {
+        if (pendingTurns.size() < memPlayers.stream().filter(player-> player.getCharacter().getHp() > 0).count()) {
             System.out.println("Esperant jugadors... (" + pendingTurns.size() + "/" + memPlayers.size() + ")");
             return;
         }
